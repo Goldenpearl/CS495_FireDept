@@ -6,7 +6,7 @@ CREATE TABLE Fireman(
 firstName varchar(30) not null,
 lastName varchar(30) not null,
 age int not null,
-id int not null primary key
+firemanId int not null primary key
 );
 
 INSERT INTO Fireman VALUES(
@@ -27,9 +27,9 @@ startDate DATETIME NOT NULL,
 
 endDate DATETIME NOT NULL,
 
-id INT NOT NULL AUTO_INCREMENT, 
+timeslotId INT NOT NULL AUTO_INCREMENT, 
 
-PRIMARY KEY (id)
+PRIMARY KEY (timeslotId)
 );
 
 INSERT INTO timeslot(startDate, endDate) VALUES(
@@ -161,188 +161,187 @@ INSERT INTO timeslot(startDate, endDate) VALUES(
 
 CREATE TABLE availibleTimeslot(
 
-timeslotID INT NOT NULL,
+timeslotId INT NOT NULL,
 
-firemanID INT NOT NULL,
+firemanId INT NOT NULL,
 
-id INT NOT NULL AUTO_INCREMENT,
+availibleTimeslotId INT NOT NULL AUTO_INCREMENT,
 
-PRIMARY KEY(id)
-);
+PRIMARY KEY(availibleTimeslotId));
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 1,
 1);
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 2,
 1);
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 3,
 1);
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 4,
 1);
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 5,
 1);
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 6,
 2);
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 7,
 2);
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 8,
 2);
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 9,
 2);
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 10,
 2);
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 11,
 3);
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 12,
 3);
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 13,
 3);
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 14,
 3);
 
 
-INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO availibleTimeslot(timeslotId, firemanId) VALUES(
 15,
 3);
 
 CREATE TABLE scheduleTimeslot(
-timeslotID INT NOT NULL,
+timeslotId INT NOT NULL,
 
-firemanID INT NOT NULL,
+firemanId INT NOT NULL,
 
-id INT NOT NULL AUTO_INCREMENT,
+scheduleTimeslotId INT NOT NULL AUTO_INCREMENT,
 
-PRIMARY KEY(id)
+PRIMARY KEY(scheduleTimeslotId)
 );
 
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 16,
 1);
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 17,
 1);
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 18,
 1);
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 19,
 1);
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 20,
 1);
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 21,
 2);
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 22,
 2);
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 23,
 2);
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 24,
 2);
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 25,
 2);
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 26,
 3);
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 27,
 3);
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 28,
 3);
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 29,
 3);
 
 
 
-INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+INSERT INTO scheduleTimeslot(timeslotId, firemanId) VALUES(
 30,
 3);
 
@@ -363,3 +362,25 @@ SELECT * FROM timeslot;
 SELECT * FROM scheduleTimeslot;
 
 SELECT * FROM availibleTimeslot;
+
+SELECT fireman.firemanId, fireman.firstName, fireman.lastName, timeslot.startDate, timeslot.endDate, timeslot.timeslotId
+FROM availibleTimeslot
+
+JOIN (fireman, timeslot)
+
+ON (availibleTimeslot.firemanId=fireman.firemanId AND availibleTimeslot.timeslotId=timeslot.timeslotId);
+
+SELECT fireman.firemanId, fireman.firstName, fireman.lastName, timeslot.startDate, timeslot.endDate, timeslot.timeslotId
+FROM availibleTimeslot
+
+JOIN (fireman, timeslot)
+
+ON (availibleTimeslot.firemanId=fireman.firemanId AND availibleTimeslot.timeslotId=timeslot.timeslotId);
+
+
+SELECT fireman.firemanId, fireman.firstName, fireman.lastName, timeslot.startDate, timeslot.endDate, timeslot.timeslotId
+FROM scheduleTimeslot
+
+JOIN (fireman, timeslot)
+
+ON (scheduleTimeslot.firemanId=fireman.firemanId AND scheduleTimeslot.timeslotId=timeslot.timeslotId);
