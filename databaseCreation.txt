@@ -1,0 +1,22 @@
+DROP DATABASE IF EXISTS fireDept;
+CREATE DATABASE fireDept;
+USE fireDept;
+
+CREATE TABLE Fireman(
+firstName varchar(30) not null,
+lastName varchar(30) not null,
+age int not null,
+id int not null primary key
+);
+
+INSERT INTO Fireman VALUES(
+"Ash", "Ketchum", 10, 1
+);
+
+INSERT INTO Fireman VALUES(
+"Misty", "Bubbles", 10, 2
+);
+
+INSERT INTO Fireman VALUES(
+"Brock", "Rock", 10, 3
+);
