@@ -20,3 +20,346 @@ INSERT INTO Fireman VALUES(
 INSERT INTO Fireman VALUES(
 "Brock", "Rock", 10, 3
 );
+
+CREATE TABLE timeslot(
+
+startDate DATETIME NOT NULL,
+
+endDate DATETIME NOT NULL,
+
+id INT NOT NULL AUTO_INCREMENT, 
+
+PRIMARY KEY (id)
+);
+
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-19 14:00:00",
+"2015-10-19 18:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-21 14:00:00",
+"2015-10-21 18:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-21 20:00:00",
+"2015-10-22 01:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-23 17:00:00",
+"2015-10-23 19:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-24 20:00:00",
+"2015-10-25 01:00:00"
+);
+
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-20 15:00:00",
+"2015-10-20 18:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-22 15:00:00",
+"2015-10-22 18:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-22 19:00:00",
+"2015-10-22 22:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-23 17:30:00",
+"2015-10-23 19:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-24 20:00:00",
+"2015-10-25 01:00:00"
+);
+
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-21 15:00:00",
+"2015-10-20 18:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-21 10:00:00",
+"2015-10-22 11:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-22 02:00:00",
+"2015-10-22 12:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-23 17:30:00",
+"2015-10-23 19:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-24 20:00:00",
+"2015-10-24 22:00:00"
+);
+
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-19 14:00:00",
+"2015-10-19 16:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-21 14:00:00",
+"2015-10-21 16:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-21 20:00:00",
+"2015-10-21 22:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-23 17:00:00",
+"2015-10-23 18:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-24 20:00:00",
+"2015-10-25 01:00:00"
+);
+
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-20 15:00:00",
+"2015-10-20 16:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-22 15:00:00",
+"2015-10-22 17:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-22 19:00:00",
+"2015-10-22 22:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-23 17:30:00",
+"2015-10-23 19:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-24 20:00:00",
+"2015-10-24 22:00:00"
+);
+
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-21 15:00:00",
+"2015-10-20 18:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-21 10:00:00",
+"2015-10-22 11:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-22 02:00:00",
+"2015-10-22 04:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-22 06:30:00",
+"2015-10-23 08:00:00"
+);
+INSERT INTO timeslot(startDate, endDate) VALUES(
+"2015-10-24 20:00:00",
+"2015-10-24 22:00:00"
+);
+
+
+CREATE TABLE availibleTimeslot(
+
+timeslotID INT NOT NULL,
+
+firemanID INT NOT NULL,
+
+id INT NOT NULL AUTO_INCREMENT,
+
+PRIMARY KEY(id)
+);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+1,
+1);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+2,
+1);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+3,
+1);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+4,
+1);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+5,
+1);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+6,
+2);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+7,
+2);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+8,
+2);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+9,
+2);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+10,
+2);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+11,
+3);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+12,
+3);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+13,
+3);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+14,
+3);
+
+
+INSERT INTO availibleTimeslot(timeslotID, firemanID) VALUES(
+15,
+3);
+
+CREATE TABLE scheduleTimeslot(
+timeslotID INT NOT NULL,
+
+firemanID INT NOT NULL,
+
+id INT NOT NULL AUTO_INCREMENT,
+
+PRIMARY KEY(id)
+);
+
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+16,
+1);
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+17,
+1);
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+18,
+1);
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+19,
+1);
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+20,
+1);
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+21,
+2);
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+22,
+2);
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+23,
+2);
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+24,
+2);
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+25,
+2);
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+26,
+3);
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+27,
+3);
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+28,
+3);
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+29,
+3);
+
+
+
+INSERT INTO scheduleTimeslot(timeslotID, firemanID) VALUES(
+30,
+3);
+
+
+DESCRIBE fireman;
+
+DESCRIBE timeslot;
+
+DESCRIBE scheduleTimeslot;
+
+DESCRIBE availibleTimeslot;
+
+
+SELECT * FROM fireman;
+
+SELECT * FROM timeslot;
+
+SELECT * FROM scheduleTimeslot;
+
+SELECT * FROM availibleTimeslot;
