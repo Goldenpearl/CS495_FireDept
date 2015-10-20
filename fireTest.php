@@ -43,14 +43,14 @@ if ($conn->query($sql) === TRUE) {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
 */
-$sql = "SELECT id, firstname, lastname, age FROM Fireman";
+$sql = "SELECT firemanId, firstName, lastName, age FROM Fireman";
 $result = $conn->query($sql);
 $conn->close();
 if ($result->num_rows > 0) {
     echo "<table><tr><th>ID</th><th>Name</th></tr>";
     // output data of each row
     while($row = $result->fetch_assoc()) {
-        echo "<tr><td>".$row["id"]."</td><td>".$row["firstname"]." ".$row["lastname"]."</td></tr>";
+        echo "<tr><td>".$row["firemanId"]."</td><td>".$row["firstName"]." ".$row["lastName"]."</td></tr>";
     }
     echo "</table>";
 } else {
@@ -61,7 +61,7 @@ if ($result->num_rows > 0) {
     echo "<table><tr><th>ID</th><th>Name</th></tr>";
     // output data of each row
     while($row = $result->fetch_assoc()) {
-        echo "<tr><td>".$row["id"]."</td><td>".$row["firstname"]." ".$row["lastname"]."</td></tr>";
+        echo "<tr><td>".$row["firemanId"]."</td><td>".$row["firstName"]." ".$row["lastName"]."</td></tr>";
     }
     echo "</table>";
 } else {
@@ -78,7 +78,7 @@ echo "<select id='fireman_select'>";
 if ($result->num_rows > 0) {
 	mysqli_data_seek($result, 0);
     while($row = $result->fetch_assoc()) {
-		echo "<option value= '". $row['id']."'>".$row["firstname"]." ".$row["lastname"]."</option>";
+		echo "<option value= '". $row['firemanId']."'>".$row["firstName"]." ".$row["lastName"]."</option>";
     }
     echo "</table>";
 } else {
@@ -86,11 +86,11 @@ if ($result->num_rows > 0) {
 }	
 echo "</select><br><br>";
 echo  "Enter a date:";
-echo "<input type='date' name='bday' max='2050-12-31-12-31' min='2015-01-02'><br><br>";
+echo "<input type='date' name='bday' max='2050-12-31-12-31' min='2015-01-02' id='dateEntry'><br><br>";
 echo "Start Time:";
-echo "<input type='time' name='start_time'>";
+echo "<input type='time' name='start_time' id= 'startTime'>";
 echo "End Time:";
-echo "<input type='time' name='end_time'><br><br>";
+echo "<input type='time' name='end_time' id='endTime'><br><br>";
 echo "<br>";
 echo "<br>";
 echo "</form>";
@@ -105,8 +105,8 @@ function submitDate() {
 	var startDate= "";
 	var startTime="";
 	var endTime="";
-	var date ="";
-	var date2="";
+	var date =getStartDatetime();
+	var date2=getEndDatetime();
 	
 	if(document.getElementById("availible").checked==true){
 		availibleSlot=true;
@@ -117,24 +117,21 @@ function submitDate() {
 	var queryString = "";
 	var tableString =""
 	if(availibleSlot){
-		tableString ="AvailibleTimeSlot";
+		tableString ="AvailibleTimeslot";
 	}
 	else if(scheduleSlot){
-		tableString ="ScheduledTimeSlot";
+		tableString ="ScheduleTimeslot";
 	}
-	queryString+="Insert into Timeslot values("
+	
+	queryString+="INSERT INTO timeslot(startDate, endDate) VALUES("
 	queryString+= date
 	queryString+=", "
 	queryString+= date2
-	queryString+=", "
-	queryString+=100
 	queryString+="); "
 	queryString+="INSERT INTO "
 	queryString+=tableString
-	queryString+=" (timeslotId, id, firemanId) VALUES ("
-	queryString+=100
-	queryString+=", "
-	queryString+=100
+	queryString+=" (timeslotId, firemanId) VALUES ("
+	queryString+="??"
 	queryString+=", "
 	queryString+=firemanId;
 	queryString+=");";
@@ -142,7 +139,17 @@ function submitDate() {
 
 }	
 
-
+function getStartDatetime(){
+	var date = document.getElementById("dateEntry").value;
+	var date2 = document.getElementById("startTime").value;
+	return '"'+date +" "+ date2+'"'; //"start time and date";
+}
+function getEndDatetime(){
+	
+	var date = document.getElementById("dateEntry").value;
+	var date2 = document.getElementById("endTime").value;
+	return '"'+date +" "+ date2+'"'; //"start time and date";
+}
 </script>
 
 
