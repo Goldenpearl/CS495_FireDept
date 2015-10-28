@@ -1,0 +1,121 @@
+<html>
+<head>
+<script>
+var select = true;
+var schedule = false;
+var availability = false;
+function showUser(str) {
+if(select)
+{
+    if (str == "") {
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+    } else { 
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("txtHint").innerHTML = xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","dbTestServer.php?q="+str,true);
+        xmlhttp.send();
+    }
+}
+if(schedule)
+{
+    if (str == "") {
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+    } else { 
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("txtHint").innerHTML = xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","dbBryceTestServer.php?q="+str,true);
+        xmlhttp.send();
+    }
+}
+if(availability)
+{
+    if (str == "") {
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+    } else { 
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("txtHint").innerHTML = xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","availableTest.php?q="+str,true);
+        xmlhttp.send();
+    }
+}
+}
+
+function getFiremanSelect() {
+		if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+           xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+               document.getElementById("selected").innerHTML = xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","getFiremanSelect.php",true);
+        xmlhttp.send();
+    //}	
+}
+
+function getFiremanSchedule()
+{
+		schedule = true;
+		select = false;
+		availability = false;
+		showUser(xmlhttp.responseText);
+}
+
+function getFiremanAvailability()
+{
+		schedule = false;
+		select = false;
+		availability = true;
+		showUser(xmlhttp.responseText);
+}
+
+window.onload(getFiremanSelect());
+</script>
+</head>
+<body>
+
+<br>
+<div id="txtHint"><b>Person info will be listed here...</b></div>
+<p id="selected"></p>
+<button onclick = "getFiremanSchedule()">Show Schedule</button>
+<button onclick = "getFiremanAvailability()">Show Availability</button>
+</body>
+</html>
