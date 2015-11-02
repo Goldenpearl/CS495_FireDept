@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 <style>
@@ -13,6 +14,7 @@ th, td {
 </style>
  </head>
 <body>
+<!--
 <script>
 function shadeCells(){
  var x = document.getElementById("Fireman").rows.length;
@@ -88,8 +90,9 @@ To  <select>
 <button type="button">Reset</button>
 <br>
 <br>
+>
+-->
 <?php
-
 function getTimeRow($numberOfHours, $startHour){
 	echo "<tr>";
 	echo"<td>";
@@ -138,25 +141,40 @@ function getHour($hour){
 	}
 	return ($displayHour.":00 ".$amLabel);
 }
-
+include "navbar.html";
+echo "<br> <br><br>";
 echo "<table>";
 getTimeRow(24, 12);
 echo "</table>";
-echo "<table id="Fireman" style="width:100%">";
-echo "<tr id="Header">";
+echo "<table id='Fireman' style='width:100%'>";
+echo "<tr id='Header'>";
 echo "<th id='0'> </th>";
-echo "<th>9AM</th>";
-echo  "<th id='10'>10AM</th>";
-echo "<th>11AM</th>";
-echo "<th>12PM</th>";
-echo "<th>1PM</th>";
-echo "<th>2PM</th>";
-echo "<th>3PM</th>";
-echo "<th>4PM</th>";
-echo "<th>5PM</th>";
-  </tr>
-
-
+echo "<th id='12am'>12AM</th>";
+echo "<th id='1am'>1AM</th>";
+echo "<th id='2am'>2AM</th>";
+echo "<th id='3am'>3AM</th>";
+echo "<th id='4am'>4AM</th>";
+echo "<th id='5am'>5AM</th>";
+echo "<th id='6am'>6AM</th>";
+echo "<th id='7am'>7AM</th>";
+echo "<th id='8am'>8AM</th>";
+echo "<th id='9am'>9AM</th>";
+echo "<th id='10am'>10AM</th>";
+echo "<th id='11am'>11AM</th>";
+echo "<th id='12pm'>12PM</th>";
+echo "<th id='1pm'>1PM</th>";
+echo "<th id='2pm'>2PM</th>";
+echo "<th id='3pm'>3PM</th>";
+echo "<th id='4am'>4PM</th>";
+echo "<th id='5pm'>5PM</th>";
+echo "<th id='6pm'>6PM</th>";
+echo "<th id='7pm'>7PM</th>";
+echo "<th id='8pm'>8PM</th>";
+echo "<th id='9pm'>9PM</th>";
+echo "<th id='10pm'>10PM</th>";
+echo "<th id='11pm'>11PM</th>";
+echo "</tr>";
+echo "</table>";
 ?>
 <table id="Fireman" style="width:100%">
   <tr id="Header">
