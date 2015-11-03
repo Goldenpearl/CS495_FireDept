@@ -20,6 +20,10 @@ function closeConnection($conn){
 	$conn->close();
 }
 
+function createDateTime($date, $time){
+	return $date." ".$time.":00";
+}
+
 function getAutoIncrement(){
 	$conn = createConnection();
 	$sql = "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'fireDept' AND TABLE_NAME = 'timeslot'";
@@ -110,9 +114,22 @@ function isDateTime($datetime){
 	}
 
 $q = intval($_GET);
+//$query = $_GET['q'];
+$firemanId = $_GET['firemanId'];
+$startTime = $_GET['startTime'];
+$endTime = $_GET['endTime'];
+$date = $_GET['date'];
 // Create connection
 $f = getAutoIncrement();
-echo($f);
+echo("<br><br>");
+echo("Fireman Id: ".$firemanId);
+echo("<br><br>");
+echo("Start Time: ".$startTime."<br><br>");
+echo("End Time: ".$endTime."<br><br>");
+echo("Date: ".$date);
+echo("<br><br>");
+echo(createDateTime($date, $startTime));
+//echo($new_str);
 insertTimeslot("2009-03-15 14:01:43", "2009-03-15 14:01:43");
 /**
 $sql = "INSERT INTO Fireman (firstname, lastname, age)
