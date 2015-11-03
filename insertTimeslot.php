@@ -21,7 +21,12 @@ function closeConnection($conn){
 }
 
 function createDateTime($date, $time){
-	return $date." ".$time.":00";
+	$dateTime = $date." ".$time.":00";
+	if(empty($date) || empty($time))
+		return "empty";
+	else if(isDateTime($dateTime))
+		return $dateTime;
+	else return "invalid dateTime";
 }
 
 function getAutoIncrement(){
@@ -38,7 +43,7 @@ function getAutoIncrement(){
 function insertTimeslot($startDate, $endDate){
 	$conn = createConnection();
 	if(isDateTime($startDate)&& isDateTime($endDate))
-	{	echo ("ok");
+	{
 		$queryString = "INSERT INTO timeslot(startDate, endDate) VALUES(" .
 		"'".
 		$startDate.
@@ -60,6 +65,48 @@ function insertTimeslot($startDate, $endDate){
 	closeConnection($conn);
 }
 
+function insertScheduleTimeslot($timeslotId, $firemanId){
+	if(isValidTimeslotId($timeslotId) && isValidFiremanId($firemanId))
+	{
+		$conn = createConnection();
+		$queryString = "INSERT INTO ScheduleTimeSlot(timeslotId, firemanId) VALUES (".$timeslotId.",".$firemanId.");";
+		$sql= $queryString;
+		echo($queryString);
+		if ($conn->query($sql) === TRUE) {
+		echo "New record created successfully";
+		} 	
+		else {
+		echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+		closeConnection($conn);
+	}
+}
+function insertAvailibleTimeslot($timeslotId, $firemanId){
+		if(isValidTimeslotId($timeslotId) && isValidFiremanId($firemanId))
+	{
+		$conn = createConnection();
+		$queryString = "INSERT INTO AvailibleTimeSlot(timeslotId, firemanId) VALUES (".$timeslotId.",".$firemanId.");";
+		$sql=$queryString;
+		echo($queryString);
+		
+		if ($conn->query($sql) === TRUE) {
+		echo "New record created successfully";
+		} 	
+		else {
+		echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+		closeConnection($conn);
+	}
+}
+
+function isValidFiremanId($id){
+	return true;
+}
+
+function isValidTimeslotId($id){
+	return true;
+}
+
 function isDateTime($datetime){
 		$correctLength=19;
 		$length = strlen($datetime);
@@ -78,27 +125,27 @@ function isDateTime($datetime){
 		$meetsDateFormat = true;
 		if($length!=$correctLength){
 			$meetsSQLFormat = false;
-			"invalid length";
+			//"invalid length";
 		}
 		if($firstDash!="-" || $secondDash!="-"){
 			$meetsSQLFormat = false;
-			echo "invalid dash";
+			//echo "invalid dash";
 		}
 		if($firstColon!=":" || $secondColon!=":"){
 			$meetsSQLFormat = false;
-			echo "invalid colon";
+			//echo "invalid colon";
 		}
 		if($spacebar != " "){
 			$meetsSQLFormat = false;
-			echo "invalid space";
+			//echo "invalid space";
 		}
 		if(!$numericYear || !$numericMonth || !$numericDay){
 			$meetsSQLFormat = false;
-			echo "invalid date";
+			//echo "invalid date";
 		}
 		if(!$numericHour || !$numericMinute || !$numericSecond){
 			$meetsSQLFormat = false;
-		echo "invalid time";
+		//echo "invalid time";
 		}
 		try{
 			$type = new DateTime($datetime);
@@ -108,7 +155,7 @@ function isDateTime($datetime){
 			$meetsDateFormat = false;
 		}
 		if(!$meetsDateFormat){
-			echo("b");
+			//echo("b");
 		}
 		return $meetsDateFormat && $meetsSQLFormat;
 	}
@@ -129,8 +176,20 @@ echo("End Time: ".$endTime."<br><br>");
 echo("Date: ".$date);
 echo("<br><br>");
 echo(createDateTime($date, $startTime));
-//echo($new_str);
-insertTimeslot("2009-03-15 14:01:43", "2009-03-15 14:01:43");
+$startDateTime = createDateTime($date, $startTime);
+$endDateTime = createDateTime($date, $endTime);
+if(isDateTime($startDateTime) && isDateTime($endDateTime))
+{
+	insertTimeslot($startDateTime, "2009-03-15 14:01:43");
+	echo "<br><br>";
+	insertAvailibleTimeslot(0, $firemanId);
+	echo"<br><br>";
+	insertScheduleTimeslot(0, $firemanId);
+	echo"<br><br>";
+}
+
+else
+	echo("no");
 /**
 $sql = "INSERT INTO Fireman (firstname, lastname, age)
 VALUES ('John', 'Doe', 22)";
