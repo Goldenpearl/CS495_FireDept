@@ -1,0 +1,75 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="tableStyle.css">
+</head>
+<body onload= "getData()">
+	<div id="id01"></div>
+	<script>
+	
+	function getData(){
+		makeXmlRequest();
+		//myFunction(myArr);
+	}
+	function makeXmlRequest(){
+		var xmlhttp = new XMLHttpRequest();
+		var url = "KellyTxt.txt";
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				var myArr = JSON.parse(xmlhttp.responseText);
+				myFunction(myArr);
+			}
+		};
+		xmlhttp.open("GET", url, true);
+		xmlhttp.send();
+	}
+
+	function myFunction(arr) {
+		var out = "";
+		var i;
+		for(i = 0; i < arr.length; i++) {
+			out += '<a href="' + arr[i].url + '">' + 
+			arr[i].display + '</a><br>';
+		}
+	document.getElementById("id01").innerHTML = out;
+}
+
+</script>
+</script>
+	<table>
+	<tr>
+		<tr>
+			<th></th>
+			<th>12:00 am</th>
+			<th>1:00 am</th>
+			<th>2:00 am</th>
+			<th>3:00 am</th>
+			<th>4:00 am</th>
+			<th>5:00 am</th>
+			<th>6:00 am</th>
+			<th>7:00 am</th>
+			<th>8:00 am</th>
+			<th>9:00 am</th>
+			<th>10:00 am</th>
+			<th>11:00 am</th>
+			<th>12:00 pm</th>
+			<th>1:00 pm</th>
+			<th>2:00 pm</th>
+			<th>3:00 pm</th>
+			<th>4:00 pm</th>
+			<th>5:00 pm</th>
+			<th>6:00 pm</th>
+			<th>7:00 pm</th>
+			<th>8:00 pm</th>
+			<th>9:00 pm</th>
+			<th>10:00 pm</th>
+			<th>11:00 pm</th>
+			<th>12:00 pm</th>
+		</tr>
+		<tr>
+			<th>Bob</th>
+			<td>aa</td>
+		</tr>
+	</table>
+<h1>Cool</h1>
+</body>
+</html>
