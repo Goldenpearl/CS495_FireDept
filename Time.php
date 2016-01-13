@@ -1,12 +1,19 @@
 <?php
 
 	class TimeSlot{
-		public $startTime=0;
+		public $startTime=1;
 		public $endTime=0;
 		
 		public function setTimes($startTime, $endTime){
+			
+			if(is_a($startTime, 'String'))
+			{
+				//
+			}
+			else{
 			$this->startTime=$startTime;
 			$this->endTime=$endTime;
+			}
 		}
 		
 		public function getStartTime(){
@@ -17,15 +24,24 @@
 			return $endTime;
 		}
 		
-		function isBefore($other){
-			if(true){
-				return true;
-			}
-			else return false;
+		function dateAIsBeforeDateB($dateA, $dateB)
+		{
+			
 		}
-		function isAfter($other){
+		
+		function dateAIsAfterDateB($dateA, $dateB){
 			
+		}
+		
+		function dateAEqualsDateB($dateA, $dateB){
 			
+		}
+		
+		function thisTimeslotIsBeforeOther($other){
+			return dateAIsBeforeDateB(getEndTime(),other.getStartTime());
+		}
+		function thisTimeslotIsAfterOther($other){
+			return dateAIsAfterDateB(getStartTime(),other.getEndTime());
 		}
 	}
 	

@@ -384,3 +384,10 @@ FROM scheduleTimeslot
 JOIN (fireman, timeslot)
 
 ON (scheduleTimeslot.firemanId=fireman.firemanId AND scheduleTimeslot.timeslotId=timeslot.timeslotId);
+
+SELECT fireman.firemanId, fireman.firstName, fireman.lastName, timeslot.startDate, timeslot.endDate, timeslot.timeslotId
+FROM availibleTimeslot
+JOIN (fireman, timeslot)
+
+ON (availibleTimeslot.firemanId=fireman.firemanId 
+AND availibleTimeslot.timeslotId=timeslot.timeslotId AND timeslot.endDate BETWEEN "2015-10-20 0:0:0" AND "2015-10-21 0:0:0");
