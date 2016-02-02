@@ -2,10 +2,21 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="tableStyle.css">
 </head>
-<body onload= "getData()">
-	<div id="id01"></div>
+<body onload= "loadNavBar(); getData()">
+	<div id="navbar"></div>
+	<br>
+	<h1>Shift Schedule</h1>
 	<script>
-	
+	function loadNavBar() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+		document.getElementById("navbar").innerHTML = xhttp.responseText;
+		}
+	}
+	xhttp.open("GET", "navbar.html", true);
+	xhttp.send();
+	}
 	
 	function getData(){
 		makeXmlRequest();
@@ -15,7 +26,7 @@
 		timeslots.push(["Bob", 12]);
 		timeslots.push(["Bob", 13]);
 		timeslots.push(["Allan", 11]);
-		timeslots.push(["Jess", 1]);
+		timeslots.push(["Jess", 2]);
 		createList(timeslots);
 		createTable(timeslots);
 	}
@@ -87,7 +98,8 @@
 
                 tablecontents += "</tr>";
             }
-			tablecontents = "<table id = myTable>";
+			tablecontents = "";
+			tablecontents += "<table id = myTable>";
 			tablecontents += "<tr>";
 			tablecontents += "<th>";
 			tablecontents += "</th>";
@@ -101,13 +113,14 @@
 				tablecontents+="<th>";
 				tablecontents+= names[i];
 				for(var j=0; j<timeHeader.length; j++){
-				tablecontents+= "<td>";
+				tablecontents+= "<td class=table-cell>";
 				tablecontents+= "</td>";
 				}
 				tablecontents+="</th>";
 				tablecontents+="</tr>";
 			}
             tablecontents += "</table>";
+			
 			document.getElementById("tableDiv").innerHTML = tablecontents;
 			for( var i=0; i<timeslots.length; i++){	
 				var name = timeslots[i][0];
@@ -123,7 +136,7 @@
 					}
 				}
 				if(nameFound){
-				document.getElementById('myTable').rows[indexOfName+1].cells[timeslots[i][1]].setAttribute("bgcolor", "#00FF00");
+				document.getElementById('myTable').rows[indexOfName+1].cells[timeslots[i][1]+1].setAttribute("bgcolor", "#00FF00");
 				}
 			}
 		}
@@ -141,7 +154,10 @@
 			var realIndex = index%24;
 			var time = "";
 			var m = "";
-			if(index>12){
+			if(index<=0){
+				time+="12:00 am";
+			}
+			else if(index>12){
 				m="pm";
 				time+=index%12+":00 "+m;
 			}
@@ -154,8 +170,9 @@
 	
 	</script>
 	
-	<div id=tableDiv> </div>
-	<div id=listDiv></div>
-<h1>Cool</h1>
+	<div id=listDiv> </div>
+	<br><br>
+	<h1>Table Schedule</h3>
+	<div id=tableDiv></div>
 </body>
 </html>
