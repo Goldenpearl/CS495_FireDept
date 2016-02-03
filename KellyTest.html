@@ -6,9 +6,18 @@
 	<div id="id01"></div>
 	<script>
 	
+	
 	function getData(){
 		makeXmlRequest();
 		//myFunction(myArr);
+		var timeslots = new Array();
+		timeslots.push(["Bob", 11]);
+		timeslots.push(["Bob", 12]);
+		timeslots.push(["Bob", 13]);
+		timeslots.push(["Allan", 11]);
+		timeslots.push(["Jess", 1]);
+		createList(timeslots);
+		createTable(timeslots);
 	}
 	function makeXmlRequest(){
 		var xmlhttp = new XMLHttpRequest();
@@ -33,43 +42,120 @@
 	document.getElementById("id01").innerHTML = out;
 }
 
-</script>
-</script>
-	<table>
-	<tr>
-		<tr>
-			<th></th>
-			<th>12:00 am</th>
-			<th>1:00 am</th>
-			<th>2:00 am</th>
-			<th>3:00 am</th>
-			<th>4:00 am</th>
-			<th>5:00 am</th>
-			<th>6:00 am</th>
-			<th>7:00 am</th>
-			<th>8:00 am</th>
-			<th>9:00 am</th>
-			<th>10:00 am</th>
-			<th>11:00 am</th>
-			<th>12:00 pm</th>
-			<th>1:00 pm</th>
-			<th>2:00 pm</th>
-			<th>3:00 pm</th>
-			<th>4:00 pm</th>
-			<th>5:00 pm</th>
-			<th>6:00 pm</th>
-			<th>7:00 pm</th>
-			<th>8:00 pm</th>
-			<th>9:00 pm</th>
-			<th>10:00 pm</th>
-			<th>11:00 pm</th>
-			<th>12:00 pm</th>
-		</tr>
-		<tr>
-			<th>Bob</th>
-			<td>aa</td>
-		</tr>
-	</table>
+	 function createTable(timeslots) {
+	 
+			//generate a table based on timeslots/ fire names
+			//choose a start date and time
+			//choose an end date and time
+			//choose a divider or increment
+			
+			//create a "dummy table" with all the names and no time slots
+			//for each timeslot, fill in relevant cells and link to the shift label
+			
+			var DAYS_IN_WEEK = 7;
+			var HOURS_IN_DAY = 24;
+			var MINUTES_IN_HOUR = 60;
+			var names = ["Bob", "Allan", "Jess"];
+			var timeHeader = new Array();
+			timeHeader[0]="12:00 am";
+			for(var i=1; i<12; i++){
+				var str = i+":00 am";
+				timeHeader[i] = str;;
+			} 
+			timeHeader[12] = "12:00 pm";
+			for(var i=1; i<12; i++){
+				var str = i+":00 pm";
+				timeHeader[12+i]=str;
+			} 		
+			timeHeader[24] = "12:00 am";
+            var employee = new Array();
+            employee.push(["Employee Id", "Name", "Country"]);
+            employee.push([1, "Harish Kumar", "United States"]);
+            employee.push([2, "Pankaj Mohan", "India"]);
+            employee.push([3, "Nitin Srivastav", "France"]);
+            employee.push([4, "Ramchandra Verma", "Russia"]);
+
+            var tablecontents = "";
+            tablecontents = "<table border='1'>";
+
+            for (var i = 0; i < employee.length; i++) {
+                tablecontents += "<tr>";
+                for (var j = 0; j < employee[i].length; j++) {
+
+                    tablecontents += "<td>" + employee[i][j] + "</td>";
+                }
+
+                tablecontents += "</tr>";
+            }
+			tablecontents = "<table id = myTable>";
+			tablecontents += "<tr>";
+			tablecontents += "<th>";
+			tablecontents += "</th>";
+			for(var i =0; i< timeHeader.length; i++){
+			tablecontents+="<th>";
+			tablecontents+=timeHeader[i] +"</th>";
+			}
+			tablecontents += "</tr>"
+			for(var i=0; i<names.length; i++){
+				tablecontents+="<tr>";
+				tablecontents+="<th>";
+				tablecontents+= names[i];
+				for(var j=0; j<timeHeader.length; j++){
+				tablecontents+= "<td>";
+				tablecontents+= "</td>";
+				}
+				tablecontents+="</th>";
+				tablecontents+="</tr>";
+			}
+            tablecontents += "</table>";
+			document.getElementById("tableDiv").innerHTML = tablecontents;
+			for( var i=0; i<timeslots.length; i++){	
+				var name = timeslots[i][0];
+				var indexOfName = 0;
+				var nameFound = false
+				while(!nameFound && indexOfName<names.length){
+					if(name === names[indexOfName])
+					{
+						nameFound=true;
+					}
+					else{
+					indexOfName++;
+					}
+				}
+				if(nameFound){
+				document.getElementById('myTable').rows[indexOfName+1].cells[timeslots[i][1]].setAttribute("bgcolor", "#00FF00");
+				}
+			}
+		}
+	
+		function createList(timeslots){
+			var listContents = "";
+			//alert(timeslots.length);
+			for(var n=0; n<timeslots.length; n++){
+			 listContents+=timeslots[n][0] + " " + indexToTime(timeslots[n][1])+ "<br>";
+			}
+			document.getElementById("listDiv").innerHTML = listContents;
+		}
+		
+		function indexToTime(index){
+			var realIndex = index%24;
+			var time = "";
+			var m = "";
+			if(index>12){
+				m="pm";
+				time+=index%12+":00 "+m;
+			}
+			else{
+			m = "am"
+			time+=index+":00 "+m;
+			}
+			return time;
+		}
+	
+	</script>
+	
+	<div id=tableDiv> </div>
+	<div id=listDiv></div>
 <h1>Cool</h1>
 </body>
 </html>
