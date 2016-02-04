@@ -32,14 +32,14 @@ class Firefighter {
 class Timeslot{
 	private $startTime;
 	private $endTime;
-	private $firefighterId;
+	private $firefighter;
 	private $timeslotId;
 	
-	function __construct($timeslotId, $startTime, $endTime, $firefighterId){
+	function __construct($timeslotId, $startTime, $endTime, $firefighter){
 		$this->startTime = $startTime;
 		$this->endTime = $endTime;
-		$this->firefighterId = $firefighterId;
-		$this->endTime = $endTime;
+		$this->firefighter = $firefighter;
+		$this->timeslotId = $timeslotId;
 	}
 	
 	public function getStartTime(){
@@ -50,11 +50,11 @@ class Timeslot{
 		return $this->endTime;
 	}
 
-	public function getFirefighterId(){
-		return $this->firefighterId;
+	public function getFirefighter(){
+		return $this->firefighter;
 	}
 	
-	public function timeslotId(){
+	public function getTimeslotId(){
 		return $this->timeslotId;
 	}
 }
@@ -98,21 +98,8 @@ function openConnection($queryString){
 function getAllFirefighters(){
 	$q = intval($_GET);
 	$firefighters = array();
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$dbname = "fireDept";
-	// Create connection
-	$conn = new mysqli($servername, $username, $password, $dbname);
-	// Check connection
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}	 
 	$sql = "SELECT firemanId, firstName, lastName, age FROM Fireman";
-	$result = $conn->query($sql);
-	$conn->close();
-	//$result = openConnection($sql);
-	$firefighters;
+	$result = openConnection($sql);
 	if ($result->num_rows > 0) {
 		mysqli_data_seek($result, 0);
 			while($row = $result->fetch_assoc()) {
@@ -128,30 +115,64 @@ function getAllFirefighters(){
 }
 function getAllScheduleTimeslotsBetween($startTime, $endTime){
 	$timeslots = array();
-	$result = openConnection("");
+	$result = openConnection("
+	SELECT scheduleTimeslotId, fireman.firemanId, fireman.firstName, fireman.lastName, fireman.age, timeslot.startDate, timeslot.endDate, timeslot.timeslotId
+	FROM scheduleTimeslot
+	JOIN (fireman, timeslot)
+	ON (scheduleTimeslot.firemanId=fireman.firemanId AND scheduleTimeslot.timeslotId=timeslot.timeslotId);");
 	$timeslots;
 	if ($result->num_rows > 0) {
 		mysqli_data_seek($result, 0);
 			while($row = $result->fetch_assoc()) {
-				$startTime = $row[''];
-				$endTime = $row["firstName"];
-				$id = $row["id"];
-				$timeslot = new TimeSlot($startTime, $endTime);
-				$scheduleTimeslot = new ScheduleTimeslot($id, $timeslot);
-				array_push($timeslots, $timeslot); 
-			}
+				$startTime = $row['startDate'];
+				$endTime = $row['endDate'];
+				$timeslotId = $row['timeslotId'];
+				$firefighterId = $row['firemanId'];	
+				$firstName = $row['firstName'];
+				$lastName = $row['lastName'];
+				$age = $row ['age'];
+				$scheduleTimeslotId= $row['scheduleTimeslotId'];
+				$firefighter = new Firefighter($firefighterId, $firstName, $lastName, $age);
+				$timeslot = new TimeSlot($timeslotId, $startTime, $endTime, $firefighter);
+				$scheduleTimeslot = new ScheduleTimeslot($timeslot, $scheduleTimeslotId);
+				array_push($timeslots, $scheduleTimeslot); 
+		}
 	}
 	return $timeslots;
 }
 
+function testGetAllFirefighters(){
 $firefighters = getAllFirefighters();
-$a =1;
-$b =2;
-//$timeslots = getAllScheduleTimeslotsBetween($a, $b);
 foreach($firefighters as $firefighter){
-	echo $firefighter->getAge();
+	echo "Firefighter ";
+	echo $firefighter->getId();
+	echo"<br>";
 	echo $firefighter->getFirstName();
+	echo " ";
+	echo $firefighter->getLastName();
+	echo "<br> Age ";
+	echo $firefighter->getAge();
+	echo "<br><br>";
 }
-
+}
+function testGetAllScheduleTimeslots(){
+	$scheduleTimeslots = getAllScheduleTimeslotsBetween(1, 2);
+	foreach($scheduleTimeslots as $scheduleTimeslot){
+	echo "<br>ScheduleTimeslotId: ";
+	echo $scheduleTimeslot->getScheduleTimeslotId();
+	echo "<br> Timeslot id: ";
+	echo $scheduleTimeslot->getTimeslot()->getTimeslotId();
+	echo "<br>Start Time: ";
+	echo $scheduleTimeslot->getTimeslot()->getStartTime();
+	echo "<br>End Time: ";
+	echo $scheduleTimeslot->getTimeslot()->getEndTime();
+	echo "<br> Firefighter : ";
+	echo $scheduleTimeslot->getTimeslot()->getFirefighter()->getFirstName()." ";
+	echo $scheduleTimeslot->getTimeslot()->getFirefighter()->getLastName();
+	echo "<br>";
+	}
+	}
+testGetAllFirefighters();
+testGetAllScheduleTimeslots();
 
 ?>
