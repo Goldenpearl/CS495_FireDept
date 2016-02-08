@@ -27,6 +27,12 @@ class Firefighter {
 	public function getAge(){
 		return $this->age;
 	}
+	
+	public function getJSON(){
+		$arr = array('id'=>$this->id, 'firstName'=>$this->fName, 'lastName'=>$this->lName, 'age'=>$this->age);
+		$json = json_encode($arr);
+		return $json;
+	}
 }
 
 class Timeslot{
@@ -172,7 +178,14 @@ function testGetAllScheduleTimeslots(){
 	echo "<br>";
 	}
 	}
+function testGetAllFirefightersToJSON(){
+$firefighters = getAllFirefighters();
+foreach($firefighters as $firefighter){
+	echo $firefighter->getJSON()."<br> ";
+}
+}
+	
 testGetAllFirefighters();
 testGetAllScheduleTimeslots();
-
+testGetAllFirefightersToJSON();
 ?>
