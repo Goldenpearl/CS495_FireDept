@@ -31,9 +31,9 @@ Admin Scheduler (Locked unless admin)<br>
 <body>
 
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
+$servername = "162.243.8.101:3306";
+$username = "webadmin";
+$password = "digitalpie";
 $dbname = "fireDept";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -53,7 +53,7 @@ if ($conn->query($sql) === TRUE) {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
 */
-$sql = "SELECT firemanId, firstName, lastName, age FROM Fireman";
+$sql = "SELECT firemanId, firstName, lastName, age FROM fireman";
 $result = $conn->query($sql);
 $conn->close();
 if ($result->num_rows > 0) {
