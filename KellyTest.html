@@ -6,7 +6,7 @@
 	<div id="navbar"></div>
 	<br>
 	<h1>Shift Schedule</h1>
-	<script>
+	<script src = "classes.js"></script><script>
 	function loadNavBar() {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
@@ -16,6 +16,7 @@
 	}
 	xhttp.open("GET", "navbar.html", true);
 	xhttp.send();
+	
 	}
 	
 	function getData(){
