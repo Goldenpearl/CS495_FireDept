@@ -54,21 +54,9 @@
 	document.getElementById("id01").innerHTML = out;
 }
 
-	 function createTable(timeslots) {
-	 
-			//generate a table based on timeslots/ fire names
-			//choose a start date and time
-			//choose an end date and time
-			//choose a divider or increment
-			
-			//create a "dummy table" with all the names and no time slots
-			//for each timeslot, fill in relevant cells and link to the shift label
-			
-			var DAYS_IN_WEEK = 7;
-			var HOURS_IN_DAY = 24;
-			var MINUTES_IN_HOUR = 60;
-			var names = ["Bob", "Allan", "Jess"];
-			var timeHeader = new Array();
+
+	function createTimeHeader(){
+	var timeHeader = new Array();
 			timeHeader[0]="12:00 am";
 			for(var i=1; i<12; i++){
 				var str = i+":00 am";
@@ -80,26 +68,29 @@
 				timeHeader[12+i]=str;
 			} 		
 			timeHeader[24] = "12:00 am";
-            var employee = new Array();
-            employee.push(["Employee Id", "Name", "Country"]);
-            employee.push([1, "Harish Kumar", "United States"]);
-            employee.push([2, "Pankaj Mohan", "India"]);
-            employee.push([3, "Nitin Srivastav", "France"]);
-            employee.push([4, "Ramchandra Verma", "Russia"]);
-
-            var tablecontents = "";
-            tablecontents = "<table border='1'>";
-
-            for (var i = 0; i < employee.length; i++) {
-                tablecontents += "<tr>";
-                for (var j = 0; j < employee[i].length; j++) {
-
-                    tablecontents += "<td>" + employee[i][j] + "</td>";
-                }
-
-                tablecontents += "</tr>";
-            }
-			tablecontents = "";
+			return timeHeader;
+	}
+	function getFiremenNames(){
+	var names = ["Bob", "Allan", "Jess"];
+	return names;
+	}
+	
+	 function createTable(timeslots) {
+	 
+			//generate a table based on timeslots/ fire names
+			//choose a start date and time
+			//choose an end date and time
+			//choose a divider or increment
+			
+			//create a "dummy table" with all the names and no time slots
+			//for each timeslot, fill in relevant cells and link to the shift label
+			
+			//var DAYS_IN_WEEK = 7;
+			//var HOURS_IN_DAY = 24;
+			//var MINUTES_IN_HOUR = 60;
+			var names = getFiremenNames();
+			var timeHeader = createTimeHeader();
+			var tablecontents = "";
 			tablecontents += "<table id = myTable>";
 			tablecontents += "<tr>";
 			tablecontents += "<th>";

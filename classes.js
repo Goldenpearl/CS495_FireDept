@@ -26,6 +26,18 @@ function parseScheduleTimeslot(json){
 	return scheduletimeslot;
 }
 
+function parseScheduleTimeslots(json){
+	var ob = JSON.parse(json);	
+	var timeslots = new Array();
+	for(var n=0; n<1; n++){ //TODO find ob size
+		var fireman = new Fireman(ob.ScheduleTimeslot[0].fireman.firemanId, ob.ScheduleTimeslot[0].fireman.firstName, ob.ScheduleTimeslot[0].fireman.lastName);
+		var timeslot = new Timeslot(ob.ScheduleTimeslot[0].timeslot.timeslotId, ob.ScheduleTimeslot[0].timeslot.startTime, ob.ScheduleTimeslot[0].timeslot.endTime, fireman);
+		var scheduletimeslot = new ScheduleTimeslot(fireman, timeslot);
+		timeslots.push(scheduletimeslot);
+	};
+	return timeslots;
+}
+
 var texts = '{ "ScheduleTimeslot" : {' +
 	'"fireman":{'+
 	'"firstName":"Bob",'+
@@ -40,13 +52,28 @@ var texts = '{ "ScheduleTimeslot" : {' +
 	'}'+
 '}}';
 
-// Instantiate new objects with 'new'
-var fireman = new Fireman("1", "Bob", "M");
-var timeslot = new Timeslot(1, "1","1",fireman);
-var s = parseScheduleTimeslot(texts);
 
+var textss = '{ "ScheduleTimeslot" : [' +
+	'{"fireman":{'+
+	'"firstName":"James",'+
+	'"lastName":"Jo",'+
+	'"firemanId":"12"'+
+	'},'+
+	'"timeslot":{'+
+	'"startTime":"12",'+
+	'"endTime":"1",'+
+	'"firemanId":"12",'+
+	'"timeslotId":"1"'+
+	'}}'+
+']}';
 function testParsing(){
 	var s = parseScheduleTimeslot(texts);
 	s.timeslot.getAlert();
 }
+// Instantiate new objects with 'new'
+var fireman = new Fireman("1", "Bob", "M");
+var timeslot = new Timeslot(1, "1","1",fireman);
+var s = parseScheduleTimeslot(texts);
+var ss = parseScheduleTimeslots(textss);
+ss[0].timeslot.getAlert();
 testParsing();
