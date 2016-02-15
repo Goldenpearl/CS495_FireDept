@@ -1,14 +1,6 @@
 	var tableDiv = "tableDiv";
 	var listDiv = "listDiv";
 	
-	function getTableDiv(){
-		return tableDiv;
-	}
-	
-	function getListDiv(){
-		return listDiv;
-	}
-	
 	function createScheduler(){
 		var timeslots = loadTimeslots();
 		createList(timeslots);
@@ -133,7 +125,7 @@
 	
 	function makeXmlRequest(){
 		var xmlhttp = new XMLHttpRequest();
-		var url = "KellyTxt.txt";
+		var url = "scheduleGrab.php";
 		xmlhttp.onreadystatechange = function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				var myArr = JSON.parse(xmlhttp.responseText);
