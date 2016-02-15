@@ -63,6 +63,10 @@ class Timeslot{
 	public function getTimeslotId(){
 		return $this->timeslotId;
 	}
+	
+	public function getJSON(){
+
+	}
 }
 
 class ScheduleTimeslot{
@@ -81,6 +85,11 @@ class ScheduleTimeslot{
 	public function getScheduleTimeslotId(){
 		return $this->id;
 	}	
+	
+	public function getJSON(){
+	
+		return timeslot->getJSON() . id;
+	}
 
 }
 
@@ -182,6 +191,13 @@ function testGetAllFirefightersToJSON(){
 $firefighters = getAllFirefighters();
 foreach($firefighters as $firefighter){
 	echo $firefighter->getJSON()."<br> ";
+}
+}
+
+function testGetAllScheduleToJSON(){
+$timeslots = getAllScheduleTimeslots();
+foreach($timeslots as $scheduleTimeslot){
+	echo $scheduleTimeslot->getJSON()."<br>";
 }
 }
 	
