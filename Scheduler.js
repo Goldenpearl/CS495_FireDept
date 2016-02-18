@@ -2,21 +2,38 @@
 	var listDiv = "listDiv";
 	
 	function createScheduler(){
-		var timeslots = loadTimeslots();
+		var timeslots = grabSchedule();
+		createSchedulerFromTimeslots(timeslots);
+	}
+	
+	function grabSchedule() {	
+		var id=0;
+		var response1;
+		var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "scheduleGrab.php?id=" + id, false);
+        xmlhttp.send();
+		return xmlhttp.responseText;
+		//xmlhttp.close;
+	}
+	
+	function createSchedulerFromTimeslots(timeslotss){
+		var timeslots = loadTimeslots(timeslotss);
 		createList(timeslots);
 		createTable(timeslots);
 	}
 	
-	function loadTimeslots(){
-		var timeslots = new Array();
-		timeslots.push(["Bob", 11]);
-		timeslots.push(["Bob", 12]);
-		timeslots.push(["Bob", 13]);
-		timeslots.push(["Allan", 11]);
-		timeslots.push(["Jess", 2]);
-		return timeslots;
+	function loadTimeslots(timeslots){
+		//TODO convert timeslots to array
+		var name = timeslots.split("<br>");
+		var timeslotss = Array();
+		for(n=0; n<name.length-1; n++){
+			var aa = JSON.parse(name[n]);
+			timeslotss.push([aa.ScheduleTimeslot.Firefighter.firstName, 10]);
+		}
+		alert(ss);
+		timeslotss.push(["Jess", 2]);
+		return timeslotss;
 	}
-
 	
 	function createList(timeslots){
 		var listContents = "";
@@ -121,17 +138,4 @@
 
 			}
 		}
-	}
-	
-	function makeXmlRequest(){
-		var xmlhttp = new XMLHttpRequest();
-		var url = "scheduleGrab.php";
-		xmlhttp.onreadystatechange = function() {
-			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				var myArr = JSON.parse(xmlhttp.responseText);
-				myFunction(myArr);
-			}
-		};
-		xmlhttp.open("GET", url, true);
-		xmlhttp.send();
 	}

@@ -1,0 +1,48 @@
+Email:
+Name: Yorktown Fire
+email:ytfscheduler@gmail.com
+password:firepie1
+Birthdate: Jan 1 1990
+Gender: Other
+
+Digital Ocean
+Account username:
+ytfscheduler@gmail.com
+Name: yorktownfire
+Account password: digitalpie
+
+Current Server Info:
+Ip adress: 162.243.8.101
+Username: root
+Password: digitalpie
+
+Server Users:
+User: wp-user
+Password: wordpie
+
+SQL Info:
+Username: root
+Password: digitalpie
+
+Database Name: wordpress
+*User: 'wordpressuser'@'localhost'
+*Password: 'wordpie';
+*Priviledges: all
+
+*User: 'wordpressuser'@'162.243.7.38'
+*Password: 'wordpie';
+Priviledges: SELECT, DELETE, INSERT, UPDATE
+
+Namecheap.com
+User:yorktownfire
+Password:firepie
+Domain:yorktownfire.xyz
+
+Wordpress info:
+user: ytfscheduler
+email:ytfscheduler@gmail.com
+password:ytfwaterfirepie
+
+Paid sites:
+Digital Ocean
+Namecheap

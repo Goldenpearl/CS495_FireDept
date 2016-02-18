@@ -90,9 +90,9 @@ class ScheduleTimeslot{
 	
 	public function getJSON(){
 		$str = '{"ScheduleTimeslot": '.
-		'{"Firefighter":'.
+		'{"Timeslot":'.
 		$this->timeslot->getJSON().
-		', "Timeslot":'.
+		', "Firefighter":'.
 		$this->timeslot->getFirefighter()->getJSON().
 		'}}';
 		return $str;
@@ -202,14 +202,26 @@ foreach($firefighters as $firefighter){
 }
 
 function testGetAllScheduleToJSON(){
-$timeslots = getAllScheduleTimeslotsBetween(2,2);
-foreach($timeslots as $scheduleTimeslot){
-	echo $scheduleTimeslot->getJSON()."<br>";
+	$timeslots = getAllScheduleTimeslotsBetween(2,2);
+	$len = count($timeslots);
+	//echo "{";
+	for($n=0; $n<count($timeslots); $n++){
+		echo $timeslots[$n]->getJSON();
+		//if($n<count($timeslots)-1){
+			//echo ",";
+		//}
+		echo"<br>";
+	}
+	//echo "}";
 }
+$id = $_REQUEST["id"];
+if($id == 0){
+	echo testGetAllScheduleToJSON();
 }
-	
+else if($id=1){
 testGetAllFirefighters();
 testGetAllScheduleTimeslots();
 testGetAllFirefightersToJSON();
 testGetAllScheduleToJSON();
+}
 ?>
