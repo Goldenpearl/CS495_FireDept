@@ -6,62 +6,19 @@
 		createSchedulerFromTimeslots(timeslots);
 	}
 	
-	function grabSchedule() {	
-		var id=0;
-		var response1;
-		var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", "scheduleGrab.php?id=" + id, false);
-        xmlhttp.send();
-		return xmlhttp.responseText;
-		//xmlhttp.close;
-	}
-	
 	function createSchedulerFromTimeslots(timeslotss){
-		var timeslots = loadTimeslots(timeslotss);
-		createList(timeslots);
-		createTable(timeslots);
-	}
-	
-	function loadTimeslots(timeslots){
-		//TODO convert timeslots to array
-		var name = timeslots.split("<br>");
-		var timeslotss = Array();
-		for(n=0; n<name.length-1; n++){
-			var aa = JSON.parse(name[n]);
-			timeslotss.push([aa.ScheduleTimeslot.Firefighter.firstName, 10]);
-		}
-		alert(ss);
-		timeslotss.push(["Jess", 2]);
-		return timeslotss;
-	}
-	
-	function createList(timeslots){
-		var listContents = "";
-		for(var n=0; n<timeslots.length; n++){
-			listContents+=timeslots[n][0] + " " + indexToTime(timeslots[n][1])+ "<br>";
-		}
-		document.getElementById(listDiv).innerHTML = listContents;
+		createList(timeslotss, listDiv);
+		createTable(timeslotss, tableDiv);
 	}
 
-	function indexToTime(index){
-		var realIndex = index%24;
-		var time = "";
-		var m = "";
-		if(index<=0){
-			time+="12:00 am";
+	function createList(timeslots, divName){
+		var listContents = "";
+		for(var n=0; n<timeslots.length; n++){
+			listContents+=timeslots[n].getSummary()+"<br>";
 		}
-		else if(index>12){
-			m="pm";
-			time+=index%12+":00 "+m;
-		}
-		else{
-			m = "am"
-			time+=index+":00 "+m;
-		}
-			return time;
+		document.getElementById(divName).innerHTML = listContents;
 	}
-	
-	
+
 	function createTable(timeslots, divName) {
 			//Get all unique firemen
 			var names = getFiremenNames();
@@ -97,7 +54,7 @@
 	}
 
 	function getFiremenNames(){
-	var names = ["Bob", "Allan", "Jess"];
+	var names = ["Ash", "Misty", "Brock"];
 	return names;
 	}
 	
@@ -117,25 +74,32 @@
 			return timeHeader;
 	}
 
+	function getNameIndex(name, names){
+		for(var n=0; n<names.length; n++){
+			if(name === names[n]){
+				return n;
+			}
+		}
+		return -1;
+	}
+	
+	function getTimeIndex(date){
+		var time = date.getStartDate();
+		return time.getHours();
+	}
+	
 	function shadeCells(timeslots, names){
 		for(var i=0; i<timeslots.length; i++){	
-			var name = timeslots[i][0];
-			var indexOfName = 0;
-			var nameFound = false
-			while(!nameFound && indexOfName<names.length){
-				if(name === names[indexOfName])
-				{
-					nameFound=true;
-				}
-				else
-				{
-					indexOfName++;
-				}
-			}
-			if(nameFound)
+			var name = timeslots[i].fireman.firstName;
+			var startTime = timeslots[i].timeslot;
+			var nameIndex = getNameIndex(name, names);
+			var timeIndex = getTimeIndex(startTime)
+			if(nameIndex!=-1 && timeIndex !=-1)
 			{
-				document.getElementById('myTable').rows[indexOfName+1].cells[timeslots[i][1]+1].setAttribute("bgcolor", "#00FF00");
+				document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex+1].setAttribute("bgcolor", "#00FF00");
 
 			}
 		}
 	}
+	
+	
