@@ -2,6 +2,9 @@
 	var listDiv = "listDiv";
 	
 	function createScheduler(){
+		var dateGetter = new validDateGetter();
+		var earliestValidDate = dateGetter.getEarliestValidDate();
+		var latestValidDate = dateGetter.getLatestValidDate();
 		var timeslots = grabSchedule();
 		createSchedulerFromTimeslots(timeslots);
 	}
@@ -54,7 +57,7 @@
 	}
 
 	function getFiremenNames(){
-	var names = ["Ash", "Misty", "Brock"];
+	var names = ["Ash Ketchum", "Misty Bubbles", "Brock Rock"];
 	return names;
 	}
 	
@@ -90,7 +93,7 @@
 	
 	function shadeCells(timeslots, names){
 		for(var i=0; i<timeslots.length; i++){	
-			var name = timeslots[i].fireman.firstName;
+			var name = timeslots[i].fireman.getFullName();
 			var startTime = timeslots[i].timeslot;
 			var nameIndex = getNameIndex(name, names);
 			var timeIndex = getTimeIndex(startTime)

@@ -3,6 +3,10 @@ function Fireman(firemanId, firstName, lastName){
 	this.firstName=firstName;
 	this.lastName=lastName;
 	
+	this.getFullName = function(){
+		return this.firstName + " " + this.lastName;
+	}
+	
 	this.getSummary = function(){
 		return "Fireman ("+firemanId+", "+firstName+", "+lastName+")";
 	}
@@ -56,6 +60,29 @@ function Timeslot(timeslotId, startTime, endTime, fireman){
 	   return (overlap || containsAnOverlap);
    }
 }
+
+function validDateGetter(){
+	var dateBuffer = 60;// 60 day buffer
+	this.getEarliestValidDate = function(){
+		var dt = new Date(); //current date
+		dt.setHours(0,0,0,0); //set to midnight
+		dt.setDate(dt.getDate() - dateBuffer); 
+		return dt;
+	}
+	this.getLatestValidDate = function(){
+		var dt = new Date(); //current date
+		dt.setHours(23,59,59,99) // date set to almost midnightTomorrow;
+		dt.setDate(dt.getDate() + dateBuffer);
+		return dt;
+	}
+}
+
+function addDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
+
 function isDateBeforeOtherDate(date, otherDate){
 	return (date<otherDate);
 }
