@@ -19,10 +19,53 @@ function Timeslot(timeslotId, startTime, endTime, fireman){
 		var dateStr = startTime.replace(" ", "T");
 		return new Date(dateStr);
 	}
+	this.getEndDate = function(){
+		var dateStr = endTime.replace(" ","T");
+		return new Date(dateStr);
+	}
    this.getSummary = function(){
 	   return "Timeslot ("+timeslotId+", "+startTime+", "+endTime+")";
    }
+   this.isBefore = function(otherTimeslot){
+		var startsBeforeOther = isDateBeforeOtherDate(this.startTime, otherTimeslot.startTime);
+		var endsBeforeOther = isDateBeforeOtherDate(this.endTime, otherTimeslot.startTime);
+		return (startsBeforeOther && endsBeforeOther);
+   }
+   
+   this.isAfter = function(otherTimeslot){
+	   var endsAfterOther = isDateAfterOtherDate(this.endTime, otherTimeslot.endTime);
+	   var beginsAfterOther = isDateAfterOtherDate(this.startTime, otherTimeslot.endTime);
+	   return (endsAfterOther && beginsAfterOther);
+   }
+   this.isEqual = function(otherTimeslot){
+	   var startTimeIsEqual = isDateEqualToOtherDate(this.startTime, otherTimeslot.startTime);
+	   var endTimeIsEqual = isDateEqualToOtherDate(this.endTime, otherTimeslot.endTime);
+	   return (startTimeIsEqual && endTimeIsEqual);
+   }
+   this.overlapsWith= function(otherTimeslot){
+	   var thisStartsBeforeOtherEnds = isDateBeforeOtherDate(this.startTime, otherTimeslot.endTime);
+	   var thisEndsAfterOtherStarts = isDateAfterOtherDate(this,endTime, otherTimeslot.startTime);
+	   var overlap = (thisStartsBeforeOtherEnds && thisEndsAfterOtherStarts);
+	   
+	   var thisStartsAtTheSameTimeOtherEnds = isDateEqualToOtherDate(this.startTime, otherTimeslot.endTime);
+	   var thisEndsAtTheSameTimeOtherStarts = isDateEqualToOtherDate(this.endTime, other.startTime);
+	   var theseStartAtTheSameTime = isDateEqualToOtherDate(this.startTime, otherTimeslot.startTime);
+	   var theseEndAtTheSameTime = isDateEqualToOtherDate(this.endTime, otherTimeslot.endTime);
+	   var containsAnOverlap =(thisStartsAtTheSameTimeOtherEnds || thisEndsAtTheSameTimeOtherStarts ||theseStartAtTheSameTime ||theseEndAtTheSameTime);
+	   
+	   return (overlap || containsAnOverlap);
+   }
+}
+function isDateBeforeOtherDate(date, otherDate){
+	return (date<otherDate);
+}
 
+function isDateAfterOtherDate(date, otherDate){
+	return (date>otherDate);
+}
+
+function isDateEqualToOtherDate(date, otherDate){
+	return (date === otherDate);
 }
 
 function ScheduleTimeslot(fireman, timeslot){
