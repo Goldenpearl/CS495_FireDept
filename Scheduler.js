@@ -5,20 +5,36 @@
 	var dateIdDAILY = 0;
 	var dateIdWEEKLY = 1;
 	var dateIdMONTHLY = 2;
-	
+	// external call method; creates scheduler
 	function createScheduler(){
-		var timeslots = grabSchedule();
+		var dateId = dateIdWEEKLY;
+		var timeslots = grabSchedule(); //external call
 		var names = getFiremenNames();
 		//createList(timeslots, listDiv);
 		createTable(tableDiv, names);
 		
-		var dateRangeArray = getDateRange(dateIdMONTHLY);
-		var dateIndex = 1;
+		var dateRangeArray = getDateRange(dateId);
+		var dateIndex = getDateIndex(dateRangeArray);
 		shadeCells(timeslots, names, dateRangeArray[dateIndex]);
 		createDateLabel(dateRangeArray, dateIndex, timeslots, names);
-		
+		var header = getHeaderOfDateRange(dateId, dateRangeArray[dateIndex]);
+		for(var n=0; n<header.length; n++){
+			alert(header[n].getSummary());
+		}
 	}
 	
+	//returns index that is closest to current date
+	function getDateIndex(dateRangeArray){
+		var currentDate = new Date();
+		for(var n=0; n<dateRangeArray.length; n++){
+			if(currentDate>=dateRangeArray[n].startDate && currentDate<=dateRangeArray[n].endDate){
+				return n;
+			}
+		}
+		return 0;
+	}
+	
+	//Returns an array of dateRanges
 	function getDateRange(dateId){
 		var dateGetter = new validDateGetter();
 		var earliestValidDate = dateGetter.getEarliestValidDate();
@@ -48,7 +64,6 @@
 				nextEndDate.setMonth(nextEndDate.getMonth()+1);
 			}
 			var dtRange = new DateRange(nextStartDate, nextEndDate);
-			alert(dtRange.getSummary());
 			dateRangeArray.push(dtRange);
 			nextStartDate = new Date(nextStartDate.getTime());
 			nextEndDate = new Date(nextEndDate.getTime());
@@ -56,6 +71,42 @@
 		return dateRangeArray;
 	}
 	
+	function getHeaderOfDateRange(dateId, dateRange){
+		var startDate = new Date(dateRange.startDate.getTime());
+		var endDate = new Date(startDate.getTime());
+		var header = new Array();
+		if(dateId == dateIdDAILY){
+			endDate.setHours(0,0,0,0);
+		}
+		else if(dateId == dateIdWEEKLY){
+			var dateDiff =endDate.getDay() + (day==0?7:0);
+			endDate.setDate(endDate.getDate()-dateDiff);
+			endDate.setHours(0,0,0,0);
+		}
+		else{
+			endDate.setDate(1);
+			endDate.setHours(0,0,0,0);
+		}
+		while(endDate<dateRange.endDate){
+			startDate=new Date(endDate.getTime());
+			endDate = new Date(startDate.getTime());
+			if(dateId== dateIdDAILY){
+				endDate.setHours(endDate.getHours()+1);
+			}
+			else if(dateId == dateIdWEEKLY){
+				endDate.setHours(endDate.getHours()+4);
+			}
+			else{
+				endDate.setDate(endDate.getDate()+1);
+			}
+			var range = new DateRange(startDate, endDate);
+			header.push(range);
+		}
+		return header;
+	}
+	
+	
+	//Writes the specified schedule in list form
 	function createList(timeslots, divName){
 		var listContents = "";
 		for(var n=0; n<timeslots.length; n++){
@@ -64,6 +115,7 @@
 		document.getElementById(divName).innerHTML = listContents;
 	}
 
+	//Creates a label specifying which times are shown, as well as buttons to go back or forward
 	function createDateLabel(dateRangeArray, index, timeslots, names){
 		var dateContents = "";
 		var startDate = dateRangeArray[index].startDate;
@@ -92,6 +144,7 @@
 		}
 	}
 	
+	//Creates an unshaded table with a row for each firefighter name
 	function createTable(divName, firefighterNames) {
 			//all unique firemen
 			var names = firefighterNames
@@ -124,13 +177,14 @@
 			document.getElementById(tableDiv).innerHTML = tablecontents;
 	}
 
-	
+	//Called to update the time range of the schedule (called when you push back or forward)
 	function changeTableActiveTime(dateRangeArray, dateIndex, timeslots, names){
 		if(dateIndex<=dateRangeArray.length-1 && dateIndex>=0)
 		//shadeCells(timeslots, names, dateRangeArray[dateIndex]);
 		createDateLabel(dateRangeArray, dateIndex);
 	}
 	
+	//TODO call database
 	function getFiremenNames(){
 	var names = ["Ash Ketchum", "Misty Bubbles", "Brock Rock"];
 	return names;
@@ -152,6 +206,7 @@
 			return timeHeader;
 	}
 
+	//Returns the index of the name in the array, or -1 if name is not found
 	function getNameIndex(name, names){
 		for(var n=0; n<names.length; n++){
 			if(name === names[n]){
