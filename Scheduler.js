@@ -9,14 +9,15 @@
 	var dateIdMONTHLY = 2;
 	
 	var lastKnownDate = Date(); //Default is current date. Helps keep track of date across all formats.
-	
+	var grabbedslots;
+	var grabNames;
 	//calls one time setup methods
 	function initScheduler(){
-		var timeslots = grabSchedule(); //external call
-		var names = getFiremenNames();
+		grabbedslots = grabSchedule(); //external call
+		grabNames = getFiremenNames();
 		createDateSelection(bubbleDiv);
 		//createList(timeslots, listDiv);
-		reloadTable(timeslots, names);
+		reloadTable();
 	}
 	
 	//TODO call database
@@ -59,14 +60,24 @@
 	}
 	
 	//Refreshes header guide, table header, and cell shading
-	function reloadTable(timeslots, names){
+	function reloadTable(){
+		var timeslots = getTimeslots();
+		var names = getNames();
 		var dateFormatId = getDateSelectionIndex();
 		var dateRangeArray = getDateRange(dateFormatId);
 		var dateIndex = getDateIndex(dateRangeArray);
 		
-		refreshHeaderGuide(dateRangeArray, dateIndex, timeslots, names);
+		refreshHeaderGuide(dateRangeArray, dateIndex, timeslots, names, dateFormatId);
 		refreshTableCells(tableDiv, getFiremenNames(), dateRangeArray[dateIndex], dateFormatId);
 		refreshCellShading(timeslots, names, dateRangeArray[dateIndex]);
+	}
+	//returns the grabbed timeslots
+	function getTimeslots(){
+		return grabbedslots;
+	}
+	//returns the grabbed fire names
+	function getNames(){
+		return grabNames;
 	}
 	
 	//returns value of selected radio button; this value cooresponds to a display format
@@ -115,7 +126,7 @@
 				nextEndDate.setDate(nextEndDate.getDate() +1);
 			}
 			else if(dateId == dateIdWEEKLY){
-				nextEndDate.setDate(nextEndDate.getDate() +7);
+				nextEndDate.setDate(nextEndDate.getDate() +6);
 			}
 			else{
 				nextEndDate.setMonth(nextEndDate.getMonth()+1);
@@ -130,37 +141,40 @@
 	
 	
 	//Refreshes the text above the table
-	function refreshHeaderGuide(dateRangeArray, dateIndex, timeslots, names){
-		createDateLabel(dateRangeArray, dateIndex, timeslots, names);
-	}
-	
-	//Creates a label specifying which times are shown, as well as buttons to go back or forward
-	function createDateLabel(dateRangeArray, index, timeslots, names){
+	function refreshHeaderGuide(dateRangeArray, dateIndex, timeslots, names, dateFormatId){
 		var dateContents = "";
-		var startDate = dateRangeArray[index].startDate;
-		var endDate = dateRangeArray[index].endDate;
+		var startDate = dateRangeArray[dateIndex].startDate;
+		var endDate = dateRangeArray[dateIndex].endDate;
 		dateContents += "<button id = 'backButton'> << </button>";
 		//dateContents += "<h3>";
 		dateContents += simpleDate(startDate);
+		if(dateFormatId!=dateIdDAILY){
 		dateContents += " - ";
 		dateContents += simpleDate(endDate);
+		}
 		//dateContents += "</h3>";
 		dateContents += "<button id = 'forwardButton'> >> </button>";
 		document.getElementById(dateDiv).innerHTML = dateContents;
-		document.getElementById('forwardButton').onclick=function(){changeTableActiveTime(dateRangeArray, index+1, timeslots, names);};
-		document.getElementById('backButton').onclick=function(){changeTableActiveTime(dateRangeArray, index-1, timeslots, names);};
-		if(index<=0){
+		document.getElementById('forwardButton').onclick=function(){changeTableActiveTime(dateRangeArray, dateIndex+1, timeslots, names, dateFormatId);};
+		document.getElementById('backButton').onclick=function(){changeTableActiveTime(dateRangeArray, dateIndex-1, timeslots, names, dateFormatId);};
+		if(dateIndex<=0){
 			document.getElementById('backButton').disabled=true;
 		}
 		else{
 			document.getElementById('backButton').disabled=false;
 		}
-		if(index>=dateRangeArray.length-1){
+		if(dateIndex>=dateRangeArray.length-1){
 			document.getElementById('forwardButton').disabled=true;
 		}
 		else{
 			document.getElementById('forwardButton').disabled=false;
 		}
+	}
+	//Called to update the time range of the schedule (called when you push back or forward)
+	function changeTableActiveTime(dateRangeArray, dateIndex, timeslots, names, dateFormatId){
+		if(dateIndex<=dateRangeArray.length-1 && dateIndex>=0)
+		refreshCellShading(timeslots, names, dateRangeArray[dateIndex]);
+		refreshHeaderGuide(dateRangeArray, dateIndex, timeslots, names, dateFormatId);
 	}
 	
 	//Creates an unshaded table with a row for each firefighter name
@@ -208,9 +222,13 @@
 		}
 		else if(dateFormatId == dateIdWEEKLY){
 			var day = endDate.getDay();
-			var dateDiff =day + (day==0?7:0);
-			endDate.setDate(endDate.getDate()-dateDiff);
+			if(day!=0)
+			{
+				//var dateDiff =(day==0?7:0);
+				//endDate.setDate(endDate.getDate()-dateDiff);
+			}
 			endDate.setHours(0,0,0,0);
+			
 		}
 		else{
 			endDate.setDate(1);
@@ -223,7 +241,7 @@
 				endDate.setHours(endDate.getHours()+1);
 			}
 			else if(dateFormatId == dateIdWEEKLY){
-				endDate.setHours(endDate.getHours()+4);
+				endDate.setHours(endDate.getHours()+24);
 			}
 			else{
 				endDate.setDate(endDate.getDate()+1);
@@ -251,6 +269,32 @@
 	
 	function getDateString(date, dateFormatId){
 		if(dateFormatId==dateIdDAILY){
+			var weekday = "";
+			switch (date.getDay()){
+				case 0:
+				weekday = "Sunday";
+				break;
+				case 1:
+				weekday = "Monday";
+				break;
+				case 2:
+				weekday = "Tuesday";
+				break;
+				case 3:
+				weekday = "Wednesday";
+				break;
+				case 4:
+				weekday = "Thursday";
+				break;
+				case 5:
+				weekday = "Friday";
+				break;
+				case 6:
+				weekday = "Saturday";
+				break;
+				default:
+			}
+			
 			var hours = date.getHours();
 			var dateString = "";
 			var m = "am";
@@ -268,10 +312,41 @@
 			
 		}
 		else if (dateFormatId == dateIdWEEKLY){
+			var weekday = "";
+			switch (date.getDay()){
+				case 0:
+				weekday = "Sunday";
+				break;
+				case 1:
+				weekday = "Monday";
+				break;
+				case 2:
+				weekday = "Tuesday";
+				break;
+				case 3:
+				weekday = "Wednesday";
+				break;
+				case 4:
+				weekday = "Thursday";
+				break;
+				case 5:
+				weekday = "Friday";
+				break;
+				case 6:
+				weekday = "Saturday";
+				break;
+				default:
+			}
 			
+			var dateString = "";
+			dateString += weekday + ", ";
+			dateString +=getMonth(date.getMonth());
+			dateString += " "+ date.getDate();
+			return dateString;
 		}
 		else{
-			
+			var dateString = simpleDate(date);
+			return dateString;
 		}
 		return "gg";
 	}
@@ -315,12 +390,6 @@
 		document.getElementById(divName).innerHTML = listContents;
 	}
 
-	//Called to update the time range of the schedule (called when you push back or forward)
-	function changeTableActiveTime(dateRangeArray, dateIndex, timeslots, names){
-		if(dateIndex<=dateRangeArray.length-1 && dateIndex>=0)
-		//shadeCells(timeslots, names, dateRangeArray[dateIndex]);
-		createDateLabel(dateRangeArray, dateIndex);
-	}
 	
 	
 
