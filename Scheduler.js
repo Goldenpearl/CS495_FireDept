@@ -1,33 +1,125 @@
 	var tableDiv = "tableDiv";
 	var listDiv = "listDiv";
 	var dateDiv = "dateDiv";
-	
+	var bubbleDiv= "bubbleDiv";
+	var dateFormat = "dateFormat";
+	var dateSelection = "dateSelection";
 	var dateIdDAILY = 0;
 	var dateIdWEEKLY = 1;
 	var dateIdMONTHLY = 2;
-	// external call method; creates scheduler
-	function createScheduler(){
-		var dateId = dateIdWEEKLY;
+	
+	var lastKnownDate = Date(); //Default is current date. Helps keep track of date across all formats.
+	
+	//calls one time setup methods
+	function initScheduler(){
 		var timeslots = grabSchedule(); //external call
 		var names = getFiremenNames();
+		createDateSelection(bubbleDiv);
 		//createList(timeslots, listDiv);
 		createTable(tableDiv, names);
-		
+		reloadTable(timeslots, names);
+	}
+	
+	//adds radio buttons to html	
+	function createDateSelection(divName){
+		var selectionContents = "";
+		selectionContents+='<form id='
+		selectionContents+=dateFormat;
+		selectionContents+='><label><input type="radio" id='
+		selectionContents+=dateSelection;
+		selectionContents+=' name='
+		selectionContents+=dateSelection;
+		selectionContents+=' onchange ="reloadTable()"';
+		selectionContents+=' checked = "checked" value ='
+		selectionContents+=dateIdDAILY;
+		selectionContents+=' />Daily   </label>';
+		selectionContents+='<label><input type="radio" id='
+		selectionContents+=dateSelection
+		selectionContents+=' name = ';
+		selectionContents+= dateSelection;
+		selectionContents+=' onchange = "reloadTable()"';
+		selectionContents+=' value = ';
+		selectionContents+=dateIdWEEKLY;
+		selectionContents+=' />Weekly   </label>';
+		selectionContents+='<label><input type="radio" id='
+		selectionContents+=dateSelection
+		selectionContents+=' name = ';
+		selectionContents+= dateSelection;
+		selectionContents+=' onchange = "reloadTable()"';
+		selectionContents+= ' value = '
+		selectionContents+= dateIdMONTHLY;
+		selectionContents+=' />Monthly   </label>';
+		selectionContents+='</form>';
+		document.getElementById(divName).innerHTML = selectionContents;
+	}
+	
+	//Refreshes header guide, table header, and cell shading
+	function reloadTable(timeslots, names){
+		var dateId = getDateSelectionIndex();
 		var dateRangeArray = getDateRange(dateId);
 		var dateIndex = getDateIndex(dateRangeArray);
-		shadeCells(timeslots, names, dateRangeArray[dateIndex]);
+		
+		refreshHeaderGuide(dateRangeArray, dateIndex, timeslots, names);
+		refreshTableHeader(dateId, dateRangeArray[dateIndex]);
+		refreshCellShading(timeslots, names, dateRangeArray[dateIndex]);
+	}
+	
+	function refreshHeaderGuide(dateRangeArray, dateIndex, timeslots, names){
 		createDateLabel(dateRangeArray, dateIndex, timeslots, names);
-		var header = getHeaderOfDateRange(dateId, dateRangeArray[dateIndex]);
+	}
+	
+	function refreshTableHeader(dateId, dateRange){
+		var header = getHeaderOfDateRange(dateId, dateRange);
 		for(var n=0; n<header.length; n++){
-			alert(header[n].getSummary());
+			//alert(header[n].getSummary());
 		}
+	}
+	
+	function refreshCellShading(timeslots, names, dateRange){
+		for(var i=0; i<timeslots.length; i++){	
+			var name = timeslots[i].firefighter.getFullName();
+			var startTime = timeslots[i].timeslot;
+			var nameIndex = getNameIndex(name, names);
+			var timeIndex = getTimeIndex(startTime)
+			if(nameIndex!=-1 && timeIndex !=-1)
+			{
+				document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex+1].setAttribute("bgcolor", "#00FF00");
+
+			}
+		}
+	}
+	
+	//Returns the index of the name in the array, or -1 if name is not found
+	function getNameIndex(name, names){
+		for(var n=0; n<names.length; n++){
+			if(name === names[n]){
+				return n;
+			}
+		}
+		return -1;
+	}
+	
+	function getTimeIndex(date){
+		var time = date.getStartDate();
+		return time.getHours();
+	}
+	
+	//returns value of selected radio button; this value cooresponds to a display format
+	function getDateSelectionIndex(){
+		var radioButtons = document.getElementById(dateFormat).elements[dateSelection];
+		for(var i=0; i<radioButtons.length; i++){
+			if(radioButtons[i].checked){
+				return radioButtons[i].value;
+			}
+		}
+		return 0;
 	}
 	
 	//returns index that is closest to current date
 	function getDateIndex(dateRangeArray){
-		var currentDate = new Date();
+		var targetDate = Date();
 		for(var n=0; n<dateRangeArray.length; n++){
-			if(currentDate>=dateRangeArray[n].startDate && currentDate<=dateRangeArray[n].endDate){
+			if(targetDate>=dateRangeArray[n].startDate && targetDate<=dateRangeArray[n].endDate){
 				return n;
 			}
 		}
@@ -79,7 +171,8 @@
 			endDate.setHours(0,0,0,0);
 		}
 		else if(dateId == dateIdWEEKLY){
-			var dateDiff =endDate.getDay() + (day==0?7:0);
+			var day = endDate.getDay();
+			var dateDiff =day + (day==0?7:0);
 			endDate.setDate(endDate.getDate()-dateDiff);
 			endDate.setHours(0,0,0,0);
 		}
@@ -161,7 +254,7 @@
 				tablecontents+=timeHeader[i] +"</th>";
 			}
 			tablecontents += "</tr>"
-			for(var i=0; i<names.length; i++){ //create a row for each fireman
+			for(var i=0; i<names.length; i++){ //create a row for each firefighter
 				tablecontents+="<tr>";
 				tablecontents+="<th>";
 				tablecontents+= names[i];
@@ -174,7 +267,7 @@
 			}
             tablecontents += "</table>";
 			//Add the table to the document
-			document.getElementById(tableDiv).innerHTML = tablecontents;
+			document.getElementById(divName).innerHTML = tablecontents;
 	}
 
 	//Called to update the time range of the schedule (called when you push back or forward)
@@ -206,33 +299,6 @@
 			return timeHeader;
 	}
 
-	//Returns the index of the name in the array, or -1 if name is not found
-	function getNameIndex(name, names){
-		for(var n=0; n<names.length; n++){
-			if(name === names[n]){
-				return n;
-			}
-		}
-		return -1;
-	}
 	
-	function getTimeIndex(date){
-		var time = date.getStartDate();
-		return time.getHours();
-	}
-	
-	function shadeCells(timeslots, names, dateRange){
-		for(var i=0; i<timeslots.length; i++){	
-			var name = timeslots[i].fireman.getFullName();
-			var startTime = timeslots[i].timeslot;
-			var nameIndex = getNameIndex(name, names);
-			var timeIndex = getTimeIndex(startTime)
-			if(nameIndex!=-1 && timeIndex !=-1)
-			{
-				document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex+1].setAttribute("bgcolor", "#00FF00");
-
-			}
-		}
-	}
 	
 	
