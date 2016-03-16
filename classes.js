@@ -146,7 +146,6 @@ function ScheduleTimeslot(firefighter, timeslot){
 }
 
 function parseScheduleTimeslot(json){
-	alert(json);
 	var ob = JSON.parse(json);
 	var firstName = ob.ScheduleTimeslot.Firefighter.firstName;
 	var lastName = ob.ScheduleTimeslot.Firefighter.lastName;
