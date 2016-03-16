@@ -126,7 +126,7 @@
 				nextEndDate.setDate(nextEndDate.getDate() +1);
 			}
 			else if(dateId == dateIdWEEKLY){
-				nextEndDate.setDate(nextEndDate.getDate() +6);
+				nextEndDate.setDate(nextEndDate.getDate() +7);
 			}
 			else{
 				nextEndDate.setMonth(nextEndDate.getMonth()+1);
@@ -150,7 +150,10 @@
 		dateContents += simpleDate(startDate);
 		if(dateFormatId!=dateIdDAILY){
 		dateContents += " - ";
-		dateContents += simpleDate(endDate);
+		var tempDate = new Date();
+		tempDate.setTime(endDate.getTime());
+		tempDate.setMinutes(tempDate.getMinutes()-1);
+		dateContents += simpleDate(tempDate);
 		}
 		//dateContents += "</h3>";
 		dateContents += "<button id = 'forwardButton'> >> </button>";
@@ -173,8 +176,11 @@
 	//Called to update the time range of the schedule (called when you push back or forward)
 	function changeTableActiveTime(dateRangeArray, dateIndex, timeslots, names, dateFormatId){
 		if(dateIndex<=dateRangeArray.length-1 && dateIndex>=0)
-		refreshCellShading(timeslots, names, dateRangeArray[dateIndex]);
-		refreshHeaderGuide(dateRangeArray, dateIndex, timeslots, names, dateFormatId);
+		{
+			refreshTableCells(tableDiv, names, dateRangeArray[dateIndex], dateFormatId);
+			refreshCellShading(timeslots, names, dateRangeArray[dateIndex]);
+			refreshHeaderGuide(dateRangeArray, dateIndex, timeslots, names, dateFormatId);
+		}
 	}
 	
 	//Creates an unshaded table with a row for each firefighter name
@@ -192,7 +198,7 @@
 			for(var i =0; i< timeHeaderArray.length; i++){
 				tablecontents+="<th>";
 				tablecontents+=getDateString(timeHeaderArray[i].startDate, dateFormatId)+"</th>";
-				if(i== timeHeaderArray.length-1){
+				if(i== timeHeaderArray.length-1 && dateFormatId == dateIdDAILY){
 					tablecontents+="<th>"+getDateString(timeHeaderArray[i].endDate, dateFormatId)+"</th>";
 				}
 			}
@@ -201,7 +207,11 @@
 				tablecontents+="<tr>";
 				tablecontents+="<th>";
 				tablecontents+= names[i];
-				for(var j=0; j<timeHeaderArray.length+1; j++){ //create a cell for each column header
+				for(var j=0; j<timeHeaderArray.length; j++){ //create a cell for each column header
+					tablecontents+= "<td class=table-cell>";
+					tablecontents+= "</td>";
+				}
+				if(dateFormatId == dateIdDAILY){
 					tablecontents+= "<td class=table-cell>";
 					tablecontents+= "</td>";
 				}
@@ -213,6 +223,7 @@
 			document.getElementById(divName).innerHTML = tablecontents;
 	}
 	
+	//returns an array of DateRanges to be used to calculate table header.
 	function getTimeHeaderArray(dateRange, dateFormatId){
 		var startDate = new Date(dateRange.startDate.getTime());
 		var endDate = new Date(startDate.getTime());
@@ -267,6 +278,7 @@
 			return timeHeader;*/
 	}
 	
+	//returns an appropriate string for the table header
 	function getDateString(date, dateFormatId){
 		if(dateFormatId==dateIdDAILY){
 			var weekday = "";
