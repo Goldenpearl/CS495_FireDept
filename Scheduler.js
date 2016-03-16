@@ -196,10 +196,10 @@
 			tablecontents += "<th>";
 			tablecontents += "</th>";
 			for(var i =0; i< timeHeaderArray.length; i++){
-				tablecontents+="<th>";
+				tablecontents+="<th value = "+timeHeaderArray[i].startDate.getTime()+">";
 				tablecontents+=getDateString(timeHeaderArray[i].startDate, dateFormatId)+"</th>";
 				if(i== timeHeaderArray.length-1 && dateFormatId == dateIdDAILY){
-					tablecontents+="<th>"+getDateString(timeHeaderArray[i].endDate, dateFormatId)+"</th>";
+					tablecontents+="<th value="+timeHeaderArray[i].endDate.getTime()+">"+getDateString(timeHeaderArray[i].endDate, dateFormatId)+"</th>";
 				}
 			}
 			tablecontents += "</tr>"
@@ -363,20 +363,37 @@
 		return "gg";
 	}
 	
+	//TODO
 	//Shades cells that are scheduled
 	function refreshCellShading(timeslots, names, dateRange){
 		for(var i=0; i<timeslots.length; i++){	
 			var name = timeslots[i].firefighter.getFullName();
 			var startTime = timeslots[i].timeslot;
 			var nameIndex = getNameIndex(name, names);
-			var timeIndex = getTimeIndex(startTime)
-			if(nameIndex!=-1 && timeIndex !=-1)
+			if(nameIndex!=-1)
 			{
-				document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex+1].setAttribute("bgcolor", "#00FF00");
+				var numberOfColumns = document.getElementById('myTable').rows[1+nameIndex].cells.length;
+				for(var timeIndex = 0; timeIndex<numberOfColumns-1; timeIndex++){
+					var cellDate = Date(document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex].value);
+					var plus = 1;
+					if(timeIndex == numberOfColumns-1){
+						plus = 0;
+					}
+					var nextCellDate = Date(document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex+plus].value);
+					if(shadeCell(startTime, cellDate, nextCellDate)){
+						document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex+1].setAttribute("bgcolor", "#00FF00");
+					}
+				}
 
 			}
 		}
 	}
+	
+	function shadeCell(timeslot, currentCellDate, nextCellDate){
+		var range = new DateRange(currentCellDate, nextCellDate);
+		return timeslot.overlapsWithDateRange(range);
+	}
+	
 	
 	//Returns the index of the name in the array, or -1 if name is not found
 	function getNameIndex(name, names){
