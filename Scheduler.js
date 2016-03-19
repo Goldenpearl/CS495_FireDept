@@ -16,7 +16,7 @@
 		grabbedslots = grabSchedule(); //external call
 		grabNames = getFiremenNames();
 		createDateSelection(bubbleDiv);
-		//createList(timeslots, listDiv);
+		createList(grabbedslots, listDiv);
 		reloadTable();
 	}
 	
@@ -93,9 +93,11 @@
 	
 	//returns index that is closest to current date
 	function getDateIndex(dateRangeArray){
-		var targetDate = Date();
+		var targetDate = new Date();
 		for(var n=0; n<dateRangeArray.length; n++){
-			if(targetDate>=dateRangeArray[n].startDate && targetDate<=dateRangeArray[n].endDate){
+			var beforeDate = dateRangeArray[n].startDate;
+			var afterDate = dateRangeArray[n].endDate;
+			if(targetDate<=afterDate && targetDate>=beforeDate){
 				return n;
 			}
 		}
@@ -196,10 +198,10 @@
 			tablecontents += "<th>";
 			tablecontents += "</th>";
 			for(var i =0; i< timeHeaderArray.length; i++){
-				tablecontents+="<th value = "+timeHeaderArray[i].startDate.getTime()+">";
+				tablecontents+="<th id ="+timeHeaderArray[i].startDate.getTime()+">";
 				tablecontents+=getDateString(timeHeaderArray[i].startDate, dateFormatId)+"</th>";
 				if(i== timeHeaderArray.length-1 && dateFormatId == dateIdDAILY){
-					tablecontents+="<th value="+timeHeaderArray[i].endDate.getTime()+">"+getDateString(timeHeaderArray[i].endDate, dateFormatId)+"</th>";
+					tablecontents+="<th id="+timeHeaderArray[i].endDate.getTime()+">"+getDateString(timeHeaderArray[i].endDate, dateFormatId)+"</th>";
 				}
 			}
 			tablecontents += "</tr>"
@@ -363,7 +365,7 @@
 		return "gg";
 	}
 	
-	//TODO
+	//TODO test with dates in range
 	//Shades cells that are scheduled
 	function refreshCellShading(timeslots, names, dateRange){
 		for(var i=0; i<timeslots.length; i++){	
@@ -374,12 +376,15 @@
 			{
 				var numberOfColumns = document.getElementById('myTable').rows[1+nameIndex].cells.length;
 				for(var timeIndex = 0; timeIndex<numberOfColumns-1; timeIndex++){
-					var cellDate = Date(document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex].value);
+					var millis = parseInt(document.getElementById('myTable').rows[0].cells[timeIndex].id);
+					var cellDate = new Date(millis);
 					var plus = 1;
 					if(timeIndex == numberOfColumns-1){
 						plus = 0;
 					}
-					var nextCellDate = Date(document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex+plus].value);
+					var millis2 = parseInt(document.getElementById('myTable').rows[0].cells[timeIndex+plus].value);
+					var nextCellDate = new Date();
+					
 					if(shadeCell(startTime, cellDate, nextCellDate)){
 						document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex+1].setAttribute("bgcolor", "#00FF00");
 					}
