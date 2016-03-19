@@ -368,24 +368,29 @@
 	//TODO test with dates in range
 	//Shades cells that are scheduled
 	function refreshCellShading(timeslots, names, dateRange){
+		
+		var numberOfColumns = document.getElementById('myTable').rows[0].cells.length;
+		var timeArray = new Array();
+		for(var n=0; n< numberOfColumns-1; n++){
+			var plus = 1;
+			if(n == timeArray.length -1 ){
+				plus=0;
+			}
+			var millis = parseInt(document.getElementById('myTable').rows[0].cells[n].id);
+			var millis2 =  parseInt(document.getElementById('myTable').rows[0].cells[n+plus].id);
+			var startDate = new Date(millis);
+			var endDate = new Date(millis2);
+			var range = new DateRange(startDate, endDate);
+			timeArray.push(range);
+		}
 		for(var i=0; i<timeslots.length; i++){	
 			var name = timeslots[i].firefighter.getFullName();
 			var startTime = timeslots[i].timeslot;
 			var nameIndex = getNameIndex(name, names);
 			if(nameIndex!=-1)
-			{
-				var numberOfColumns = document.getElementById('myTable').rows[1+nameIndex].cells.length;
+			{		
 				for(var timeIndex = 0; timeIndex<numberOfColumns-1; timeIndex++){
-					var millis = parseInt(document.getElementById('myTable').rows[0].cells[timeIndex].id);
-					var cellDate = new Date(millis);
-					var plus = 1;
-					if(timeIndex == numberOfColumns-1){
-						plus = 0;
-					}
-					var millis2 = parseInt(document.getElementById('myTable').rows[0].cells[timeIndex+plus].value);
-					var nextCellDate = new Date();
-					
-					if(shadeCell(startTime, cellDate, nextCellDate)){
+					if(shadeCell(startTime, timeArray[timeIndex])){
 						document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex+1].setAttribute("bgcolor", "#00FF00");
 					}
 				}
@@ -394,9 +399,16 @@
 		}
 	}
 	
-	function shadeCell(timeslot, currentCellDate, nextCellDate){
-		var range = new DateRange(currentCellDate, nextCellDate);
-		return timeslot.overlapsWithDateRange(range);
+	function shadeCell(timeslot, range){
+		var cellStart = range.startDate;
+		var cellEnd = range.endDate;
+		var timeStart = timeslot.startTime;
+		var timeEnd = timeslot.endTime;
+		var cellStartsBeforeOrEqualToTimeEnds = cellStart<=timeEnd;
+		var cellEndsAfterOrEqualToTimeEnds = cellEnd>=timeEnd;
+		return cellStartsBeforeOrEqualToTimeEnds && cellEndsAfterOrEqualToTimeEnds;
+		//var range = new DateRange(currentCellDate, nextCellDate);
+		//return timeslot.overlapsWithDateRange(range);
 	}
 	
 	
