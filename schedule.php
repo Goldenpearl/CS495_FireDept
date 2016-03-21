@@ -31,9 +31,9 @@ Admin Scheduler (Locked unless admin)<br>
 <body>
 
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
+$servername = "162.243.8.101:3306";
+$username = "webadmin";
+$password = "digitalpie";
 $dbname = "fireDept";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -53,7 +53,7 @@ if ($conn->query($sql) === TRUE) {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
 */
-$sql = "SELECT firemanId, firstName, lastName, age FROM Fireman";
+$sql = "SELECT firemanId, firstName, lastName, age FROM fireman";
 $result = $conn->query($sql);
 $conn->close();
 if ($result->num_rows > 0) {
@@ -175,9 +175,38 @@ function getTimeslotIndex() {
                document.getElementById("i").innerHTML = xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","insertTimeslot.php",true);
+        xmlhttp.open("GET","insertTimeslot.php"+getPassVariables(),true);
         xmlhttp.send(getStartDatetime());
    alert("hi");
+}
+
+function getPassVariables(){
+	var firemanIdHeader="firemanId";
+	var firemanId = document.getElementById("fireman_select").value;
+	var dateHeader = "date";
+	var date = document.getElementById("dateEntry").value;
+	var startTimeHeader = "startTime";
+	var startTime = document.getElementById("startTime").value;
+	var endTimeHeader = "endTime";
+	var endTime=document.getElementById("endTime").value;;
+	
+	var stringToPass = "?";
+	stringToPass+=firemanIdHeader;
+	stringToPass+="=";
+	stringToPass+=firemanId;
+	stringToPass+="&";
+	stringToPass+=dateHeader;
+	stringToPass+="=";
+	stringToPass+=date;
+	stringToPass+="&";
+	stringToPass+=startTimeHeader;
+	stringToPass+="=";
+	stringToPass+=startTime;
+	stringToPass+="&";
+	stringToPass+=endTimeHeader;
+	stringToPass+="=";
+	stringToPass+=endTime;
+	return stringToPass;
 }
 </script>
 

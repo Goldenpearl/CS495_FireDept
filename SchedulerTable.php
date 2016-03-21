@@ -11,6 +11,9 @@ th, td {
     padding: 5px;
     text-align: left;    
 }
+.scrollit {
+	overflow:scroll;
+	height:100px;
 </style>
  </head>
 <body>
@@ -147,6 +150,7 @@ echo "<table>";
 getTimeRow(24, 12);
 echo "</table>";
 echo "<table id='Fireman' style='width:100%'>";
+echo "<thead>";
 echo "<tr id='Header'>";
 echo "<th id='0'> </th>";
 echo "<th id='12am'>12AM</th>";
@@ -174,44 +178,165 @@ echo "<th id='9pm'>9PM</th>";
 echo "<th id='10pm'>10PM</th>";
 echo "<th id='11pm'>11PM</th>";
 echo "</tr>";
+echo "</thead>";
 echo "</table>";
 ?>
-<table id="Fireman" style="width:100%">
-  <tr id="Header">
-    <th id="0"> </th>
-    <th>9AM</th>
-	<th id="10">10AM</th>
-	<th>11AM</th>
-	<th>12PM</th>
-	<th>1PM</th>
-	<th>2PM</th>
-	<th>3PM</th>
-	<th>4PM</th>
-	<th>5PM</th>
-  </tr>
-  <tr>
-    <td>Bill Gates</td>
-    <td></td>
-    <td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-    <td></td>
-	<td></td>
-	<td></td>
-  </tr>
-  <tr>
-	<td>Alex</td>
-	<td bgcolor="#35eb35"></td>
-    <td></td>
-    <td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-    <td></td>
-	<td></td>
-	<td></td>
-</tr>
+<table border="1">
+  <thead>
+    <tr>
+      <th>Month</th>
+      <th>Savings</th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <td>Sum</td>
+      <td>$180</td>
+    </tr>
+  </tfoot>
+  <tbody>
+    <tr>
+		<td colspan="2">
+			<div class="scrollit">
+			<table>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+          <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+  </tbody>
+</table>
+</div>
   
 </table>
 
