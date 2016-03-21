@@ -1,0 +1,55 @@
+
+<html>
+   <head>
+      <title>Yorktown Login</title>
+   </head>
+   <script>
+   
+   var username = document.getElementById("username");
+   
+   function getUserName()
+   {
+	    if (str == "") {
+        document.getElementById("username").innerHTML = "";
+        return;
+    } else { 
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("username").innerHTML = xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","loginConformation.php?q=0",true);
+        xmlhttp.send();
+    }
+	}
+   </script>
+   <body>
+
+      <form method = "post" action = "loginConformation.php">
+
+
+         <p><label>User ID:
+               <input id = "username" name = "id" type = "text" size = "25"
+                  maxlength = "30" />
+            </label></p>
+
+            <label>Password:
+			               <input name = "password" type = "password" size = "25"
+			                  maxlength = "30" />
+            </label></p>
+
+         <p>
+            <input type = "submit" value = "Register" onclick="getUserName()" />
+            <input type = "reset" value = "Clear" />
+         </p>
+      </form>
+   </body>
+</html>
+
