@@ -371,13 +371,22 @@
 		
 		var numberOfColumns = document.getElementById('myTable').rows[0].cells.length;
 		var timeArray = [];
-		for(var n=1; n< numberOfColumns-1; n++){
+		for(var n=1; n< numberOfColumns; n++){
 			var plus = 1;
 			if(n == timeArray.length -1 ){
 				plus=0;
 			}
 			var millis = parseInt(document.getElementById('myTable').rows[0].cells[n].id);
-			var millis2 =  parseInt(document.getElementById('myTable').rows[0].cells[n+plus].id);
+			
+			var millis2;
+			if(n<numberOfColumns-1) //if not the last col
+			{
+				millis2 =  parseInt(document.getElementById('myTable').rows[0].cells[n+plus].id);
+			}
+			else //if the last col
+			{
+				millis2= millis;
+			}
 			var startDate = new Date(millis);
 			var endDate = new Date(millis2);
 			var range = new DateRange(startDate, endDate);
@@ -391,10 +400,9 @@
 			{		
 				for(var timeIndex = 0; timeIndex<numberOfColumns-1; timeIndex++){
 					var myCellRange = timeArray[timeIndex];
-					//if(shadeCell(startTime, myCellRange)){
-						//document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex+1].setAttribute("bgcolor", "#00FF00");
-					//}
-					alert(myCellRange.startDate);
+					if(shadeCell(startTime, myCellRange)){
+						document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex+1].setAttribute("bgcolor", "#00FF00");
+					}
 				}
 
 			}
@@ -404,15 +412,17 @@
 	//TODO
 	function shadeCell(timeslot, range){
 		var cellStart = range.startDate;
-		//var cellEnd = range.endDate;
+		var cellEnd = range.endDate;
 		//alert("Cell Starts "+cellStart +" "+"Cell Ends "+cellEnd);
 		var timeStart = timeslot.getStartDate();
 		var timeEnd = timeslot.getEndDate();
-		//var cellStartsBeforeOrEqualToTimeEnds = (cellStart<=timeEnd);
-		//var cellEndsAfterOrEqualToTimeEnds = (cellEnd>=timeEnd);
-		//return cellStartsBeforeOrEqualToTimeEnds;
+		var timeslotWasBeforeCell = timeEnd<cellStart;
+		var timeslotWasAfterCell = cellEnd<timeStart;
+		return !timeslotWasBeforeCell && !timeslotWasAfterCell;
+		
 		//var range = new DateRange(currentCellDate, nextCellDate);
 		//return timeslot.overlapsWithDateRange(range);
+		//return true;
 	}
 	
 	
