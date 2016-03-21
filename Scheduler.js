@@ -396,6 +396,7 @@
 			var name = timeslots[i].firefighter.getFullName();
 			var startTime = timeslots[i].timeslot;
 			var nameIndex = getNameIndex(name, names);
+			//alert(startTime.getStartDate());
 			if(nameIndex!=-1)
 			{		
 				for(var timeIndex = 0; timeIndex<numberOfColumns-1; timeIndex++){
@@ -416,8 +417,8 @@
 		//alert("Cell Starts "+cellStart +" "+"Cell Ends "+cellEnd);
 		var timeStart = timeslot.getStartDate();
 		var timeEnd = timeslot.getEndDate();
-		var timeslotWasBeforeCell = timeEnd<cellStart;
-		var timeslotWasAfterCell = cellEnd<timeStart;
+		var timeslotWasBeforeCell = timeEnd<=cellStart;
+		var timeslotWasAfterCell = cellEnd<=timeStart;
 		return !timeslotWasBeforeCell && !timeslotWasAfterCell;
 		
 		//var range = new DateRange(currentCellDate, nextCellDate);
