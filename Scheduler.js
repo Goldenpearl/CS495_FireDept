@@ -370,8 +370,8 @@
 	function refreshCellShading(timeslots, names, dateRange){
 		
 		var numberOfColumns = document.getElementById('myTable').rows[0].cells.length;
-		var timeArray = new Array();
-		for(var n=0; n< numberOfColumns-1; n++){
+		var timeArray = [];
+		for(var n=1; n< numberOfColumns-1; n++){
 			var plus = 1;
 			if(n == timeArray.length -1 ){
 				plus=0;
@@ -390,23 +390,27 @@
 			if(nameIndex!=-1)
 			{		
 				for(var timeIndex = 0; timeIndex<numberOfColumns-1; timeIndex++){
-					if(shadeCell(startTime, timeArray[timeIndex])){
-						document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex+1].setAttribute("bgcolor", "#00FF00");
-					}
+					var myCellRange = timeArray[timeIndex];
+					//if(shadeCell(startTime, myCellRange)){
+						//document.getElementById('myTable').rows[1+nameIndex].cells[timeIndex+1].setAttribute("bgcolor", "#00FF00");
+					//}
+					alert(myCellRange.startDate);
 				}
 
 			}
 		}
 	}
 	
+	//TODO
 	function shadeCell(timeslot, range){
 		var cellStart = range.startDate;
-		var cellEnd = range.endDate;
-		var timeStart = timeslot.startTime;
-		var timeEnd = timeslot.endTime;
-		var cellStartsBeforeOrEqualToTimeEnds = cellStart<=timeEnd;
-		var cellEndsAfterOrEqualToTimeEnds = cellEnd>=timeEnd;
-		return cellStartsBeforeOrEqualToTimeEnds && cellEndsAfterOrEqualToTimeEnds;
+		//var cellEnd = range.endDate;
+		//alert("Cell Starts "+cellStart +" "+"Cell Ends "+cellEnd);
+		var timeStart = timeslot.getStartDate();
+		var timeEnd = timeslot.getEndDate();
+		//var cellStartsBeforeOrEqualToTimeEnds = (cellStart<=timeEnd);
+		//var cellEndsAfterOrEqualToTimeEnds = (cellEnd>=timeEnd);
+		//return cellStartsBeforeOrEqualToTimeEnds;
 		//var range = new DateRange(currentCellDate, nextCellDate);
 		//return timeslot.overlapsWithDateRange(range);
 	}
