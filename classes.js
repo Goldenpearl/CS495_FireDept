@@ -30,60 +30,9 @@ function Timeslot(timeslotId, startTime, endTime, firefighter){
    this.getSummary = function(){
 	   return "Timeslot ("+timeslotId+", "+startTime+", "+endTime+")";
    }
-   this.isBefore = function(otherTimeslot){
-		var startsBeforeOther = isDateBeforeOtherDate(this.startTime, otherTimeslot.startTime);
-		var endsBeforeOther = isDateBeforeOtherDate(this.endTime, otherTimeslot.startTime);
-		return (startsBeforeOther && endsBeforeOther);
-   }
-   
-   this.isAfter = function(otherTimeslot){
-	   var endsAfterOther = isDateAfterOtherDate(this.endTime, otherTimeslot.endTime);
-	   var beginsAfterOther = isDateAfterOtherDate(this.startTime, otherTimeslot.endTime);
-	   return (endsAfterOther && beginsAfterOther);
-   }
-   this.isEqual = function(otherTimeslot){
-	   var startTimeIsEqual = isDateEqualToOtherDate(this.startTime, otherTimeslot.startTime);
-	   var endTimeIsEqual = isDateEqualToOtherDate(this.endTime, otherTimeslot.endTime);
-	   return (startTimeIsEqual && endTimeIsEqual);
-   }
-   this.overlapsWith= function(otherTimeslot){
-	   var thisStartsBeforeOtherEnds = isDateBeforeOtherDate(this.startTime, otherTimeslot.endTime);
-	   var thisEndsAfterOtherStarts = isDateAfterOtherDate(this,endTime, otherTimeslot.startTime);
-	   var overlap = (thisStartsBeforeOtherEnds && thisEndsAfterOtherStarts);
-	   
-	   var thisStartsAtTheSameTimeOtherEnds = isDateEqualToOtherDate(this.startTime, otherTimeslot.endTime);
-	   var thisEndsAtTheSameTimeOtherStarts = isDateEqualToOtherDate(this.endTime, other.startTime);
-	   var theseStartAtTheSameTime = isDateEqualToOtherDate(this.startTime, otherTimeslot.startTime);
-	   var theseEndAtTheSameTime = isDateEqualToOtherDate(this.endTime, otherTimeslot.endTime);
-	   var containsAnOverlap =(thisStartsAtTheSameTimeOtherEnds || thisEndsAtTheSameTimeOtherStarts ||theseStartAtTheSameTime ||theseEndAtTheSameTime);
-	   
-	   return (overlap || containsAnOverlap);
-   }
-   
-   this.isBeforeDateRange = function(dateRange){
-		var startsBeforeOther = isDateBeforeOtherDate(this.startTime, dateRange.startDate);
-		var endsBeforeOther = isDateBeforeOtherDate(this.endTime, dateRange.startDate);
-		return (startsBeforeOther && endsBeforeOther);
-   }
-   
-   this.isAfterDateRange = function(dateRange){
-	   var endsAfterOther = isDateAfterOtherDate(this.endTime, dateRange.endDate);
-	   var beginsAfterOther = isDateAfterOtherDate(this.startTime, dateRange.endDate);
-	   return (endsAfterOther && beginsAfterOther);
-   }
-
-   this.overlapsWithDateRange= function(dateRange){
-	   var thisStartsBeforeOtherEnds = isDateBeforeOtherDate(this.startTime, dateRange.endDate);
-	   var thisEndsAfterOtherStarts = isDateAfterOtherDate(this,endTime, dateRange.startDate);
-	   var overlap = (thisStartsBeforeOtherEnds && thisEndsAfterOtherStarts);
-	   
-	   var thisStartsAtTheSameTimeOtherEnds = isDateEqualToOtherDate(this.startTime, dateRange.endDate);
-	   var thisEndsAtTheSameTimeOtherStarts = isDateEqualToOtherDate(this.endTime, dateRange.startDate);
-	   var theseStartAtTheSameTime = isDateEqualToOtherDate(this.startTime, dateRange.startDate);
-	   var theseEndAtTheSameTime = isDateEqualToOtherDate(this.endTime, dateRange.endDate);
-	   var containsAnOverlap =(thisStartsAtTheSameTimeOtherEnds || thisEndsAtTheSameTimeOtherStarts ||theseStartAtTheSameTime ||theseEndAtTheSameTime);
-	   
-	   return (overlap || containsAnOverlap);
+ 
+   this.getDateRange = function(){
+		return new DateRange(this.getStartDate(), this.getEndDate());
    }
 }
 
@@ -110,6 +59,46 @@ function DateRange(startDate, endDate){
 	this.getSummary = function(){
 		return "Start: "+this.startDate+", End: "+this.endDate;
 	}
+	
+	this.isBeforeDateRange = function(dateRange){
+		var startsBeforeOther = isDateBeforeOtherDate(this.startDate, dateRange.startDate);
+		var endsBeforeOther = isDateBeforeOtherDate(this.startDate, dateRange.startDate);
+		return (startsBeforeOther && endsBeforeOther);
+   }
+   
+   this.isAfterDateRange = function(dateRange){
+	   var endsAfterOther = isDateAfterOtherDate(this.endDate, dateRange.endDate);
+	   var beginsAfterOther = isDateAfterOtherDate(this.endDate, dateRange.endDate);
+	   return (endsAfterOther && beginsAfterOther);
+   }
+   
+    this.isEqualToDateRange = function(dateRange){
+	   var endDatesEqual = isDateEqualToOtherDate(this.endDate, dateRange.endDate);
+	   var startDatesEqual = isDateEqualToOtherDate(this.startDate, dateRange.startDate);
+	   return (endDatesEqual && startDatesEqual);
+   }
+
+   this.overlapsWithDateRange= function(dateRange){
+	   var thisStartsBeforeOtherEnds = isDateBeforeOtherDate(this.startDate, dateRange.endDate);
+	   var thisEndsAfterOtherStarts = isDateAfterOtherDate(this.endDate, dateRange.startDate);
+	   var overlap = (thisStartsBeforeOtherEnds && thisEndsAfterOtherStarts);
+	   
+	   var thisStartsAtTheSameTimeOtherEnds = isDateEqualToOtherDate(this.startDate, dateRange.endDate);
+	   var thisEndsAtTheSameTimeOtherStarts = isDateEqualToOtherDate(this.endDate, dateRange.startDate);
+	   var theseStartAtTheSameTime = isDateEqualToOtherDate(this.startDate, dateRange.startDate);
+	   var theseEndAtTheSameTime = isDateEqualToOtherDate(this.endDate, dateRange.endDate);
+	   var containsAnOverlap =(thisStartsAtTheSameTimeOtherEnds || thisEndsAtTheSameTimeOtherStarts ||theseStartAtTheSameTime ||theseEndAtTheSameTime);
+	   
+	   return(overlap || containsAnOverlap);
+   }
+
+   this.harshOverlapsWithDateRange = function(dateRange){
+	   var thisStartsBeforeOtherEnds = isDateBeforeOtherDate(this.startDate, dateRange.endDate);
+	   var thisEndsAfterOtherStarts = isDateAfterOtherDate(this.endDate, dateRange.startDate);
+	   var overlap = (thisStartsBeforeOtherEnds && thisEndsAfterOtherStarts);
+	   return overlap;
+   }
+	
 }
 
 function simpleDate(date){
@@ -159,7 +148,7 @@ function isDateAfterOtherDate(date, otherDate){
 }
 
 function isDateEqualToOtherDate(date, otherDate){
-	return (date === otherDate);
+	return (date.getTime() === otherDate.getTime());
 }
 
 function ScheduleTimeslot(firefighter, timeslot){

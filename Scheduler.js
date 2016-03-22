@@ -8,7 +8,7 @@
 	var dateIdWEEKLY = 1;
 	var dateIdMONTHLY = 2;
 	
-	var lastKnownDate = Date(); //Default is current date. Helps keep track of date across all formats.
+	var lastKnownDate = new Date(); //Default is current date. Helps keep track of date across all formats.
 	var grabbedslots;
 	var grabNames;
 	//calls one time setup methods
@@ -18,6 +18,7 @@
 		createDateSelection(bubbleDiv);
 		createList(grabbedslots, listDiv);
 		reloadTable();
+		testDateRange();
 	}
 	
 	//TODO call database
@@ -91,9 +92,9 @@
 		return 0;
 	}
 	
-	//returns index that is closest to current date
+	//returns index that is closest to the last date viewed. If no memory, uses current date.
 	function getDateIndex(dateRangeArray){
-		var targetDate = new Date();
+		var targetDate = lastKnownDate;
 		for(var n=0; n<dateRangeArray.length; n++){
 			var beforeDate = dateRangeArray[n].startDate;
 			var afterDate = dateRangeArray[n].endDate;
@@ -179,10 +180,18 @@
 	function changeTableActiveTime(dateRangeArray, dateIndex, timeslots, names, dateFormatId){
 		if(dateIndex<=dateRangeArray.length-1 && dateIndex>=0)
 		{
+			updateLastKnownDateFromDateRange(dateRangeArray[dateIndex]);
 			refreshTableCells(tableDiv, names, dateRangeArray[dateIndex], dateFormatId);
 			refreshCellShading(timeslots, names, dateRangeArray[dateIndex]);
 			refreshHeaderGuide(dateRangeArray, dateIndex, timeslots, names, dateFormatId);
 		}
+	}
+	
+	function updateLastKnownDateFromDateRange(dateRange){
+		var time1 = dateRange.startDate.getTime();
+		var time2 = dateRange.endDate.getTime();
+		var time3 = (time1+time2)/2;
+		lastKnownDate = new Date(time3);
 	}
 	
 	//Creates an unshaded table with a row for each firefighter name
@@ -365,7 +374,7 @@
 		return "gg";
 	}
 	
-	//TODO test with dates in range
+	//TODO update db timezone
 	//Shades cells that are scheduled
 	function refreshCellShading(timeslots, names, dateRange){
 		
@@ -410,20 +419,9 @@
 		}
 	}
 	
-	//TODO
 	function shadeCell(timeslot, range){
-		var cellStart = range.startDate;
-		var cellEnd = range.endDate;
-		//alert("Cell Starts "+cellStart +" "+"Cell Ends "+cellEnd);
-		var timeStart = timeslot.getStartDate();
-		var timeEnd = timeslot.getEndDate();
-		var timeslotWasBeforeCell = timeEnd<=cellStart;
-		var timeslotWasAfterCell = cellEnd<=timeStart;
-		return !timeslotWasBeforeCell && !timeslotWasAfterCell;
-		
-		//var range = new DateRange(currentCellDate, nextCellDate);
-		//return timeslot.overlapsWithDateRange(range);
-		//return true;
+		var timerange = timeslot.getDateRange();
+		return range.harshOverlapsWithDateRange(timerange);
 	}
 	
 	
@@ -437,23 +435,30 @@
 		return -1;
 	}
 	
-	function getTimeIndex(date){
-		var time = date.getStartDate();
-		return time.getHours();
-	}
-	
 	//Writes the specified schedule in list form
 	function createList(timeslots, divName){
+		var displayedTimeslots = getDisplayedTimeslots(timeslots);
 		var listContents = "";
-		for(var n=0; n<timeslots.length; n++){
-			listContents+=timeslots[n].getSummary()+"<br>";
+		for(var n=0; n<displayedTimeslots.length; n++){
+			listContents+=displayedTimeslots[n].getSummary()+"<br>";
 		}
 		document.getElementById(divName).innerHTML = listContents;
 	}
 
+	function getDisplayedTimeslots(timeslots){
+		var displayedTimeslots = new Array();
+		for(var n=0; n<timeslots.length; n++)
+		{
+			displayedTimeslots.push(timeslots[n]);
+		}
+		return displayedTimeslots;
+	}
 	
+	function displayTimeslot(timeslot){
+		var date = new Date();
+		var startTime = timeslot.startTime;
+		var endTime
 	
-
-	
+	}
 	
 	
