@@ -151,13 +151,23 @@ function isDateEqualToOtherDate(date, otherDate){
 	return (date.getTime() === otherDate.getTime());
 }
 
+//TODO implement id
 function ScheduleTimeslot(firefighter, timeslot){
 	this.firefighter = firefighter;
 	this.timeslot = timeslot;
 	
-	this.getSummary = function(){
+	this.getLiteralSummary = function(){
 		return "ScheduleTimeslot ("+timeslot.getSummary()+", "+firefighter.getSummary()+")";
 	}
+	
+	this.getCleanSummary = function(){
+		return firefighter.getFullName() + "&nbsp ("+simpleDate(timeslot.getStartDate()) + " - "+simpleDate(timeslot.getEndDate()) +")";
+	}
+	
+	this.getMidrangeSummary = function(){
+		return firefighter.id + "&nbsp&nbsp"+firefighter.getFullName() + "&nbsp Schedule ("+simpleDate(timeslot.getStartDate()) + " - "+simpleDate(timeslot.getEndDate()) +") &nbspTID:" +this.timeslot.timeslotId +" &nbsp SID:";
+	}
+	
 }
 
 function parseScheduleTimeslot(json){

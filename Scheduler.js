@@ -4,6 +4,8 @@
 	var bubbleDiv= "bubbleDiv";
 	var dateFormat = "dateFormat";
 	var dateSelection = "dateSelection";
+	var listSelection = "listSelection";
+	var listBubbleDiv = "listBubbleDiv";
 	var dateIdDAILY = 0;
 	var dateIdWEEKLY = 1;
 	var dateIdMONTHLY = 2;
@@ -15,10 +17,10 @@
 	function initScheduler(){
 		grabbedslots = grabSchedule(); //external call
 		grabNames = getFiremenNames();
+		createListSelection(listBubbleDiv);
 		createDateSelection(bubbleDiv);
-		createList(grabbedslots, listDiv);
 		reloadTable();
-		testDateRange();
+		//testDateRange();
 	}
 	
 	//TODO call database
@@ -27,7 +29,26 @@
 	return names;
 	}
 	
-	//adds radio buttons to html	
+	//adds radio buttons to html - list
+	function createListSelection(divName){
+		var selectionContents = "";
+		selectionContents+='<form>'
+		selectionContents+= '<label><input type="radio" id='
+		selectionContents+=listSelection;
+		selectionContents+=' name='
+		selectionContents+=listSelection;
+		selectionContents+=' checked = "checked" />Relevant </label>';
+		selectionContents+= '<label><input type="radio" id='
+		selectionContents+=listSelection;
+		selectionContents+=' name='
+		selectionContents+=listSelection;
+		selectionContents+=' />All </label>';
+		selectionContents+='</form>';
+		document.getElementById(divName).innerHTML = selectionContents;
+	}
+	
+	
+	//adds radio buttons to html - schedule
 	function createDateSelection(divName){
 		var selectionContents = "";
 		selectionContents+='<form id='
@@ -68,6 +89,7 @@
 		var dateRangeArray = getDateRange(dateFormatId);
 		var dateIndex = getDateIndex(dateRangeArray);
 		
+		refreshList(listDiv, grabbedslots, dateRangeArray[dateIndex]);
 		refreshHeaderGuide(dateRangeArray, dateIndex, timeslots, names, dateFormatId);
 		refreshTableCells(tableDiv, getFiremenNames(), dateRangeArray[dateIndex], dateFormatId);
 		refreshCellShading(timeslots, names, dateRangeArray[dateIndex]);
@@ -81,7 +103,7 @@
 		return grabNames;
 	}
 	
-	//returns value of selected radio button; this value cooresponds to a display format
+	//returns value of selected radio button; this value corresponds to a display format
 	function getDateSelectionIndex(){
 		var radioButtons = document.getElementById(dateFormat).elements[dateSelection];
 		for(var i=0; i<radioButtons.length; i++){
@@ -181,6 +203,7 @@
 		if(dateIndex<=dateRangeArray.length-1 && dateIndex>=0)
 		{
 			updateLastKnownDateFromDateRange(dateRangeArray[dateIndex]);
+			refreshList(listDiv, timeslots, dateRangeArray[dateIndex]);
 			refreshTableCells(tableDiv, names, dateRangeArray[dateIndex], dateFormatId);
 			refreshCellShading(timeslots, names, dateRangeArray[dateIndex]);
 			refreshHeaderGuide(dateRangeArray, dateIndex, timeslots, names, dateFormatId);
@@ -436,29 +459,59 @@
 	}
 	
 	//Writes the specified schedule in list form
-	function createList(timeslots, divName){
-		var displayedTimeslots = getDisplayedTimeslots(timeslots);
+	function refreshList(divName, timeslots, dateRange){
+		var displayedTimeslots = getDisplayedTimeslots(timeslots, dateRange);
+		displayedTimeslots = sortTimeslots(displayedTimeslots);
 		var listContents = "";
 		for(var n=0; n<displayedTimeslots.length; n++){
-			listContents+=displayedTimeslots[n].getSummary()+"<br>";
+			listContents+=displayedTimeslots[n].getMidrangeSummary()+"<br>";
 		}
 		document.getElementById(divName).innerHTML = listContents;
 	}
 
-	function getDisplayedTimeslots(timeslots){
+	function getDisplayedTimeslots(timeslots, dateRange){
 		var displayedTimeslots = new Array();
 		for(var n=0; n<timeslots.length; n++)
 		{
-			displayedTimeslots.push(timeslots[n]);
+			if(displayTimeslot(timeslots[n], dateRange))
+			{
+				displayedTimeslots.push(timeslots[n]);
+			}
 		}
 		return displayedTimeslots;
 	}
 	
-	function displayTimeslot(timeslot){
-		var date = new Date();
-		var startTime = timeslot.startTime;
-		var endTime
-	
+	function displayTimeslot(timeslot, dateRange){
+		var validRange = dateRange;
+		var timeslotRange = timeslot.timeslot.getDateRange();
+		if(validRange.overlapsWithDateRange(timeslotRange))
+		{
+			return true;
+		}
+		else return false;
 	}
 	
 	
+	function sortTimeslots(timeslots){
+		timeslots.sort(function(a, b){return a.timeslot.getStartDate()-b.timeslot.getStartDate()}); 
+		return timeslots;	
+	}
+	
+	
+	//global categorize timeslots
+		//already complete
+		//partially complete/in progress
+		//not yet started
+	//colorcode them
+	//sort them by starttime
+	
+	//categorize timeslots - in app
+		//within range asked for
+		//partially within range asked for
+		//not within range asked for
+	//only display relevant timeslots
+	//sort these by startTime
+	
+	//CHANGE DATABASE TIMEZONE TO EST
+	
+	//possible: display/highlight the timeslot that the user hovers over on cell
