@@ -29,7 +29,7 @@ class Firefighter {
 	}
 	
 	public function getJSON(){
-		$arr = array('id'=>$this->id, 'firstName'=>$this->fName, 'lastName'=>$this->lName, 'age'=>$this->age);
+		$arr = array('firefighterId'=>$this->id, 'firstName'=>$this->fName, 'lastName'=>$this->lName, 'age'=>$this->age);
 		$json = json_encode($arr);
 		return $json;
 	}
@@ -214,11 +214,16 @@ function testGetAllScheduleToJSON(){
 	}
 	//echo "}";
 }
+
 $id = $_REQUEST["id"];
 if($id == 0){
 	echo testGetAllScheduleToJSON();
 }
-else if($id=1){
+else if ($id==1){
+	echo testGetAllFirefightersToJSON();
+}
+else
+{
 testGetAllFirefighters();
 testGetAllScheduleTimeslots();
 testGetAllFirefightersToJSON();

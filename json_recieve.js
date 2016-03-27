@@ -1,5 +1,5 @@
 var SCHEDULE_ID = 0;
-
+var FIREFIGHTER_ID = 1;
 function recieveScheduleJson() {	
 		var response1;
 		var xmlhttp = new XMLHttpRequest();
@@ -23,3 +23,29 @@ function grabSchedule(){
 	var scheduleJson = recieveScheduleJson();
 	return parseScheduleJson(scheduleJson);
 }
+
+
+function recieveFirefighterJson() {	
+		var response1;
+		var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "scheduleGrab.php?id=" + FIREFIGHTER_ID, false);
+        xmlhttp.send();
+		return xmlhttp.responseText;
+		//xmlhttp.close;
+}
+
+function parseFirefighterJson(firefighterJson){
+	var firefighterArrayJson = firefighterJson.split("<br>");
+		var firefighters = new Array();
+		for(n=0; n<firefighterArrayJson.length-1; n++){
+			var firefighter = parseFirefighter(firefighterArrayJson[n]);
+			firefighters.push(firefighter);
+		}
+		return firefighters;
+}
+
+function grabFirefighters(){
+	var firefighterJson = recieveFirefighterJson();
+	return parseFirefighterJson(firefighterJson);
+}
+

@@ -165,10 +165,20 @@ function ScheduleTimeslot(firefighter, timeslot){
 	}
 	
 	this.getMidrangeSummary = function(){
-		return firefighter.id + "&nbsp&nbsp"+firefighter.getFullName() + "&nbsp Schedule ("+simpleDate(timeslot.getStartDate()) + " - "+simpleDate(timeslot.getEndDate()) +") &nbspTID:" +this.timeslot.timeslotId +" &nbsp SID:";
+		return firefighter.firefighterId + "&nbsp&nbsp"+firefighter.getFullName() + "&nbsp Schedule ("+simpleDate(timeslot.getStartDate()) + " - "+simpleDate(timeslot.getEndDate()) +") &nbspTID:" +this.timeslot.timeslotId +" &nbsp SID:";
 	}
 	
 }
+
+function parseFirefighter(json){
+	var ob = JSON.parse(json);
+	var firefighterId = ob.firefighterId;
+	var firstName = ob.firstName;
+	var lastName = ob.lastName;
+	var firefighter = new Firefighter(firefighterId, firstName, lastName);
+	return firefighter;
+}
+
 
 function parseScheduleTimeslot(json){
 	var ob = JSON.parse(json);

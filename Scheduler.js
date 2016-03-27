@@ -16,17 +16,11 @@
 	//calls one time setup methods
 	function initScheduler(){
 		grabbedslots = grabSchedule(); //external call
-		grabNames = getFiremenNames();
+		grabNames = grabFirefighters(); //external call
 		createListSelection(listBubbleDiv);
 		createDateSelection(bubbleDiv);
 		reloadTable();
 		//testDateRange();
-	}
-	
-	//TODO call database
-	function getFiremenNames(){
-	var names = ["Ash Ketchum", "Misty Bubbles", "Brock Rock"];
-	return names;
 	}
 	
 	//adds radio buttons to html - list
@@ -91,7 +85,7 @@
 		
 		refreshList(listDiv, grabbedslots, dateRangeArray[dateIndex]);
 		refreshHeaderGuide(dateRangeArray, dateIndex, timeslots, names, dateFormatId);
-		refreshTableCells(tableDiv, getFiremenNames(), dateRangeArray[dateIndex], dateFormatId);
+		refreshTableCells(tableDiv, grabNames, dateRangeArray[dateIndex], dateFormatId);
 		refreshCellShading(timeslots, names, dateRangeArray[dateIndex]);
 	}
 	//returns the grabbed timeslots
@@ -240,7 +234,7 @@
 			for(var i=0; i<names.length; i++){ //create a row for each firefighter
 				tablecontents+="<tr>";
 				tablecontents+="<th>";
-				tablecontents+= names[i];
+				tablecontents+= names[i].getFullName();
 				for(var j=0; j<timeHeaderArray.length; j++){ //create a cell for each column header
 					tablecontents+= "<td class=table-cell>";
 					tablecontents+= "</td>";
@@ -295,21 +289,6 @@
 			header.push(range);
 		}
 		return header;
-	
-		/*
-		var timeHeader = new Array();
-			timeHeader[0]="12:00 am";
-			for(var i=1; i<12; i++){
-				var str = i+":00 am";
-				timeHeader[i] = str;;
-			} 
-			timeHeader[12] = "12:00 pm";
-			for(var i=1; i<12; i++){
-				var str = i+":00 pm";
-				timeHeader[12+i]=str;
-			} 		
-			timeHeader[24] = "12:00 am";
-			return timeHeader;*/
 	}
 	
 	//returns an appropriate string for the table header
@@ -425,12 +404,12 @@
 			timeArray.push(range);
 		}
 		for(var i=0; i<timeslots.length; i++){	
-			var name = timeslots[i].firefighter.getFullName();
+			var firefighterId = timeslots[i].firefighter.firefighterId;
 			var startTime = timeslots[i].timeslot;
-			var nameIndex = getNameIndex(name, names);
+			var nameIndex = getNameIndex(firefighterId, grabNames);
 			//alert(startTime.getStartDate());
 			if(nameIndex!=-1)
-			{		
+			{
 				for(var timeIndex = 0; timeIndex<numberOfColumns-1; timeIndex++){
 					var myCellRange = timeArray[timeIndex];
 					if(shadeCell(startTime, myCellRange)){
@@ -449,9 +428,9 @@
 	
 	
 	//Returns the index of the name in the array, or -1 if name is not found
-	function getNameIndex(name, names){
-		for(var n=0; n<names.length; n++){
-			if(name === names[n]){
+	function getNameIndex(firefighterId, firefighters){
+		for(var n=0; n<firefighters.length; n++){
+			if(firefighterId == firefighters[n].firefighterId){
 				return n;
 			}
 		}
