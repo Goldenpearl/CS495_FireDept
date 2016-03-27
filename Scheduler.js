@@ -5,10 +5,13 @@
 	var dateFormat = "dateFormat";
 	var dateSelection = "dateSelection";
 	var listSelection = "listSelection";
+	var listBubble = "listBubble";
 	var listBubbleDiv = "listBubbleDiv";
 	var dateIdDAILY = 0;
 	var dateIdWEEKLY = 1;
 	var dateIdMONTHLY = 2;
+	var listALLSLOTS = 0;
+	var listRELEVANTSLOTS = 1;
 	
 	var lastKnownDate = new Date(); //Default is current date. Helps keep track of date across all formats.
 	var grabbedslots;
@@ -26,21 +29,43 @@
 	//adds radio buttons to html - list
 	function createListSelection(divName){
 		var selectionContents = "";
-		selectionContents+='<form>'
-		selectionContents+= '<label><input type="radio" id='
-		selectionContents+=listSelection;
+		selectionContents+='<form id= ';
+		selectionContents+= listSelection;
+		selectionContents+=' onchange = ';
+		selectionContents+=refreshListFromBubble();
+		selectionContents+=">";
+		selectionContents+= '<label><input type="radio" id=';
+		selectionContents+=listBubble;
 		selectionContents+=' name='
-		selectionContents+=listSelection;
+		selectionContents+=listBubble;
+		selectionContents+= ' value='
+		selectionContents+=listRELEVANTSLOTS;
 		selectionContents+=' checked = "checked" />Relevant </label>';
 		selectionContents+= '<label><input type="radio" id='
-		selectionContents+=listSelection;
+		selectionContents+=listBubble;
 		selectionContents+=' name='
-		selectionContents+=listSelection;
+		selectionContents+=listBubble;
+		selectionContents+=' value= '
+		selectionContents+= listALLSLOTS;
 		selectionContents+=' />All </label>';
 		selectionContents+='</form>';
 		document.getElementById(divName).innerHTML = selectionContents;
 	}
 	
+	function refreshListFromBubble(){
+		//TODO
+		//refreshList(listDiv, grabbedslots, dateRange)
+	}
+	
+	function getSlotListId(){
+		var radioButtons = document.getElementById(listSelection).elements[listBubble];
+		for(var i=0; i<radioButtons.length; i++){
+			if(radioButtons[i].checked){
+				return radioButtons[i].value;
+			}
+		}
+		return listALLSLOTS;
+	}
 	
 	//adds radio buttons to html - schedule
 	function createDateSelection(divName){
@@ -461,6 +486,10 @@
 	}
 	
 	function displayTimeslot(timeslot, dateRange){
+		if(getSlotListId() == listALLSLOTS){
+			return true;
+		}
+		
 		var validRange = dateRange;
 		var timeslotRange = timeslot.timeslot.getDateRange();
 		if(validRange.overlapsWithDateRange(timeslotRange))
