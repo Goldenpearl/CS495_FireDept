@@ -152,10 +152,10 @@ function isDateEqualToOtherDate(date, otherDate){
 }
 
 //TODO implement id
-function ScheduleTimeslot(firefighter, timeslot){
+function ScheduleTimeslot(firefighter, timeslot, scheduleTimeslotId){
 	this.firefighter = firefighter;
 	this.timeslot = timeslot;
-	
+	this.scheduleTimeslotId = scheduleTimeslotId;
 	this.getLiteralSummary = function(){
 		return "ScheduleTimeslot ("+timeslot.getSummary()+", "+firefighter.getSummary()+")";
 	}
@@ -165,7 +165,7 @@ function ScheduleTimeslot(firefighter, timeslot){
 	}
 	
 	this.getMidrangeSummary = function(){
-		return firefighter.firefighterId + "&nbsp&nbsp"+firefighter.getFullName() + "&nbsp Schedule ("+simpleDate(timeslot.getStartDate()) + " - "+simpleDate(timeslot.getEndDate()) +") &nbspTID:" +this.timeslot.timeslotId +" &nbsp SID:";
+		return firefighter.firefighterId + "&nbsp&nbsp"+firefighter.getFullName() + "&nbsp Schedule ("+simpleDate(timeslot.getStartDate()) + " - "+simpleDate(timeslot.getEndDate()) +") &nbspTID:" +this.timeslot.timeslotId +" &nbsp SID:"+scheduleTimeslotId;
 	}
 	
 }
@@ -190,7 +190,8 @@ function parseScheduleTimeslot(json){
 	var timeslotId = ob.ScheduleTimeslot.Timeslot.timeslotId
 	var firefighter = new Firefighter(firefighterId, firstName, lastName);
 	var timeslot = new Timeslot(timeslotId,startTime, endTime, firefighter);
-	var scheduletimeslot = new ScheduleTimeslot(firefighter, timeslot);
+	var scheduleTimeslotId = ob.ScheduleTimeslot.scheduleTimeslotId;
+	var scheduletimeslot = new ScheduleTimeslot(firefighter, timeslot, scheduleTimeslotId);
 	return scheduletimeslot;
 }
 
@@ -201,13 +202,15 @@ function parseScheduleTimeslots(json){
 	for(var n=0; n<1; n++){ //TODO find ob size
 		var firefighter = new Firefighter(ob.ScheduleTimeslot[0].Firefighter.firefighterId, ob.ScheduleTimeslot[0].Firefighter.firstName, ob.ScheduleTimeslot[0].Firefighter.lastName);
 		var timeslot = new Timeslot(ob.ScheduleTimeslot[0].Timeslot.timeslotId, ob.ScheduleTimeslot[0].Timeslot.startTime, ob.ScheduleTimeslot[0].Timeslot.endTime, firefighter);
-		var scheduletimeslot = new ScheduleTimeslot(firefighter, timeslot);
+		var scheduleTimeslotId = ob.ScheduleTimeslot.scheduleTimeslotId;
+		var scheduletimeslot = new ScheduleTimeslot(firefighter, timeslot, scheduleTimeslotId);
 		timeslots.push(scheduletimeslot);
 	};
 	return timeslots;
 }
 
 var texts = '{ "ScheduleTimeslot" : {' +
+	'"scheduleTimeslotId": "12",'+
 	'"Firefighter":{'+
 	'"firstName":"Bob",'+
 	'"lastName":"Jo",'+
@@ -222,8 +225,9 @@ var texts = '{ "ScheduleTimeslot" : {' +
 '}}';
 
 
-var textss = '{ "ScheduleTimeslot" : [' +
-	'{"Firefighter":{'+
+var textss = '{ "ScheduleTimeslot" : [{' +
+	'"scheduleTimeslotId": "12",'+
+	'"Firefighter":{'+
 	'"firstName":"James",'+
 	'"lastName":"Jo",'+
 	'"firefighterId":"12"'+

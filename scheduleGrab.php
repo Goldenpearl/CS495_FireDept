@@ -89,8 +89,11 @@ class ScheduleTimeslot{
 	}	
 	
 	public function getJSON(){
-		$str = '{"ScheduleTimeslot": '.
-		'{"Timeslot":'.
+		$str = '{"ScheduleTimeslot": {'.
+		'"scheduleTimeslotId": "'.
+		$this->id.
+		'",'.
+		'"Timeslot":'.
 		$this->timeslot->getJSON().
 		', "Firefighter":'.
 		$this->timeslot->getFirefighter()->getJSON().
