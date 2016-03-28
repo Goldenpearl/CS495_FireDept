@@ -7,6 +7,8 @@
 	var listSelection = "listSelection";
 	var listBubble = "listBubble";
 	var listBubbleDiv = "listBubbleDiv";
+	var scheduleInputDiv = "scheduleInputDiv";
+	var firemanDropdownId = "firemanDropdownId";
 	var dateIdDAILY = 0;
 	var dateIdWEEKLY = 1;
 	var dateIdMONTHLY = 2;
@@ -23,6 +25,7 @@
 		createListSelection(listBubbleDiv);
 		createDateSelection(bubbleDiv);
 		reloadTable();
+		createScheduleInput();
 		//testDateRange();
 	}
 	
@@ -503,6 +506,20 @@
 	function sortTimeslots(timeslots){
 		timeslots.sort(function(a, b){return a.timeslot.getStartDate()-b.timeslot.getStartDate()}); 
 		return timeslots;	
+	}
+	
+	function createScheduleInput(){
+		var scheduleInputString = "<br> <h1>Schedule Input </h1>"
+		scheduleInputString+="<select id = "
+		scheduleInputString+= firemanDropdownId;
+		scheduleInputString+=">"
+		for(n=0; n<grabNames.length; n++){
+		scheduleInputString+="<option>";
+		scheduleInputString+=grabNames[n].getSummary();
+		scheduleInputString+="</option>";
+		}
+		scheduleInputString+="</select>"
+		document.getElementById(scheduleInputDiv).innerHTML = scheduleInputString;
 	}
 	
 	
