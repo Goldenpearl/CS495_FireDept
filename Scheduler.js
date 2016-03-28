@@ -2,13 +2,17 @@
 	var listDiv = "listDiv";
 	var dateDiv = "dateDiv";
 	var bubbleDiv= "bubbleDiv";
+	var listBubbleDiv = "listBubbleDiv";
+	var scheduleInputDiv = "scheduleInputDiv";
+	var scheduleInputHeaderDiv = "scheduleInputHeaderDiv";
 	var dateFormat = "dateFormat";
 	var dateSelection = "dateSelection";
 	var listSelection = "listSelection";
 	var listBubble = "listBubble";
-	var listBubbleDiv = "listBubbleDiv";
-	var scheduleInputDiv = "scheduleInputDiv";
 	var firemanDropdownId = "firemanDropdownId";
+	var startTimeDropdownId = "startTimeDropdownId";
+	var endTimeDropdownId = "endTimeDropdownId";
+	var scheduleInputButtonID = "scheduleInputButtonID";
 	var dateIdDAILY = 0;
 	var dateIdWEEKLY = 1;
 	var dateIdMONTHLY = 2;
@@ -509,7 +513,22 @@
 	}
 	
 	function createScheduleInput(){
-		var scheduleInputString = "<br> <h1>Schedule Input </h1>"
+		var scheduleHeaderInputString = "<br> <h1>Schedule Input </h1>"
+		scheduleHeaderInputString+=getScheduleRadioInput();
+		scheduleHeaderInputString+="<br>";
+		document.getElementById(scheduleInputHeaderDiv).innerHTML = scheduleHeaderInputString;
+		
+	}
+	function getScheduleRadioInput(){
+		var scheduleRadioInputString = "";
+		scheduleRadioInputString+="<input type='radio' name = 'gender' value='male'> Male";
+		scheduleRadioInputString+="<input type='radio' name='gender' value='female'> Female";
+		scheduleRadioInputString+="<br>";
+		return scheduleRadioInputString;
+	}
+	
+	
+	function getScheduleInputScheduleShifts(){
 		scheduleInputString+="<select id = "
 		scheduleInputString+= firemanDropdownId;
 		scheduleInputString+=">"
@@ -519,7 +538,20 @@
 		scheduleInputString+="</option>";
 		}
 		scheduleInputString+="</select>"
-		document.getElementById(scheduleInputDiv).innerHTML = scheduleInputString;
+		scheduleInputString+="<br> Start time: ";
+		scheduleInputString+="<select id =";
+		scheduleInputString+=startTimeDropdownId;
+		scheduleInputString+=">";
+		scheduleInputString+="</select>";
+		scheduleInputString+="<br> End time: ";
+		scheduleInputString+="<select id =";
+		scheduleInputString+=endTimeDropdownId;
+		scheduleInputString+=">";
+		scheduleInputString+="</select>";
+	}
+	
+	function getScheduleInputDeleteShifts(){
+		
 	}
 	
 	
