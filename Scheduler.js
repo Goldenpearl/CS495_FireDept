@@ -614,7 +614,7 @@
 		alert(firefighter.getSummary());
 		alert(dateRange.startDate);
 		alert(firefighter.getJson());
-		addFirefighterJson(firefighter.getJson());
+		addScheduleTimeslotJson(firefighter.getJson());
 	}
 	
 	function deleteShift(){

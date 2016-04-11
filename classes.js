@@ -44,6 +44,19 @@ function Timeslot(timeslotId, startTime, endTime, firefighter){
    this.getDateRange = function(){
 		return new DateRange(this.getStartDate(), this.getEndDate());
    }
+   
+   this.getJson() = function(){
+	   var json = '{ "Timeslot": {';
+	   json+='"startTime":';
+	   json+=startTime;
+	   json+=', "endTime":';
+	   json+=endtime;
+	   json+=', "timeslotId":'+
+	   json+=timeslotId;
+	   json+=this.firefighter.getJson();
+	   json+='}}';
+	   return json;
+   }
 }
 
 function validDateGetter(){
