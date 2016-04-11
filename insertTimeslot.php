@@ -187,7 +187,7 @@ if(isDateTime($startDateTime) && isDateTime($endDateTime))
 	insertScheduleTimeslot(0, $firemanId);
 	echo"<br><br>";
 }
-
+z
 else
 	echo("no");
 /**

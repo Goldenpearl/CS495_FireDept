@@ -1,5 +1,6 @@
 var SCHEDULE_ID = 0;
 var FIREFIGHTER_ID = 1;
+var TIMESLOT_ID = 1;
 function recieveScheduleJson() {	
 		var response1;
 		var xmlhttp = new XMLHttpRequest();

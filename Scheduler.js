@@ -10,9 +10,13 @@
 	var listSelection = "listSelection";
 	var listBubble = "listBubble";
 	var firemanDropdownId = "firemanDropdownId";
-	var startTimeDropdownId = "startTimeDropdownId";
-	var endTimeDropdownId = "endTimeDropdownId";
+	var startTimeInputId = "startTimeInputId";
+	var endTimeInputId = "endTimeInputId";
 	var scheduleInputButtonID = "scheduleInputButtonID";
+	var scheduleRadioInputID = "scheduleRadioInputID";
+	var deleteRadioInputID = "deleteRadioInputID";
+	var scheduleRadioInputScheduleValue = "0";
+	var scheduleRadioInputDeleteValue = "1";
 	var dateIdDAILY = 0;
 	var dateIdWEEKLY = 1;
 	var dateIdMONTHLY = 2;
@@ -21,11 +25,11 @@
 	
 	var lastKnownDate = new Date(); //Default is current date. Helps keep track of date across all formats.
 	var grabbedslots;
-	var grabNames;
+	var grabFirefighters;
 	//calls one time setup methods
 	function initScheduler(){
 		grabbedslots = grabSchedule(); //external call
-		grabNames = grabFirefighters(); //external call
+		grabFirefighters = grabFirefighters(); //external call
 		createListSelection(listBubbleDiv);
 		createDateSelection(bubbleDiv);
 		reloadTable();
@@ -117,7 +121,7 @@
 		
 		refreshList(listDiv, grabbedslots, dateRangeArray[dateIndex]);
 		refreshHeaderGuide(dateRangeArray, dateIndex, timeslots, names, dateFormatId);
-		refreshTableCells(tableDiv, grabNames, dateRangeArray[dateIndex], dateFormatId);
+		refreshTableCells(tableDiv, grabFirefighters, dateRangeArray[dateIndex], dateFormatId);
 		refreshCellShading(timeslots, names, dateRangeArray[dateIndex]);
 	}
 	//returns the grabbed timeslots
@@ -126,7 +130,7 @@
 	}
 	//returns the grabbed fire names
 	function getNames(){
-		return grabNames;
+		return grabFirefighters;
 	}
 	
 	//returns value of selected radio button; this value corresponds to a display format
@@ -438,7 +442,7 @@
 		for(var i=0; i<timeslots.length; i++){	
 			var firefighterId = timeslots[i].firefighter.firefighterId;
 			var startTime = timeslots[i].timeslot;
-			var nameIndex = getNameIndex(firefighterId, grabNames);
+			var nameIndex = getNameIndex(firefighterId, grabFirefighters);
 			//alert(startTime.getStartDate());
 			if(nameIndex!=-1)
 			{
@@ -517,40 +521,103 @@
 		scheduleHeaderInputString+=getScheduleRadioInput();
 		scheduleHeaderInputString+="<br>";
 		document.getElementById(scheduleInputHeaderDiv).innerHTML = scheduleHeaderInputString;
-		
+		updateScheduleInput();	
 	}
+	
+	//Creates the input part based on selected radio
+	function updateScheduleInput(){
+		var scheduleInputString = getScheduleInputBasedOnRadio();
+		document.getElementById(scheduleInputDiv).innerHTML = scheduleInputString;
+	}
+	
 	function getScheduleRadioInput(){
 		var scheduleRadioInputString = "";
-		scheduleRadioInputString+="<input type='radio' name = 'gender' value='male'> Male";
-		scheduleRadioInputString+="<input type='radio' name='gender' value='female'> Female";
+		scheduleRadioInputString+="<input type='radio' name ='";
+		scheduleRadioInputString+=scheduleRadioInputID;
+		scheduleRadioInputString+="' id='";
+		scheduleRadioInputString+=scheduleRadioInputID;
+		scheduleRadioInputString+="' checked= 'true' onchange = 'updateScheduleInput()' value='";
+		scheduleRadioInputString+=scheduleRadioInputScheduleValue;
+		scheduleRadioInputString+="'> Schedule";
+		scheduleRadioInputString+="<input type='radio' onchange = 'updateScheduleInput()' name='"
+		scheduleRadioInputString+=scheduleRadioInputID;
+		scheduleRadioInputString+="' id='";
+		scheduleRadioInputString+=deleteRadioInputID;
+		scheduleRadioInputString+="' value = '";
+		scheduleRadioInputString+= scheduleRadioInputDeleteValue;
+		scheduleRadioInputString+="'> Delete";
 		scheduleRadioInputString+="<br>";
 		return scheduleRadioInputString;
 	}
 	
+	function getScheduleInputBasedOnRadio(){
+		var scheduleSelected = document.getElementById(scheduleRadioInputID).checked;
+		if(scheduleSelected)
+			return getScheduleInputScheduleShifts();
+		else{
+			return getScheduleInputDeleteShifts();
+		}
+		
+	}
 	
 	function getScheduleInputScheduleShifts(){
+		var scheduleInputString = "";
 		scheduleInputString+="<select id = "
 		scheduleInputString+= firemanDropdownId;
 		scheduleInputString+=">"
-		for(n=0; n<grabNames.length; n++){
-		scheduleInputString+="<option>";
-		scheduleInputString+=grabNames[n].getSummary();
+		for(n=0; n<grabFirefighters.length; n++){
+		scheduleInputString+="<option value ="; 
+		scheduleInputString+= n;
+		scheduleInputString+=">";
+		scheduleInputString+=grabFirefighters[n].getSummary();
 		scheduleInputString+="</option>";
 		}
 		scheduleInputString+="</select>"
 		scheduleInputString+="<br> Start time: ";
-		scheduleInputString+="<select id =";
-		scheduleInputString+=startTimeDropdownId;
+		scheduleInputString+="<input type = 'text' id =";
+		scheduleInputString+=startTimeInputId;
 		scheduleInputString+=">";
-		scheduleInputString+="</select>";
+		scheduleInputString+="</input>";
 		scheduleInputString+="<br> End time: ";
-		scheduleInputString+="<select id =";
-		scheduleInputString+=endTimeDropdownId;
+		scheduleInputString+="<input type = 'text' id =";
+		scheduleInputString+=endTimeInputId;
 		scheduleInputString+=">";
-		scheduleInputString+="</select>";
+		scheduleInputString+="</input>";
+		scheduleInputString+="<br> <button onclick = 'test()'>";
+		scheduleInputString+="OK </button>";
+		return scheduleInputString;
 	}
 	
 	function getScheduleInputDeleteShifts(){
+		var scheduleInputString = "";
+		return scheduleInputString;
+	}
+	
+	function getFirefighterFromScheduleDropdown(){
+		var dropdown = document.getElementById(firemanDropdownId);
+		var value = dropdown.options[dropdown.selectedIndex].value;
+		return grabFirefighters[value];
+	}
+	
+	function test(){
+		var startDate = new Date();
+		var endDate = new Date();
+		startDate.setHours(startDate.getHours()-4);
+		endDate.setHours(endDate.getHours()+6);
+		var dateRange = new DateRange(startDate, endDate);
+		
+		var firefighter = getFirefighterFromScheduleDropdown();
+		scheduleShift(firefighter, dateRange);
+	}
+	
+	function scheduleShift(firefighter, dateRange){
+		alert(firefighter.getSummary());
+		alert(dateRange.startDate);
+		alert(firefighter.getJson());
+		addFirefighterJson(firefighter.getJson());
+	}
+	
+	function deleteShift(){
 		
 	}
 	

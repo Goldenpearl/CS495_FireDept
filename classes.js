@@ -10,6 +10,16 @@ function Firefighter(firefighterId, firstName, lastName){
 	this.getSummary = function(){
 		return "Firefighter ("+firefighterId+", "+firstName+", "+lastName+")";
 	}
+	this.getJson = function(){
+		return '{"Firefighter":{"firefighterId":"'+
+				this.firefighterId+
+				'", "firstName":"'+
+				this.firstName +
+				'", "lastName":"'+
+				this.lastName+
+				'"}}';
+				
+	}
 }
 function Timeslot(timeslotId, startTime, endTime, firefighter){
    this.timeslotId=timeslotId;
