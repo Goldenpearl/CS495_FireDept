@@ -11,14 +11,17 @@ function Firefighter(firefighterId, firstName, lastName){
 		return "Firefighter ("+firefighterId+", "+firstName+", "+lastName+")";
 	}
 	this.getJson = function(){
-		return '{"Firefighter":{"firefighterId":"'+
+		return '{' +this.getNestedJson()+'}';			
+	}
+	
+	this.getNestedJson = function(){
+		return '"Firefighter":{"firefighterId":"'+
 				this.firefighterId+
 				'", "firstName":"'+
 				this.firstName +
 				'", "lastName":"'+
 				this.lastName+
-				'"}}';
-				
+				'"}';
 	}
 }
 function Timeslot(timeslotId, startTime, endTime, firefighter){
@@ -45,16 +48,21 @@ function Timeslot(timeslotId, startTime, endTime, firefighter){
 		return new DateRange(this.getStartDate(), this.getEndDate());
    }
    
-   this.getJson() = function(){
-	   var json = '{ "Timeslot": {';
-	   json+='"startTime":';
+   this.getJson = function(){
+	   return '{'+this.getNestedJson()+'}';
+   }
+   
+   this.getNestedJson = function(){
+	   var json = '"Timeslot": {';
+	   json+='"startTime":"';
 	   json+=startTime;
-	   json+=', "endTime":';
-	   json+=endtime;
-	   json+=', "timeslotId":'+
+	   json+='", "endTime":"';
+	   json+=endTime;
+	   json+='", "timeslotId":"';
 	   json+=timeslotId;
-	   json+=this.firefighter.getJson();
-	   json+='}}';
+	   json+='", ';
+	   json+=this.firefighter.getNestedJson();
+	   json+='}';
 	   return json;
    }
 }
@@ -189,6 +197,21 @@ function ScheduleTimeslot(firefighter, timeslot, scheduleTimeslotId){
 	
 	this.getMidrangeSummary = function(){
 		return firefighter.firefighterId + "&nbsp&nbsp"+firefighter.getFullName() + "&nbsp Schedule ("+simpleDate(timeslot.getStartDate()) + " - "+simpleDate(timeslot.getEndDate()) +") &nbspTID:" +this.timeslot.timeslotId +" &nbsp SID:"+scheduleTimeslotId;
+	}
+	
+	this.getJson = function(){
+	return '{'+this.getNestedJson()+'}';
+	}
+	
+	this.getNestedJson = function (){
+		var json = "";
+		json+='"ScheduleTimeslot": {';
+		json+='"scheduleTimeslotId": "';
+		json+=scheduleTimeslotId;
+		json+='", ';
+		json+=timeslot.getNestedJson();
+		json+='}';
+		return json;
 	}
 	
 }
