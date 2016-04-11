@@ -90,7 +90,7 @@ function isDateTime($dateTime){
 }
 
 
-$id = $_REQUEST["id"];
+$id = $_REQUEST["id"];/*
 if($id == 1){
 	$firefighter_json = $_REQUEST["firefighter_json"];
 	$firefighter = Firefighter::getFirefighterFromJson($firefighter_json);
@@ -101,12 +101,17 @@ if($id == 1){
 	////echo $firefighter->getLastName();
 	//insertFirefighter($fname, $lname);
 }
-else if($id ==2)
+else if($id ==Timeslot::getClassId())
 {
-	echo "no";
+	$timeslot_json = $_REQUEST["timeslot_json"];
+	$timeslot = Timeslot::getTimeslotFromJson($timeslot_json);
+	$startDate = $timeslot->getStartTime();
+	$endDate = $timeslot->getEndTime();
+	insertTimeslot($startDate, $endDate);
 }
-else{
+else{*/
 	echo "b";
+	/*
 }
-
+*/
 ?>

@@ -611,15 +611,9 @@
 	}
 	
 	function scheduleShift(firefighter, dateRange){
-		alert(firefighter.getSummary());
-		alert(dateRange.startDate);
-		alert(firefighter.getJson());
 		var timeslot = new Timeslot(0, dateRange.startDate, dateRange.endDate, firefighter);
-		alert(timeslot.getJson());
 		var scheduleTimeslot = new ScheduleTimeslot(firefighter, timeslot, 0);
-		addScheduleTimeslotJson(firefighter.getJson());
-		document.writeln(timeslot.getJson());
-		document.writeln(scheduleTimeslot.getJson());
+		addTimeslotJson(timeslot.getJson());
 	}
 	
 	function deleteShift(){

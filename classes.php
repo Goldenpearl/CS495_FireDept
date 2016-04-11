@@ -47,6 +47,10 @@ class Firefighter {
 		//echo($id."<br>");
 		return new Firefighter($id, $fName, $lName, $age);
 	}
+	
+	public static function getClassId(){
+		return 0;
+	}
 }
 
 class Timeslot{
@@ -79,7 +83,7 @@ class Timeslot{
 	}
 	
 	public function getJSON(){
-		$arr = ["startTime"=>$this->startTime, "endTime"=>$this->endTime, "timeslotId"=>$this->timeslotId, "firemanId"=>$this->firefighter->getId()];
+		$arr = ["startTime"=>$this->startTime, "endTime"=>$this->endTime, "timeslotId"=>$this->timeslotId, "firefighterId"=>$this->firefighter->getId()];
 		$json = json_encode($arr);
 		return $json;
 	}
@@ -97,9 +101,12 @@ class Timeslot{
 		$fName = $firefighterArray["firstName"];
 		$lName = $firefighterArray["lastName"];
 		$firefighterId = $firefighterArray["firefighterId"];
-		$age= $firefighterArray["age"];
-		$firefighter = $array["firemanId"];
+		$firefighter = new Firefighter($firefighterId, $fName, $lName, 0);
 		return new Timeslot($timeslotId, $startTime, $endTime, $firefighter);
+	}
+	
+	public static function getClassId(){
+		return 1;
 	}
 }
 
@@ -133,6 +140,9 @@ class ScheduleTimeslot{
 		return $str;
 	}
 
+	public function getClassId(){
+		return 2;
+	}
 }
 
 

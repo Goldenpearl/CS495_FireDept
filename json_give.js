@@ -2,7 +2,7 @@
 function addFirefighterJson(firefighterJson) {	
 		alert("adding Firefighter to DB");
 		var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("POST", "scheduleMod.php?id="+FIREFIGHTER_ID+"&firefighter_json="+firefighterJson, false);
+        xmlhttp.open("POST", "scheduleMod.php?id="+0+"&firefighter_json="+firefighterJson, false);
         xmlhttp.send();
 		document.write(xmlhttp.responseText);
 		return xmlhttp.responseText;
@@ -12,7 +12,7 @@ function addFirefighterJson(firefighterJson) {
 function addTimeslotJson(timeslotJson){
 	alert("adding timeslot to DB");
 		var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("POST", "scheduleMod.php?id="+TIMESLOT_ID+"&timeslot_json="+timeslotJson, false);
+        xmlhttp.open("POST", "scheduleMod.php?id="+1+"&timeslot_json="+timeslotJson, false);
         xmlhttp.send();
 		document.write(xmlhttp.responseText);
 		return xmlhttp.responseText;
@@ -23,7 +23,7 @@ function addTimeslotJson(timeslotJson){
 function addScheduleTimeslotJson(scheduleJson){
 	alert("adding st to DB");
 		var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("POST", "scheduleMod.php?id="+SCHEDULE_ID+"&schedule_json="+scheduleJson, false);
+        xmlhttp.open("POST", "scheduleMod.php?id="+2+"&schedule_json="+scheduleJson, false);
         xmlhttp.send();
 		document.write(xmlhttp.responseText);
 		return xmlhttp.responseText;
