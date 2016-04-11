@@ -33,8 +33,20 @@ class Firefighter {
 		return $json;
 	}
 	
+	public function getSummary(){
+		return "Age : ".
+		$this->age .
+		" <br> Name: ".
+		$this->fName.
+		" ".
+		$this->lName. 
+		"<br> Id: ".
+		$this->id.
+		"<br>";
+	}
+	
 	public static function getFirefighterFromJson($json){
-		echo($json);
+		//echo($json);
 		$data = json_decode($json, true);
 		$array = ($data["Firefighter"]);
 		//var_dump($array, true);
@@ -89,7 +101,7 @@ class Timeslot{
 	}
 	
 	public static function getTimeslotFromJson($json){
-		echo($json);
+		//echo($json);
 		$data = json_decode($json, true);
 		$array = ($data["Timeslot"]);
 		$firefighterArray = $array["Firefighter"];
@@ -103,6 +115,18 @@ class Timeslot{
 		$firefighterId = $firefighterArray["firefighterId"];
 		$firefighter = new Firefighter($firefighterId, $fName, $lName, 0);
 		return new Timeslot($timeslotId, $startTime, $endTime, $firefighter);
+	}
+	
+	public function getSummary(){
+		return "StartTime : <br>".
+		$this->startTime.
+		"<br><br> EndTime: <br>".
+		$this->endTime.
+		"<br><br>Firefighter: <br>".
+		$this->firefighter->getSummary().
+		"<br>TimeslotId: <br>".
+		$this->timeslotId.
+		"<br>";
 	}
 	
 	public static function getClassId(){
@@ -127,6 +151,29 @@ class ScheduleTimeslot{
 		return $this->id;
 	}	
 	
+	public static function getScheduleTimeslotFromJson($json){
+		//echo($json);
+		$data = json_decode($json, true);
+		$array = ($data["ScheduleTimeslot"]);
+		$timeslotArray = $array["Timeslot"];
+		$firefighterArray = $timeslotArray["Firefighter"];
+		//var_dump($array, true);
+		
+		$scheduleTimeslotId = $array["scheduleTimeslotId"];
+		$startTime= $timeslotArray["startTime"];
+		$endTime = $timeslotArray["endTime"];
+		$timeslotId = $timeslotArray["timeslotId"];
+		$fName = $firefighterArray["firstName"];
+		$lName = $firefighterArray["lastName"];
+		$firefighterId = $firefighterArray["firefighterId"];
+		$firefighter = new Firefighter($firefighterId, $fName, $lName, 0);
+		$timeslot = new Timeslot($timeslotId, $startTime, $endTime, $firefighter);
+		$scheduleTimeslot = new ScheduleTimeslot($timeslot, $scheduleTimeslotId);
+		return $scheduleTimeslot;
+	}
+	
+	
+	
 	public function getJSON(){
 		$str = '{"ScheduleTimeslot": {'.
 		'"scheduleTimeslotId": "'.
@@ -138,6 +185,14 @@ class ScheduleTimeslot{
 		$this->timeslot->getFirefighter()->getJSON().
 		'}}';
 		return $str;
+	}
+	
+	public function getSummary(){
+		return "ScheduleTimeslotId: <br>".
+		$this->id.
+		"<br><br> Timeslot:<br>".
+		$this->timeslot->getSummary().
+		"<br>";
 	}
 
 	public function getClassId(){

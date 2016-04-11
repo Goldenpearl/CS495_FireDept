@@ -36,6 +36,10 @@ function executeQueryString($queryString)
 }
 
 
+function insertScheduleTimeslotAndTimeslot($schedule_timeslot){
+	
+}
+
 function insertScheduleTimeslot($timeslotId, $firemanId){
 	if(isValidTimeslotId($timeslotId) && isValidFiremanId($firemanId))
 	{
@@ -110,7 +114,10 @@ else if($id ==Timeslot::getClassId())
 	insertTimeslot($startDate, $endDate);
 }
 else{*/
-	echo "b";
+	$schedule_timeslot_json = $_REQUEST["schedule_timeslot_json"];
+	$schedule_timeslot = ScheduleTimeslot::getScheduleTimeslotFromJson($schedule_timeslot_json);
+	insertScheduleTimeslotAndTimeslot($schedule_timeslot);
+	
 	/*
 }
 */
