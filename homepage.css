@@ -1,0 +1,26 @@
+h1 {
+	color: red; text-align: center; font-family: "Verdana";
+}
+
+h3 {
+	color: green; text-align: center; font-family: "Times-New-Roman";
+}
+ul {
+	display: inline-block; align: center; list-style-type: none; margin: 0 auto;
+	}
+  ul li {
+	  display: block;position: relative;float: left;border:1px solid #000
+	  }
+  
+  ul li a {
+	  display: block;background: #0B3861;padding: 5px 10px 5px 10px;text-decoration: none;
+           white-space: nowrap;color: #fff;
+		}
+  ul li a:hover {
+	  background: #01A9DB;
+	  }
+	  
+	  
+body {
+	background-color: #ffc3a0;
+}
