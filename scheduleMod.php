@@ -46,6 +46,7 @@ function insertScheduleTimeslotAndTimeslot($schedule_timeslot){
 	
 	$successfulTimeslotInsert = insertTimeslot($startDate, $endDate);
 	if($successfulTimeslotInsert){
+		//TODO real int not 15
 		return $successfulScheduleTimeslotInsert = insertScheduleTimeslot(15, $firemanId);
 	}
 }
