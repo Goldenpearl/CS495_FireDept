@@ -290,9 +290,9 @@ function testParsing(){
 	s.timeslot.getAlert();
 }
 // Instantiate new objects with 'new'
-var firefighter = new Firefighter("1", "Bob", "M");
-var timeslot = new Timeslot(1, "1","1",firefighter);
-var s = parseScheduleTimeslot(texts);
-var ss = parseScheduleTimeslots(textss);
-ss[0].timeslot.getAlert();
-testParsing();
+//var firefighter = new Firefighter("1", "Bob", "M");
+//var timeslot = new Timeslot(1, "1","1",firefighter);
+//var s = parseScheduleTimeslot(texts);
+//var ss = parseScheduleTimeslots(textss);
+//ss[0].timeslot.getAlert();
+//testParsing();

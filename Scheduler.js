@@ -613,11 +613,15 @@
 	function scheduleShift(firefighter, dateRange){
 		var timeslot = new Timeslot(0, dateRange.startDate, dateRange.endDate, firefighter);
 		var scheduleTimeslot = new ScheduleTimeslot(firefighter, timeslot, 0);
-		alert(scheduleTimeslot.getJson());
 		addScheduleTimeslotJson(scheduleTimeslot.getJson());
+		refreshShiftsInTable();
 	}
 	
 	function deleteShift(){
+		
+	}
+	
+	function refreshShiftsInTable(){
 		
 	}
 	

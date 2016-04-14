@@ -25,7 +25,7 @@ function addScheduleTimeslotJson(scheduleJson){
 		var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("POST", "scheduleMod.php?id="+2+"&schedule_timeslot_json="+scheduleJson, false);
         xmlhttp.send();
-		document.write(xmlhttp.responseText);
+		//document.write(xmlhttp.responseText);
 		return xmlhttp.responseText;
 		//xmlhttp.close;
 }
