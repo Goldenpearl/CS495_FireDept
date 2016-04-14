@@ -152,7 +152,6 @@ class ScheduleTimeslot{
 	}	
 	
 	public static function getScheduleTimeslotFromJson($json){
-		//echo($json);
 		$data = json_decode($json, true);
 		$array = ($data["ScheduleTimeslot"]);
 		$timeslotArray = $array["Timeslot"];

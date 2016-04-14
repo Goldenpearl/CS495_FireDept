@@ -37,7 +37,15 @@ function executeQueryString($queryString)
 
 
 function insertScheduleTimeslotAndTimeslot($schedule_timeslot){
+	$scheduleTimeslotId = $schedule_timeslot->getScheduleTimeslotId();
+	$timeslot = $schedule_timeslot->getTimeslot();
+	$firemanId = $timeslot->getFirefighter()->getId();
+	$timeslotId = $timeslot->getTimeslotId();
+	$startDate = $timeslot -> getStartTime();
+	$endDate = $timeslot -> getEndTime();
 	
+	insertTimeslot($startDate, $endDate);
+	insertScheduleTimeslot(15, $firemanId);
 }
 
 function insertScheduleTimeslot($timeslotId, $firemanId){
