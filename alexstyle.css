@@ -1,0 +1,15 @@
+/*.table {
+	border: 1px solid black;
+} */
+
+body {
+	padding: 5px;
+}
+
+.table-active:hover {
+	background-color: #b0e0e6;
+}
+
+tr {
+	height: 100px;
+}
