@@ -44,15 +44,17 @@ function insertScheduleTimeslotAndTimeslot($schedule_timeslot){
 	$startDate = $timeslot -> getStartTime();
 	$endDate = $timeslot -> getEndTime();
 	
-	insertTimeslot($startDate, $endDate);
-	insertScheduleTimeslot(15, $firemanId);
+	$successfulTimeslotInsert = insertTimeslot($startDate, $endDate);
+	if($successfulTimeslotInsert){
+		return $successfulScheduleTimeslotInsert = insertScheduleTimeslot(15, $firemanId);
+	}
 }
 
 function insertScheduleTimeslot($timeslotId, $firemanId){
 	if(isValidTimeslotId($timeslotId) && isValidFiremanId($firemanId))
 	{
 		$queryString = "INSERT INTO ScheduleTimeSlot(timeslotId, firemanId) VALUES (".$timeslotId.",".$firemanId.");";
-		executeQueryString($queryString);
+		return executeQueryString($queryString);
 	}
 }
 
@@ -69,7 +71,7 @@ function insertTimeslot($startDate, $endDate){
 		$endDate.
 		"'".
 		"); ";
-		executeQueryString($queryString);
+		return executeQueryString($queryString);
 	}
 }
 
