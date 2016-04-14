@@ -1,6 +1,6 @@
-/*.table {
-	border: 1px solid black;
-} */
+.table {
+	table-layout: fixed;
+} 
 
 body {
 	padding: 5px;
@@ -12,4 +12,13 @@ body {
 
 tr {
 	height: 100px;
+}
+
+strong {
+	font-size: 40px;
+	font-family: Consolas, Serif, Verdana;
+}
+
+th {
+	height: 50%;
 }
