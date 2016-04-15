@@ -5,7 +5,8 @@ var CURRENT_EVENT_ID = 2;
 var EDIT_EVENT_ID = 3;
 
 var currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1, 3);
-
+var selectedCalendarDay = new Date(new Date().getFullYear(), new Date().getMonth(), 1, 3);
+var loadedEvents = ["Party", "School", "Games"];
 function loadPage(){
 	drawCalendar();
 }
@@ -67,7 +68,8 @@ function changeCalendarMonth(delta){
 }
 
 function calendarOnClickFunction(date){
-	drawEventList(date);
+	selectedCalendarDay = date;
+	drawEventList();
 }
 
 function getCalendarOnClickString(date, additionalDays){
@@ -127,22 +129,17 @@ function getMonthName(date){
 
 
 /***Draw Event List***/
-function loadEvents(date){
-	var events = ["ME", "EF"];
-	return events;
+function loadEvents(){
+	loadedEvents = ["Party", "School", "Games"];
+	return loadedEvents;
 }
 
-function drawEventList(date){
-	//alert(date);
-	var dateNumber = date.getTime();
+function drawEventList(){
 	var eventString = "";
-	var events = loadEvents(date);
+	var events = loadEvents();
 	eventString +="<h3> Events </h3>";
 	eventString += "<table class = 'event-table'>"
-	eventString +="<tr onclick = 'newEventClick(";
-	eventString += "new Date(";
-	eventString += dateNumber;
-	eventString += "))'>";
+	eventString +="<tr onclick = 'newEventClick()'>";
 	eventString +="<td>";
 	eventString += "Create New Event";
 	eventString += "</td>"
@@ -159,9 +156,9 @@ function drawEventList(date){
 	document.getElementById("myUI").innerHTML = eventString;
 }
 
-function newEventClick(date){
+function newEventClick(){
 	drawEventBox(NEW_EVENT_ID);
-	document.getElementById("eventDate").value = convertDateToDateInputValue(date);
+	document.getElementById("eventDate").value = convertDateToDateInputValue(selectedCalendarDay);
 }
 
 function convertDateToDateInputValue(date){
@@ -186,6 +183,9 @@ function eventClick(){
 	drawEventBox(CURRENT_EVENT_ID);
 }
 
+function editEventClick(){
+	drawEventBox(EDIT_EVENT_ID);
+}
 /***Draw Event Information ***/
 function drawEventBox(id){
 	var eventString = "";
@@ -205,10 +205,10 @@ function drawEventBox(id){
 	eventString += "<table class = 'timetable'><tr>";
 	eventString += "<td>Start time:</td>";
 	eventString += "<td>End time:</td></tr>";
-	eventString += "<tr><td><input type='time' id='eventStartTime'";
+	eventString += "<tr><td><input type='time' id='eventStartTime' step = '900'";
 	eventString += disabledString;
 	eventString += "></td>";
-	eventString += "<td><input type='time' id='eventEndTime'";
+	eventString += "<td><input type='time' id='eventEndTime' step = '900'";
 	eventString += disabledString;
 	eventString += "><td></tr></table>";
 	eventString += "Location:<br>";
@@ -227,18 +227,18 @@ function drawEventBox(id){
 function getEventBoxButtons(eventId){
 	var eventBoxButtonString ="";
 	if(eventId == NEW_EVENT_ID){
-		eventBoxButtonString +="<button onclick = 'createEvent()'> Create Event </button>";
+		eventBoxButtonString +="<button onclick = 'createCalendarEvent()'> Create Event </button>";
 	}
 	else if (eventId == CURRENT_EVENT_ID)
 	{
-		eventBoxButtonString +="<button onclick = 'editEvent()'> Edit Event </button>";
-		eventBoxButtonString +="<button onclick = 'deleteEvent()'> Delete Event </button>";
+		eventBoxButtonString +="<button onclick = 'editEventClick()'> Edit Event </button>";
+		eventBoxButtonString +="<button onclick = 'deleteCalendarEvent()'> Delete Event </button>";
 	}
 	else if(eventId == EDIT_EVENT_ID){
 		eventBoxButtonString += "<button onclick = 'runConfirmationBox()'> Save Changes </button>";
 		eventBoxButtonString += "<button onclick = 'runConfirmationBox()'> Discard Changes </button>";
 	}
-	eventBoxButtonString += "<br><br><button onclick = 'resetEventBox()'> Back </button>";
+	eventBoxButtonString += "<br><br><button onclick = 'backToEventList()'> Back </button>";
 	return eventBoxButtonString;
 }
 
@@ -247,18 +247,21 @@ function resetEventBox(){
 	document.getElementById("myUI").innerHTML = defaultString;
 }
 
+function backToEventList(){
+	drawEventList(selectedCalendarDay);
+}
+
 /***Process Event Changes ***/
-function editEvent(){
+function editCalendarEvent(){
 	runConfirmationBox();
 	//resetEventBox();
 }
 
-function createEvent(){
-	//runConfirmationBox();
-	resetEventBox()
+function createCalendarEvent(){
+	backToEventList();
 }
 
-function deleteEvent(){
+function deleteCalendarEvent(){
 	runConfirmationBox();
 	//resetEventBox()
 }
