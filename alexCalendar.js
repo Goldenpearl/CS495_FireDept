@@ -12,7 +12,21 @@ function drawCurrentCalendar(){
 
 function drawEventBox(){
 	var eventString = "";
-	eventString += "Hi";
+	//eventString += "<form>";
+	eventString += "Event name:<br>";
+	eventString += "<input type='text' name='eventname'><br>";
+	eventString += "Event date:<br>";
+	eventString += "<input type='date' name = 'eventdate'><br>"
+	eventString += "<table class = 'timetable'><tr>";
+	eventString += "<td>Start time:</td>";
+	eventString += "<td>End time:</td></tr>";
+	eventString += "<tr><td><input type='time' name='eventStartTime'></td>";
+	eventString += "<td><input type='time' name='eventEndTime'><td></tr></table>";
+	eventString += "Location:<br>";
+	eventString += "<input type='text' name='eventLocation'><br>";
+	eventString += "Description: <br>"
+	eventString += "<textarea rows = '4' cols = '50'></textarea><br>";
+	//eventString += "</form>";
 	document.getElementById("myUI").innerHTML = eventString;
 }
 
