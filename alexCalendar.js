@@ -1,16 +1,47 @@
 
 var tableId = "tableId";
-
+var NEW_EVENT_ID = 1;
+var CURRENT_EVENT_ID = 2;
 function loadPage(){
 	drawCurrentCalendar();
-	drawEventBox();
+	//drawEventBox();
 }
 
 function drawCurrentCalendar(){
 	drawCalendar(new Date());
 }
 
+function drawEventList(){
+	var eventString = "";
+	var events = ["ME", "EF"];
+	eventString +="<h3> Events </h3>";
+	eventString += "<table class = 'event-table'>"
+	eventString +="<tr onclick = 'newEventClick()'>";
+	eventString +="<td>";
+	eventString += "Create New Event";
+	eventString += "</td>"
+	eventString +="</tr>"
+	for(var r=0; r<events.length; r++){
+		eventString +="<tr onclick = 'eventClick()'>";
+		eventString +="<td>";
+		eventString += events[r];
+		eventString += "</td>"
+		eventString +="</tr>"
+	}
+	eventString += "</table>"
+	document.getElementById("myUI").innerHTML = eventString;
+}
+
+function newEventClick(){
+	drawEventBox();
+}
+
+function eventClick(){
+	drawEventBox();
+}
+
 function drawEventBox(){
+	var id = CURRENT_EVENT_ID;
 	var eventString = "";
 	//eventString += "<form>";
 	eventString += "Event name:<br>";
@@ -26,10 +57,26 @@ function drawEventBox(){
 	eventString += "<input type='text' name='eventLocation'><br>";
 	eventString += "Description: <br>"
 	eventString += "<textarea rows = '4' cols = '50'></textarea><br>";
+	eventString += getEventBoxButtons(id);
 	//eventString += "</form>";
 	document.getElementById("myUI").innerHTML = eventString;
 }
 
+function getEventBoxButtons(eventId){
+	var eventBoxButtonString ="";
+	if(eventId == NEW_EVENT_ID){
+		eventBoxButtonString +="<button> Create Event </button>";
+	}
+	/*else if (eventId == CURRENT_EVENT_ID)
+	{
+		eventBoxButtonString +="<button> Edit Event </button>";
+		eventBoxButtonString +="<button> Delete Event </button>";
+	}*/
+	else if(eventId == CURRENT_EVENT_ID){
+		eventBoxButtonString += "<button> Save Changes </button>";
+	}
+	return eventBoxButtonString;
+}
 
 function drawCalendar(date) {
 	var tableString = "";
@@ -90,7 +137,7 @@ function addOnClickEventsToCalendar(){
 }
 
 function calendarOnClickFunction(){
-	
+	drawEventList();
 }
 
 /*returns a number from 0-6 corresponding to a weekday. The weekday cooresponds to the 1st day of the month.*/

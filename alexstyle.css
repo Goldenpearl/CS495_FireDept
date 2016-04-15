@@ -10,6 +10,12 @@ body {
 	background-color: #b0e0e6;
 }
 
+.event-table tr:hover
+{
+	background-color: #b0e0e6;
+}
+
+
 tr {
 	height: 100px;
 }
