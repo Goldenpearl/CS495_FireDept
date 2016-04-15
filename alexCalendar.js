@@ -3,9 +3,10 @@ var tableId = "tableId";
 var NEW_EVENT_ID = 1;
 var CURRENT_EVENT_ID = 2;
 var EDIT_EVENT_ID = 3;
-
+var SIGN_UP_EVENT_ID = 4;
 var currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1, 3);
 var selectedCalendarDay = new Date(new Date().getFullYear(), new Date().getMonth(), 1, 3);
+var selectedEvent= "b";
 var loadedEvents = ["Party", "School", "Games"];
 function loadPage(){
 	drawCalendar();
@@ -157,7 +158,7 @@ function drawEventList(){
 }
 
 function newEventClick(){
-	drawEventBox(NEW_EVENT_ID);
+	drawBlankEventBox(NEW_EVENT_ID);
 	document.getElementById("eventDate").value = convertDateToDateInputValue(selectedCalendarDay);
 }
 
@@ -180,22 +181,27 @@ function convertDateToDateInputValue(date){
 }
 
 function eventClick(){
-	drawEventBox(CURRENT_EVENT_ID);
+	drawEventBox(selectedEvent, CURRENT_EVENT_ID);
 }
 
 function editEventClick(){
-	drawEventBox(EDIT_EVENT_ID);
+	drawEventBox(selectedEvent, EDIT_EVENT_ID);
 }
+
+function signUpEventClick(){
+	drawEventBox(selectedEvent, SIGN_UP_EVENT_ID);
+}
+
 /***Draw Event Information ***/
-function drawEventBox(id){
+function drawBlankEventBox(id){
 	var eventString = "";
 	var disabledString = "";
-	if (id == CURRENT_EVENT_ID){
+	if (id == CURRENT_EVENT_ID || id == SIGN_UP_EVENT_ID){
 		disabledString="disabled";
 	}
 	//eventString += "<form>";
 	eventString += "Event name:<br>";
-	eventString += "<input type='text' id='eventname'";
+	eventString += "<input type='text' id='eventName'";
 	eventString += disabledString;
 	eventString += "><br>";
 	eventString += "Event date:<br>";
@@ -219,26 +225,53 @@ function drawEventBox(id){
 	eventString += "<textarea id ='eventDescription' rows = '4' cols = '50'";
 	eventString += disabledString;
 	eventString += "></textarea><br>";
+	eventString += "Apparatus:<br>";
+	eventString += "<textarea id = 'selectedApparatusTextArea' rows = '6' cols = '50' disabled>"
+	eventString += "</textarea><br>";
+	
+	if(id == NEW_EVENT_ID || id == EDIT_EVENT_ID){
+		eventString += getUnusedApparatusSelectString();
+		eventString += "<button> Add </button>";
+		eventString += getUsedApparatusSelectString();
+		eventString += "<button> Remove </button><br><br>";
+	}
+	else if(id == SIGN_UP_EVENT_ID){
+		eventString += "<br>Apparatus";
+		eventString += getUsedApparatusSelectString();
+		eventString += "Seat <select id = 'seats'>";
+		eventString += "</select><br><br>";
+	}
 	eventString += getEventBoxButtons(id);
 	//eventString += "</form>";
 	document.getElementById("myUI").innerHTML = eventString;
+}
+
+function drawEventBox(calendarEvent, id){
+	drawBlankEventBox(id);
+	document.getElementById("eventName").value=calendarEvent;
 }
 
 function getEventBoxButtons(eventId){
 	var eventBoxButtonString ="";
 	if(eventId == NEW_EVENT_ID){
 		eventBoxButtonString +="<button onclick = 'createCalendarEvent()'> Create Event </button>";
+		eventBoxButtonString += "<br><br><button onclick = 'backToEventList()'> Back </button>";
 	}
 	else if (eventId == CURRENT_EVENT_ID)
-	{
+	{	eventBoxButtonString +="<button onclick = 'signUpEventClick()'> I Want to Sign Up</button><br><br>";
 		eventBoxButtonString +="<button onclick = 'editEventClick()'> Edit Event </button>";
 		eventBoxButtonString +="<button onclick = 'deleteCalendarEvent()'> Delete Event </button>";
+		eventBoxButtonString += "<br><br><button onclick = 'backToEventList()'> Back </button>";
 	}
 	else if(eventId == EDIT_EVENT_ID){
-		eventBoxButtonString += "<button onclick = 'runConfirmationBox()'> Save Changes </button>";
-		eventBoxButtonString += "<button onclick = 'runConfirmationBox()'> Discard Changes </button>";
+		eventBoxButtonString += "<button onclick = 'saveChangesClick()'> Save Changes </button>";
+		eventBoxButtonString += "<button onclick = 'discardChangesClick()'> Discard Changes </button>";
+		eventBoxButtonString += "<br><br><button onclick = 'backToEventView()'> Back </button>";
 	}
-	eventBoxButtonString += "<br><br><button onclick = 'backToEventList()'> Back </button>";
+	else if (eventId == SIGN_UP_EVENT_ID){
+		eventBoxButtonString += "<button onclick = 'backToEventView()'> Sign up </button><br><br>";
+		eventBoxButtonString += "<br><br><button onclick = 'backToEventView()'> Back </button>";
+	}
 	return eventBoxButtonString;
 }
 
@@ -251,10 +284,20 @@ function backToEventList(){
 	drawEventList(selectedCalendarDay);
 }
 
+function backToEventView(){
+	drawEventBox(selectedEvent, CURRENT_EVENT_ID)
+}
+function discardChangesClick(){
+	backToEventView();
+}
+
+function saveChangesClick(){
+	backToEventView();
+}
 /***Process Event Changes ***/
 function editCalendarEvent(){
-	runConfirmationBox();
-	//resetEventBox();
+	var reallyEdit = runConfirmationBox();
+	backToEventView();
 }
 
 function createCalendarEvent(){
@@ -262,11 +305,26 @@ function createCalendarEvent(){
 }
 
 function deleteCalendarEvent(){
-	runConfirmationBox();
-	//resetEventBox()
+	var reallyDelete = runConfirmationBox();
+	if(reallyDelete){
+		backToEventList();
+	}
 }
 
 function runConfirmationBox(){
-	confirm("Are you sure you want");
-	
+	return confirm("Are you sure you want");
+}
+
+function getUnusedApparatusSelectString(){
+	apparatusString = "";
+	apparatusString += "<select id = 'unusedApparatusSelect'>";
+	apparatusString += "</select>";
+	return apparatusString;
+}
+
+function getUsedApparatusSelectString(){
+	apparatusString = "";
+	apparatusString += "<select id = 'apparatusSelect'>";
+	apparatusString += "</select>";
+	return apparatusString;
 }
