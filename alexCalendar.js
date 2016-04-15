@@ -18,12 +18,16 @@ function loadEvents(date){
 }
 
 function drawEventList(date){
-	alert(date);
+	//alert(date);
+	var dateNumber = date.getTime();
 	var eventString = "";
 	var events = loadEvents(date);
 	eventString +="<h3> Events </h3>";
 	eventString += "<table class = 'event-table'>"
-	eventString +="<tr onclick = 'newEventClick()'>";
+	eventString +="<tr onclick = 'newEventClick(";
+	eventString += "new Date(";
+	eventString += dateNumber;
+	eventString += "))'>";
 	eventString +="<td>";
 	eventString += "Create New Event";
 	eventString += "</td>"
@@ -45,8 +49,9 @@ function resetEventBox(){
 	document.getElementById("myUI").innerHTML = defaultString;
 }
 
-function newEventClick(){
+function newEventClick(date){
 	drawEventBox(NEW_EVENT_ID);
+	document.getElementById("eventDate").value = convertDateToDateInputValue(date);
 }
 
 function eventClick(){
@@ -77,28 +82,28 @@ function drawEventBox(id){
 	}
 	//eventString += "<form>";
 	eventString += "Event name:<br>";
-	eventString += "<input type='text' name='eventname'";
+	eventString += "<input type='text' id='eventname'";
 	eventString += disabledString;
 	eventString += "><br>";
 	eventString += "Event date:<br>";
-	eventString += "<input type='date' name = 'eventdate'";
+	eventString += "<input type='date' id = 'eventDate'";
 	eventString += disabledString;
 	eventString += "><br>";
 	eventString += "<table class = 'timetable'><tr>";
 	eventString += "<td>Start time:</td>";
 	eventString += "<td>End time:</td></tr>";
-	eventString += "<tr><td><input type='time' name='eventStartTime'";
+	eventString += "<tr><td><input type='time' id='eventStartTime'";
 	eventString += disabledString;
 	eventString += "></td>";
-	eventString += "<td><input type='time' name='eventEndTime'";
+	eventString += "<td><input type='time' id='eventEndTime'";
 	eventString += disabledString;
 	eventString += "><td></tr></table>";
 	eventString += "Location:<br>";
-	eventString += "<input type='text' name='eventLocation'";
+	eventString += "<input type='text' id='eventLocation'";
 	eventString += disabledString;
 	eventString += "><br>";
 	eventString += "Description: <br>"
-	eventString += "<textarea rows = '4' cols = '50'";
+	eventString += "<textarea id ='eventDescription' rows = '4' cols = '50'";
 	eventString += disabledString;
 	eventString += "></textarea><br>";
 	eventString += getEventBoxButtons(id);
@@ -176,15 +181,15 @@ function getCalendarOnClickString(date, additionalDays){
 	var startDate = getFirstDateOnCalendar(date);
 	var currentDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()+additionalDays, 3);
 	var dateNumber = currentDate.getTime();
-	var eventString = "'calendarOnClickFunction(";
-	eventString += dateNumber;
-	eventString+=")'";
-	return eventString;
+	var clickString = "'calendarOnClickFunction(new Date(";
+	clickString += dateNumber;
+	clickString+="))'";
+	return clickString;
 	
 }
 
-function calendarOnClickFunction(dateNumber){
-	drawEventList(new Date(dateNumber));
+function calendarOnClickFunction(date){
+	drawEventList(date);
 }
 /* returns the date cooresponding to the first date on the calendar. Always a sunday. */
 function getFirstDateOnCalendar(date){
@@ -235,3 +240,20 @@ function runConfirmationBox(){
 	
 }
 
+function convertDateToDateInputValue(date){
+	var month = date.getMonth()+1;
+	var monthString="";
+	if(month<10){
+		monthString+="0";
+	}
+	monthString +=month;
+	var dayOfMonth = date.getDate();
+	var dayOfMonthString = "";
+	if(dayOfMonth<10){
+		dayOfMonthString+=0;
+	}
+	dayOfMonthString+=dayOfMonth;
+	var year = date.getFullYear();
+	var inputValue = year+"-"+monthString+"-"+dayOfMonthString;
+	return inputValue;
+}
