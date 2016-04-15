@@ -10,124 +10,7 @@ function loadPage(){
 	drawCalendar();
 }
 
-
-function loadEvents(date){
-	var events = ["ME", "EF"];
-	return events;
-}
-
-function drawEventList(date){
-	//alert(date);
-	var dateNumber = date.getTime();
-	var eventString = "";
-	var events = loadEvents(date);
-	eventString +="<h3> Events </h3>";
-	eventString += "<table class = 'event-table'>"
-	eventString +="<tr onclick = 'newEventClick(";
-	eventString += "new Date(";
-	eventString += dateNumber;
-	eventString += "))'>";
-	eventString +="<td>";
-	eventString += "Create New Event";
-	eventString += "</td>"
-	eventString +="</tr>"
-	for(var r=0; r<events.length; r++){
-		eventString +="<tr onclick = 'eventClick()'>";
-		eventString +="<td>";
-		eventString += events[r];
-		eventString += "</td>"
-		eventString +="</tr>"
-	}
-	eventString += "</table>"
-	eventString += "<button onclick = 'resetEventBox()'> Back </button>"
-	document.getElementById("myUI").innerHTML = eventString;
-}
-
-function resetEventBox(){
-	var defaultString = "";
-	document.getElementById("myUI").innerHTML = defaultString;
-}
-
-function newEventClick(date){
-	drawEventBox(NEW_EVENT_ID);
-	document.getElementById("eventDate").value = convertDateToDateInputValue(date);
-}
-
-function eventClick(){
-	drawEventBox(CURRENT_EVENT_ID);
-}
-
-function editEvent(){
-	runConfirmationBox();
-	//resetEventBox();
-}
-
-function createEvent(){
-	//runConfirmationBox();
-	resetEventBox()
-}
-
-function deleteEvent(){
-	runConfirmationBox();
-	//resetEventBox()
-}
-
-
-function drawEventBox(id){
-	var eventString = "";
-	var disabledString = "";
-	if (id == CURRENT_EVENT_ID){
-		disabledString="disabled";
-	}
-	//eventString += "<form>";
-	eventString += "Event name:<br>";
-	eventString += "<input type='text' id='eventname'";
-	eventString += disabledString;
-	eventString += "><br>";
-	eventString += "Event date:<br>";
-	eventString += "<input type='date' id = 'eventDate'";
-	eventString += disabledString;
-	eventString += "><br>";
-	eventString += "<table class = 'timetable'><tr>";
-	eventString += "<td>Start time:</td>";
-	eventString += "<td>End time:</td></tr>";
-	eventString += "<tr><td><input type='time' id='eventStartTime'";
-	eventString += disabledString;
-	eventString += "></td>";
-	eventString += "<td><input type='time' id='eventEndTime'";
-	eventString += disabledString;
-	eventString += "><td></tr></table>";
-	eventString += "Location:<br>";
-	eventString += "<input type='text' id='eventLocation'";
-	eventString += disabledString;
-	eventString += "><br>";
-	eventString += "Description: <br>"
-	eventString += "<textarea id ='eventDescription' rows = '4' cols = '50'";
-	eventString += disabledString;
-	eventString += "></textarea><br>";
-	eventString += getEventBoxButtons(id);
-	//eventString += "</form>";
-	document.getElementById("myUI").innerHTML = eventString;
-}
-
-function getEventBoxButtons(eventId){
-	var eventBoxButtonString ="";
-	if(eventId == NEW_EVENT_ID){
-		eventBoxButtonString +="<button onclick = 'createEvent()'> Create Event </button>";
-	}
-	else if (eventId == CURRENT_EVENT_ID)
-	{
-		eventBoxButtonString +="<button onclick = 'editEvent()'> Edit Event </button>";
-		eventBoxButtonString +="<button onclick = 'deleteEvent()'> Delete Event </button>";
-	}
-	else if(eventId == EDIT_EVENT_ID){
-		eventBoxButtonString += "<button onclick = 'runConfirmationBox()'> Save Changes </button>";
-		eventBoxButtonString += "<button onclick = 'runConfirmationBox()'> Discard Changes </button>";
-	}
-	eventBoxButtonString += "<br><br><button onclick = 'resetEventBox()'> Back </button>";
-	return eventBoxButtonString;
-}
-
+/*** Draw Calendar ****/
 function drawCalendar() {
 	var tableString = "";
 	tableString += "<p class='text-center'>";
@@ -183,6 +66,10 @@ function changeCalendarMonth(delta){
 	drawCalendar();
 }
 
+function calendarOnClickFunction(date){
+	drawEventList(date);
+}
+
 function getCalendarOnClickString(date, additionalDays){
 	var startDate = getFirstDateOnCalendar(date);
 	var currentDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()+additionalDays, 3);
@@ -194,9 +81,6 @@ function getCalendarOnClickString(date, additionalDays){
 	
 }
 
-function calendarOnClickFunction(date){
-	drawEventList(date);
-}
 /* returns the date cooresponding to the first date on the calendar. Always a sunday. */
 function getFirstDateOnCalendar(date){
 	
@@ -241,9 +125,43 @@ function getMonthName(date){
 	return monthNames[date.getMonth()];
 }
 
-function runConfirmationBox(){
-	confirm("Are you sure you want");
-	
+
+/***Draw Event List***/
+function loadEvents(date){
+	var events = ["ME", "EF"];
+	return events;
+}
+
+function drawEventList(date){
+	//alert(date);
+	var dateNumber = date.getTime();
+	var eventString = "";
+	var events = loadEvents(date);
+	eventString +="<h3> Events </h3>";
+	eventString += "<table class = 'event-table'>"
+	eventString +="<tr onclick = 'newEventClick(";
+	eventString += "new Date(";
+	eventString += dateNumber;
+	eventString += "))'>";
+	eventString +="<td>";
+	eventString += "Create New Event";
+	eventString += "</td>"
+	eventString +="</tr>"
+	for(var r=0; r<events.length; r++){
+		eventString +="<tr onclick = 'eventClick()'>";
+		eventString +="<td>";
+		eventString += events[r];
+		eventString += "</td>"
+		eventString +="</tr>"
+	}
+	eventString += "</table>"
+	eventString += "<button onclick = 'resetEventBox()'> Back </button>"
+	document.getElementById("myUI").innerHTML = eventString;
+}
+
+function newEventClick(date){
+	drawEventBox(NEW_EVENT_ID);
+	document.getElementById("eventDate").value = convertDateToDateInputValue(date);
 }
 
 function convertDateToDateInputValue(date){
@@ -262,4 +180,90 @@ function convertDateToDateInputValue(date){
 	var year = date.getFullYear();
 	var inputValue = year+"-"+monthString+"-"+dayOfMonthString;
 	return inputValue;
+}
+
+function eventClick(){
+	drawEventBox(CURRENT_EVENT_ID);
+}
+
+/***Draw Event Information ***/
+function drawEventBox(id){
+	var eventString = "";
+	var disabledString = "";
+	if (id == CURRENT_EVENT_ID){
+		disabledString="disabled";
+	}
+	//eventString += "<form>";
+	eventString += "Event name:<br>";
+	eventString += "<input type='text' id='eventname'";
+	eventString += disabledString;
+	eventString += "><br>";
+	eventString += "Event date:<br>";
+	eventString += "<input type='date' id = 'eventDate'";
+	eventString += disabledString;
+	eventString += "><br>";
+	eventString += "<table class = 'timetable'><tr>";
+	eventString += "<td>Start time:</td>";
+	eventString += "<td>End time:</td></tr>";
+	eventString += "<tr><td><input type='time' id='eventStartTime'";
+	eventString += disabledString;
+	eventString += "></td>";
+	eventString += "<td><input type='time' id='eventEndTime'";
+	eventString += disabledString;
+	eventString += "><td></tr></table>";
+	eventString += "Location:<br>";
+	eventString += "<input type='text' id='eventLocation'";
+	eventString += disabledString;
+	eventString += "><br>";
+	eventString += "Description: <br>"
+	eventString += "<textarea id ='eventDescription' rows = '4' cols = '50'";
+	eventString += disabledString;
+	eventString += "></textarea><br>";
+	eventString += getEventBoxButtons(id);
+	//eventString += "</form>";
+	document.getElementById("myUI").innerHTML = eventString;
+}
+
+function getEventBoxButtons(eventId){
+	var eventBoxButtonString ="";
+	if(eventId == NEW_EVENT_ID){
+		eventBoxButtonString +="<button onclick = 'createEvent()'> Create Event </button>";
+	}
+	else if (eventId == CURRENT_EVENT_ID)
+	{
+		eventBoxButtonString +="<button onclick = 'editEvent()'> Edit Event </button>";
+		eventBoxButtonString +="<button onclick = 'deleteEvent()'> Delete Event </button>";
+	}
+	else if(eventId == EDIT_EVENT_ID){
+		eventBoxButtonString += "<button onclick = 'runConfirmationBox()'> Save Changes </button>";
+		eventBoxButtonString += "<button onclick = 'runConfirmationBox()'> Discard Changes </button>";
+	}
+	eventBoxButtonString += "<br><br><button onclick = 'resetEventBox()'> Back </button>";
+	return eventBoxButtonString;
+}
+
+function resetEventBox(){
+	var defaultString = "";
+	document.getElementById("myUI").innerHTML = defaultString;
+}
+
+/***Process Event Changes ***/
+function editEvent(){
+	runConfirmationBox();
+	//resetEventBox();
+}
+
+function createEvent(){
+	//runConfirmationBox();
+	resetEventBox()
+}
+
+function deleteEvent(){
+	runConfirmationBox();
+	//resetEventBox()
+}
+
+function runConfirmationBox(){
+	confirm("Are you sure you want");
+	
 }
