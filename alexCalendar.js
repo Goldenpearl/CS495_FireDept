@@ -2,18 +2,25 @@
 var tableId = "tableId";
 var NEW_EVENT_ID = 1;
 var CURRENT_EVENT_ID = 2;
+var EDIT_EVENT_ID = 3;
+
 function loadPage(){
 	drawCurrentCalendar();
-	//drawEventBox();
 }
 
 function drawCurrentCalendar(){
 	drawCalendar(new Date());
 }
 
-function drawEventList(){
-	var eventString = "";
+function loadEvents(date){
 	var events = ["ME", "EF"];
+	return events;
+}
+
+function drawEventList(date){
+	alert(date);
+	var eventString = "";
+	var events = loadEvents(date);
 	eventString +="<h3> Events </h3>";
 	eventString += "<table class = 'event-table'>"
 	eventString +="<tr onclick = 'newEventClick()'>";
@@ -29,34 +36,71 @@ function drawEventList(){
 		eventString +="</tr>"
 	}
 	eventString += "</table>"
+	eventString += "<button onclick = 'resetEventBox()'> Back </button>"
 	document.getElementById("myUI").innerHTML = eventString;
 }
 
+function resetEventBox(){
+	var defaultString = "";
+	document.getElementById("myUI").innerHTML = defaultString;
+}
+
 function newEventClick(){
-	drawEventBox();
+	drawEventBox(NEW_EVENT_ID);
 }
 
 function eventClick(){
-	drawEventBox();
+	drawEventBox(CURRENT_EVENT_ID);
 }
 
-function drawEventBox(){
-	var id = CURRENT_EVENT_ID;
+function editEvent(){
+	runConfirmationBox();
+	//resetEventBox();
+}
+
+function createEvent(){
+	//runConfirmationBox();
+	resetEventBox()
+}
+
+function deleteEvent(){
+	runConfirmationBox();
+	//resetEventBox()
+}
+
+
+function drawEventBox(id){
 	var eventString = "";
+	var disabledString = "";
+	if (id == CURRENT_EVENT_ID){
+		disabledString="disabled";
+	}
 	//eventString += "<form>";
 	eventString += "Event name:<br>";
-	eventString += "<input type='text' name='eventname'><br>";
+	eventString += "<input type='text' name='eventname'";
+	eventString += disabledString;
+	eventString += "><br>";
 	eventString += "Event date:<br>";
-	eventString += "<input type='date' name = 'eventdate'><br>"
+	eventString += "<input type='date' name = 'eventdate'";
+	eventString += disabledString;
+	eventString += "><br>";
 	eventString += "<table class = 'timetable'><tr>";
 	eventString += "<td>Start time:</td>";
 	eventString += "<td>End time:</td></tr>";
-	eventString += "<tr><td><input type='time' name='eventStartTime'></td>";
-	eventString += "<td><input type='time' name='eventEndTime'><td></tr></table>";
+	eventString += "<tr><td><input type='time' name='eventStartTime'";
+	eventString += disabledString;
+	eventString += "></td>";
+	eventString += "<td><input type='time' name='eventEndTime'";
+	eventString += disabledString;
+	eventString += "><td></tr></table>";
 	eventString += "Location:<br>";
-	eventString += "<input type='text' name='eventLocation'><br>";
+	eventString += "<input type='text' name='eventLocation'";
+	eventString += disabledString;
+	eventString += "><br>";
 	eventString += "Description: <br>"
-	eventString += "<textarea rows = '4' cols = '50'></textarea><br>";
+	eventString += "<textarea rows = '4' cols = '50'";
+	eventString += disabledString;
+	eventString += "></textarea><br>";
 	eventString += getEventBoxButtons(id);
 	//eventString += "</form>";
 	document.getElementById("myUI").innerHTML = eventString;
@@ -65,16 +109,18 @@ function drawEventBox(){
 function getEventBoxButtons(eventId){
 	var eventBoxButtonString ="";
 	if(eventId == NEW_EVENT_ID){
-		eventBoxButtonString +="<button> Create Event </button>";
+		eventBoxButtonString +="<button onclick = 'createEvent()'> Create Event </button>";
 	}
-	/*else if (eventId == CURRENT_EVENT_ID)
+	else if (eventId == CURRENT_EVENT_ID)
 	{
-		eventBoxButtonString +="<button> Edit Event </button>";
-		eventBoxButtonString +="<button> Delete Event </button>";
-	}*/
-	else if(eventId == CURRENT_EVENT_ID){
-		eventBoxButtonString += "<button> Save Changes </button>";
+		eventBoxButtonString +="<button onclick = 'editEvent()'> Edit Event </button>";
+		eventBoxButtonString +="<button onclick = 'deleteEvent()'> Delete Event </button>";
 	}
+	else if(eventId == EDIT_EVENT_ID){
+		eventBoxButtonString += "<button onclick = 'runConfirmationBox()'> Save Changes </button>";
+		eventBoxButtonString += "<button onclick = 'runConfirmationBox()'> Discard Changes </button>";
+	}
+	eventBoxButtonString += "<br><br><button onclick = 'resetEventBox()'> Back </button>";
 	return eventBoxButtonString;
 }
 
@@ -93,8 +139,8 @@ function drawCalendar(date) {
 	tableString += "'>";
 	tableString += "<th> Sunday </th> <th> Monday </th> <th> Tuesday </th> <th> Wednesday </th> <th> Thursday </th> <th> Friday </th> <th> Saturday </th>";
 	var monthHasBegun = false;
-	var numberOfDaysInPreviousMonth = getNumberOfDaysInMonth(date);
-	var weekdayOfFirstMonth = getFirstOfMonth(date);
+	var numberOfDaysInPreviousMonth = getNumberOfDaysInPreviousMonth(date);
+	var weekdayOfFirstMonth = getFirstWeekdayOfMonth(date);
 	var numberOfDaysInMonth = getNumberOfDaysInMonth(date);
 	var monthHasEnded = false;
 	var currentNumber = numberOfDaysInPreviousMonth-weekdayOfFirstMonth;
@@ -109,11 +155,13 @@ function drawCalendar(date) {
 				}
 			}
 			currentNumber++;
-			if(currentNumber>numberOfDaysInMonth){
+			if(monthHasBegun && currentNumber>numberOfDaysInMonth){
 				currentNumber=1;
 				monthHasEnded=true;
 			}
-			tableString += "<td style='width:5%' class='table-active'>";
+			tableString += "<td style='width:5%' class='table-active' onclick = "
+			tableString += getCalendarOnClickString(date, 7*r +i);
+			tableString += ">";
 			tableString += currentNumber;
 			tableString += "</td>";
 		}
@@ -122,36 +170,58 @@ function drawCalendar(date) {
 	tableString += "</table>";
 	
 	document.getElementById("myTable").innerHTML = tableString;
-	addOnClickEventsToCalendar();
 }
 
-function addOnClickEventsToCalendar(){
-	var table = document.getElementById(tableId);
-	if (table != null) {
-		for (var i = 0; i < table.rows.length; i++) {
-			for (var j = 0; j < table.rows[i].cells.length; j++){
-				table.rows[i].cells[j].onclick = calendarOnClickFunction;
-			}
-		}
+function getCalendarOnClickString(date, additionalDays){
+	var startDate = getFirstDateOnCalendar(date);
+	var currentDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()+additionalDays, 3);
+	var dateNumber = currentDate.getTime();
+	var eventString = "'calendarOnClickFunction(";
+	eventString += dateNumber;
+	eventString+=")'";
+	return eventString;
+	
+}
+
+function calendarOnClickFunction(dateNumber){
+	drawEventList(new Date(dateNumber));
+}
+/* returns the date cooresponding to the first date on the calendar. Always a sunday. */
+function getFirstDateOnCalendar(date){
+	
+	var firstDayOfCurrentMonth = new Date(date.getFullYear(), date.getMonth(), 1, 3);
+	var firstWeekdayOfCurrentMonth = getFirstWeekdayOfMonth(date);
+	var firstDayOnCalendar;
+	if(firstDayOfCurrentMonth == 0){
+		firstDayOnCalendar = new Date(date.getFullYear(), date.getMonth(), 1, 3);
 	}
-}
-
-function calendarOnClickFunction(){
-	drawEventList();
+	else{
+		var numberOfDaysInPreviousMonth = getNumberOfDaysInPreviousMonth(date);
+		firstDayOnCalendar = new Date(date.getFullYear(), date.getMonth()-1, numberOfDaysInPreviousMonth-(firstWeekdayOfCurrentMonth-1), 3);
+	}
+	//alert("First Date on Calendar: "+firstDayOnCalendar);
+	return firstDayOnCalendar;
 }
 
 /*returns a number from 0-6 corresponding to a weekday. The weekday cooresponds to the 1st day of the month.*/
-function getFirstOfMonth(date){
-	var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+function getFirstWeekdayOfMonth(date){
+	var firstDay = new Date(date.getFullYear(), date.getMonth(), 1, 3);
 	var weekday = firstDay.getDay();
+	//alert("First Weekday of Month:"+weekday);
 	return weekday;
 	
 }
 /*returns a number from 1-31 which corresponds to the total number of days in the given month.*/
 function getNumberOfDaysInMonth(date){
-	var lastDay = new Date(date.getFullYear(), date.getMonth()+1, 0);
+	var lastDay = new Date(date.getFullYear(), date.getMonth()+1, 0, 3);
 	var number = lastDay.getDate();
+	//alert("numberOfDaysInMonth:" + number);
 	return number;
+}
+
+function getNumberOfDaysInPreviousMonth(date){
+	var lastMonth = new Date(date.getFullYear(), date.getMonth()-1, 1, 3);
+	return getNumberOfDaysInMonth(lastMonth);
 }
 
 function getMonthName(date){
@@ -159,3 +229,9 @@ function getMonthName(date){
 		"July", "August", "September", "October", "November", "December"];
 	return monthNames[date.getMonth()];
 }
+
+function runConfirmationBox(){
+	confirm("Are you sure you want");
+	
+}
+
