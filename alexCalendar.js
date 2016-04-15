@@ -1,8 +1,21 @@
-function test () {
 
-document.write("Hi");
+var tableId = "tableId";
 
+function loadPage(){
+	drawCurrentCalendar();
+	drawEventBox();
 }
+
+function drawCurrentCalendar(){
+	drawCalendar(new Date());
+}
+
+function drawEventBox(){
+	var eventString = "";
+	eventString += "Hi";
+	document.getElementById("myUI").innerHTML = eventString;
+}
+
 
 function drawCalendar(date) {
 	var tableString = "";
@@ -14,7 +27,9 @@ function drawCalendar(date) {
 	//tableString += "<p class='text-center'> <Feb </p>";
 	tableString += "<button> &gt </button>";
 	tableString += "</p>";
-	tableString += "<table class='table table-bordered'>";
+	tableString += "<table class='table table-bordered' id = '";
+	tableString += tableId;
+	tableString += "'>";
 	tableString += "<th> Sunday </th> <th> Monday </th> <th> Tuesday </th> <th> Wednesday </th> <th> Thursday </th> <th> Friday </th> <th> Saturday </th>";
 	var monthHasBegun = false;
 	var numberOfDaysInPreviousMonth = getNumberOfDaysInMonth(date);
@@ -46,11 +61,22 @@ function drawCalendar(date) {
 	tableString += "</table>";
 	
 	document.getElementById("myTable").innerHTML = tableString;
+	addOnClickEventsToCalendar();
 }
 
+function addOnClickEventsToCalendar(){
+	var table = document.getElementById(tableId);
+	if (table != null) {
+		for (var i = 0; i < table.rows.length; i++) {
+			for (var j = 0; j < table.rows[i].cells.length; j++){
+				table.rows[i].cells[j].onclick = calendarOnClickFunction;
+			}
+		}
+	}
+}
 
-function drawCurrentCalendar(){
-	drawCalendar(new Date());
+function calendarOnClickFunction(){
+	
 }
 
 /*returns a number from 0-6 corresponding to a weekday. The weekday cooresponds to the 1st day of the month.*/
