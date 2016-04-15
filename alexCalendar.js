@@ -4,13 +4,12 @@ var NEW_EVENT_ID = 1;
 var CURRENT_EVENT_ID = 2;
 var EDIT_EVENT_ID = 3;
 
+var currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1, 3);
+
 function loadPage(){
-	drawCurrentCalendar();
+	drawCalendar();
 }
 
-function drawCurrentCalendar(){
-	drawCalendar(new Date());
-}
 
 function loadEvents(date){
 	var events = ["ME", "EF"];
@@ -129,24 +128,26 @@ function getEventBoxButtons(eventId){
 	return eventBoxButtonString;
 }
 
-function drawCalendar(date) {
+function drawCalendar() {
 	var tableString = "";
 	tableString += "<p class='text-center'>";
-	tableString += "<button> &lt </button>";
+	tableString += "<button onclick = 'changeCalendarMonth(-1)'> &lt </button>";
 	tableString += "<strong> "
-	tableString += getMonthName(date);
+	tableString += getMonthName(currentMonth);
+	tableString += " ";
+	tableString += currentMonth.getFullYear();
 	tableString += " </strong>";
 	//tableString += "<p class='text-center'> <Feb </p>";
-	tableString += "<button> &gt </button>";
+	tableString += "<button onclick = 'changeCalendarMonth(1)'> &gt </button>";
 	tableString += "</p>";
 	tableString += "<table class='table table-bordered' id = '";
 	tableString += tableId;
 	tableString += "'>";
 	tableString += "<th> Sunday </th> <th> Monday </th> <th> Tuesday </th> <th> Wednesday </th> <th> Thursday </th> <th> Friday </th> <th> Saturday </th>";
 	var monthHasBegun = false;
-	var numberOfDaysInPreviousMonth = getNumberOfDaysInPreviousMonth(date);
-	var weekdayOfFirstMonth = getFirstWeekdayOfMonth(date);
-	var numberOfDaysInMonth = getNumberOfDaysInMonth(date);
+	var numberOfDaysInPreviousMonth = getNumberOfDaysInPreviousMonth(currentMonth);
+	var weekdayOfFirstMonth = getFirstWeekdayOfMonth(currentMonth);
+	var numberOfDaysInMonth = getNumberOfDaysInMonth(currentMonth);
 	var monthHasEnded = false;
 	var currentNumber = numberOfDaysInPreviousMonth-weekdayOfFirstMonth;
 	for (var r = 0; r < 6; r++) {
@@ -165,7 +166,7 @@ function drawCalendar(date) {
 				monthHasEnded=true;
 			}
 			tableString += "<td style='width:5%' class='table-active' onclick = "
-			tableString += getCalendarOnClickString(date, 7*r +i);
+			tableString += getCalendarOnClickString(currentMonth, 7*r +i);
 			tableString += ">";
 			tableString += currentNumber;
 			tableString += "</td>";
@@ -175,6 +176,11 @@ function drawCalendar(date) {
 	tableString += "</table>";
 	
 	document.getElementById("myTable").innerHTML = tableString;
+}
+
+function changeCalendarMonth(delta){
+	currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth()+delta, 1, 3);
+	drawCalendar();
 }
 
 function getCalendarOnClickString(date, additionalDays){
