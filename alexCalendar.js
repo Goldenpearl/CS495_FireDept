@@ -9,7 +9,24 @@ var selectedCalendarDay = new Date(new Date().getFullYear(), new Date().getMonth
 var selectedEvent= "b";
 var loadedEvents = ["Party", "School", "Games"];
 function loadPage(){
-	drawCalendar();
+	initializeEvents();
+	//drawCalendar();
+}
+
+function initializeEvents(){
+	var ash = new Firefighter(1, "Ash", "Ketchum", "catch_em_all@pokemonrules.com", 5745497353, 5745497353);
+	var misty = new Firefighter(2, "Misty", "Bubbles", "water_sport@pokemonrules.com", 5745497353, 5745497353);
+	var brock = new Firefighter(3, "Brock", "Rock", "onyx@pokemonrules.com", 5745497353, 5745497353);
+	var big_truck = new Apparatus("Big truck", "Its Huge!", 16, 1);
+	var medium_truck = new Apparatus("Medium Truck", "A truck.", 8, 2);
+	var small_truck = new Apparatus ("Small Truck", "A Baby Truck!", 4, 3);
+	var birthdayTimeslot = new Timeslot(1, new Date(), new Date());
+	var newYearTimeslot = new Timeslot(2, new Date(), new Date());
+	var bday_party = new MyEvent("Ash's Birthday", "Happy B-Day!", birthdayTimeslot, 1);
+	var new_year_eve = new MyEvent("New Year's Eve", "Yay", newYearTimeslot, 2);
+	var assignedSmallTruckToBirthday = (bday_party, small_truck, 1);
+	var assignedAshToBirthday = new AssignedFirefighter(bday_party, small_truck, ash, 1);
+	document.writeln(ash.getSummary());
 }
 
 /*** Draw Calendar ****/
