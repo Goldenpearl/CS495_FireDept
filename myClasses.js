@@ -169,3 +169,44 @@ function Timeslot(timeslotId, startTime, endTime){
 	   return json;
    }
 }
+/**I would like to display information from the database on the Calendar **/
+//Load in a list of all firefighters
+//Load in a list of all apparatus
+//Load in a list of all events and timeslots
+
+/**I would like to display additional information about a single event **/
+//Load in a list of all assigned firefighters with a particular eventId
+//Load a list of all assigned apparatus with a particular eventId
+//Display the information
+
+/**I would like to sign up for an event **/
+//Create a new assigned firefighter
+//Add it to the database
+//Refresh UI
+
+/**I would like to unsignup for an event **/
+//Remove an assigned firefighter slot with a given id from database
+//Update UI
+
+/**I would like to create an event **/
+//Create an MyEvent
+//Add it to the database
+//Update UI
+
+/**I would like to delete an event **/
+//Remove a MyEvent with an id from the database
+//Remove all assigned apparatus and firefighters associated with it
+//Update UI
+
+/**I would like to modify an event **/
+//Modify a MyEvent with a given id to stated values
+//Update UI
+
+/**I would like to add an apparatus to an event **/
+//Create an assignedApparatus
+//Add it to database
+//Update UI
+
+/**I would like to remove an apparatus from an event **/
+//Remove an assignedApparatus with a given ID from the database
+//Update UI

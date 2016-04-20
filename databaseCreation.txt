@@ -6,19 +6,19 @@ CREATE TABLE fireman(
 firstName varchar(30) not null,
 lastName varchar(30) not null,
 age int not null,
-firemanId int not null primary key
+firemanId int not null primary key auto_increment
 );
 
 INSERT INTO fireman VALUES(
-"Ash", "Ketchum", 10, 1
+"Ash", "Ketchum", 10
 );
 
 INSERT INTO fireman VALUES(
-"Misty", "Bubbles", 10, 2
+"Misty", "Bubbles", 10
 );
 
 INSERT INTO fireman VALUES(
-"Brock", "Rock", 10, 3
+"Brock", "Rock", 10
 );
 
 CREATE TABLE timeslot(
@@ -404,3 +404,22 @@ JOIN (fireman, timeslot)
 
 ON (availibleTimeslot.firemanId=fireman.firemanId 
 AND availibleTimeslot.timeslotId=timeslot.timeslotId AND timeslot.endDate BETWEEN "2015-10-20 0:0:0" AND "2015-10-21 0:0:0");
+DESCRIBE FIREMAN;
+
+DROP PROCEDURE firefighter_insert;
+
+DELIMITER //
+
+CREATE PROCEDURE firefighter_insert (IN 
+
+firefighter_first_name varchar(30),firefighter_last_name varchar(30), firefighter_age INT)
+BEGIN
+INSERT INTO 
+
+fireman VALUES (firefighter_first_name, firefighter_last_name,firefighter_age, NULL);
+END//
+    
+DELIMITER ;
+CALL firefighter_insert("Kelly", "Blair", 22);
+
+SELECT * FROM FIREMAN;
