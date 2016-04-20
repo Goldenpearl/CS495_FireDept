@@ -583,7 +583,7 @@
 		scheduleInputString+=endTimeInputId;
 		scheduleInputString+=">";
 		scheduleInputString+="</input>";
-		scheduleInputString+="<br> <button onclick = 'test()'>";
+		scheduleInputString+="<br> <button onclick = 'clickAddScheduleTimeslot()'>";
 		scheduleInputString+="OK </button>";
 		return scheduleInputString;
 	}
@@ -599,13 +599,12 @@
 		return grabFirefighters[value];
 	}
 	
-	function test(){
+	function clickAddScheduleTimeslot(){
 		var startDate = new Date();
 		var endDate = new Date();
 		startDate.setHours(startDate.getHours()-4);
 		endDate.setHours(endDate.getHours()+6);
 		var dateRange = new DateRange(startDate, endDate);
-		
 		var firefighter = getFirefighterFromScheduleDropdown();
 		scheduleShift(firefighter, dateRange);
 	}
@@ -613,6 +612,8 @@
 	function scheduleShift(firefighter, dateRange){
 		var timeslot = new Timeslot(0, dateRange.startDate, dateRange.endDate, firefighter);
 		var scheduleTimeslot = new ScheduleTimeslot(firefighter, timeslot, 0);
+		addFirefighterJson(firefighter.getJson());
+		//addTimeslotJson(timeslot.getJson());
 		addScheduleTimeslotJson(scheduleTimeslot.getJson());
 		refreshShiftsInTable();
 	}

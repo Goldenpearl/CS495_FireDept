@@ -24,7 +24,7 @@ function executeQueryString($queryString)
 	$conn = createConnection();
 	if ($conn->query($queryString) === TRUE) 
 	{
-		echo "New record created successfully";
+		//echo "<br>New record created successfully<br>";
 		return true;
 	} 	
 	else 
@@ -34,7 +34,6 @@ function executeQueryString($queryString)
 	}
 	closeConnection($conn);
 }
-
 
 function insertScheduleTimeslotAndTimeslot($schedule_timeslot){
 	$scheduleTimeslotId = $schedule_timeslot->getScheduleTimeslotId();
@@ -47,7 +46,8 @@ function insertScheduleTimeslotAndTimeslot($schedule_timeslot){
 	$successfulTimeslotInsert = insertTimeslot($startDate, $endDate);
 	if($successfulTimeslotInsert){
 		//TODO real int not 15
-		return $successfulScheduleTimeslotInsert = insertScheduleTimeslot(15, $firemanId);
+		$successfulScheduleTimeslotInsert = insertScheduleTimeslot(15, $firemanId);
+		return $successfulTimeslotInsert."<br><br>ScheduleTimeSlot: ".$successfulScheduleTimeslotInsert;
 	}
 }
 
@@ -72,7 +72,8 @@ function insertTimeslot($startDate, $endDate){
 		$endDate.
 		"'".
 		"); ";
-		return executeQueryString($queryString);
+		$successfulTimeslotInsert = executeQueryString($queryString);
+		return "Timeslot: <br> Start:".$startDate."<br>End:".$endDate."<br>Success:".$successfulTimeslotInsert;
 	}
 }
 
@@ -88,8 +89,8 @@ function insertFirefighter($firstName, $lastName){
 	$lastName.
 	"'".
 	", 15); ";
-	executeQueryString($queryString);
-	
+	$successfulFirefighterInsert = executeQueryString($queryString);
+	return "Firefighter:<br> FirstName:".$firstName."<br> Last Name: ".$lastName."<br>Successful:".$successfulFirefighterInsert."<br><br>";
 }
 
 function isValidFiremanId($id){
@@ -105,31 +106,29 @@ function isDateTime($dateTime){
 }
 
 
-$id = $_REQUEST["id"];/*
-if($id == 1){
+$id = $_REQUEST["id"];
+
+if($id == "0")
+{
 	$firefighter_json = $_REQUEST["firefighter_json"];
 	$firefighter = Firefighter::getFirefighterFromJson($firefighter_json);
 	$fname = $firefighter -> getFirstName();
 	$lname = $firefighter -> getLastName();
-	//echo "<br>";
-	//echo $firefighter->getFirstName();
-	////echo $firefighter->getLastName();
-	//insertFirefighter($fname, $lname);
+	echo insertFirefighter($fname, $lname);
 }
-else if($id ==Timeslot::getClassId())
+else if($id =="1")
 {
 	$timeslot_json = $_REQUEST["timeslot_json"];
 	$timeslot = Timeslot::getTimeslotFromJson($timeslot_json);
 	$startDate = $timeslot->getStartTime();
 	$endDate = $timeslot->getEndTime();
-	insertTimeslot($startDate, $endDate);
+	//echo $startDate."<br>".$endDate."<br>";
+	echo insertTimeslot($startDate, $endDate);
 }
-else{*/
+else
+{
 	$schedule_timeslot_json = $_REQUEST["schedule_timeslot_json"];
 	$schedule_timeslot = ScheduleTimeslot::getScheduleTimeslotFromJson($schedule_timeslot_json);
-	insertScheduleTimeslotAndTimeslot($schedule_timeslot);
-	
-	/*
+	echo insertScheduleTimeslotAndTimeslot($schedule_timeslot);
 }
-*/
 ?>
