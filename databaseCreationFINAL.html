@@ -1,0 +1,181 @@
+DROP DATABASE IF EXISTS fireDept;
+CREATE DATABASE fireDept;
+USE fireDept;
+
+CREATE TABLE firefighter
+(
+ firstName varchar(30) NOT NULL,
+ lastName varchar(30) NOT NULL,
+ email varchar(50),
+ phone BIGINT,
+ secondaryPhone BIGINT,
+ phoneProvider varchar(30),
+ firefighterId  int AUTO_INCREMENT NOT NULL primary key
+);
+
+CREATE TABLE timeslot(
+ timeslotId int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+ startTime DateTime NOT NULL,
+ endTime DateTime NOT NULL
+);
+
+CREATE TABLE scheduleTimeslot
+(
+ scheduleTimeslotId int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+ timeslotId int NOT NULL,
+ firefighterId int NOT NULL
+);
+
+CREATE TABLE availableTimeslot
+(
+ avaliableTimeslotId INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+ timeslotId int NOT NULL,
+ firefighterId int NOT NULL
+);
+
+CREATE TABLE myEvent
+(
+ eventName varchar(30) NOT NULL,
+ eventDescription varchar(300),
+ timeslotId int NOT NULL,
+ eventId int AUTO_INCREMENT NOT NULL PRIMARY KEY
+);
+CREATE TABLE assignedFirefighter(
+ eventId int NOT NULL,
+ apparatusId int NOT NULL,
+ assignedFirefighterID int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+ firefighterId int NOT NULL
+);
+
+CREATE TABLE assignedApparatus
+(
+ assignedApparatusId int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+ eventId int NOT NULL,
+ apparatusId int NOT NULL
+);
+
+CREATE TABLE apparatus(
+ apparatusName varchar(30) NOT NULL,
+ apparatusDescription varchar(100),
+ numberOfSlots int NOT NULL,
+ apparatusId int AUTO_INCREMENT NOT NULL PRIMARY KEY
+);
+
+
+DESCRIBE firefighter;
+
+DELIMITER //
+
+CREATE PROCEDURE firefighter_insert (IN firefighter_first_name varchar(30),firefighter_last_name varchar(30), firefighter_email varchar(50), firefighter_phone BIGINT, firefighter_secondary_phone BIGINT, firefighter_phone_provider varchar(30))
+BEGIN
+INSERT INTO firefighter(firstName, lastName, email, phone, secondaryPhone, phoneProvider, firefighterId) VALUES (firefighter_first_name, firefighter_last_name,firefighter_email, firefighter_phone, firefighter_secondary_phone, firefighter_phone_provider, NULL);
+END//
+    
+
+DELIMITER ;
+CALL firefighter_insert("Kelly", "Blair", "kblair5@yahoo.com", 5745497353, NULL, "att");
+CALL firefighter_insert("Ash", "Ketchum", "pikachu100@pokeball.com", NULL, NULL, NULL);
+CALL firefighter_insert("Misty", "Bubbles", "misty32453453@staryu.com", NULL, NULL, NULL);
+CALL firefighter_insert("Brock", "Rock", "brockkk@onyx.com", NULL, NULL, NULL);
+CALL firefighter_insert("May", "Ki", "torchic@blaziken.com", NULL, NULL, NULL);
+SELECT * FROM firefighter;
+DELIMITER //
+CREATE PROCEDURE schedule_timeslot_insert(IN schedule_timeslot_start_time DATETIME, schedule_timeslot_end_time DATETIME, schedule_timeslot_firefighter_id INT)
+BEGIN
+INSERT INTO timeslot(startTime, endTime, timeslotId) VALUES (schedule_timeslot_start_time, schedule_timeslot_end_time, NULL);
+INSERT INTO scheduleTimeslot(timeslotId, firefighterId) VALUES (LAST_INSERT_ID(), schedule_timeslot_firefighter_id);
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE available_timeslot_insert(IN available_timeslot_start_time DATETIME, available_timeslot_end_time DATETIME, available_timeslot_firefighter_id INT)
+BEGIN
+INSERT INTO timeslot(startTime, endTime, timeslotId) VALUES(available_timeslot_start_time, available_timeslot_end_time, NULL);
+INSERT INTO availableTimeslot(timeslotId, firefighterId) VALUES (LAST_INSERT_ID(), available_timeslot_firefighter_id);
+END //
+DELIMITER ;
+
+Call schedule_timeslot_insert("2016-4-23 11:00:00", "2016-4-23 12:00:00", 1);
+Call schedule_timeslot_insert("2016-4-24 04:00:00", "2016-4-24 10:00:00", 2);
+Call schedule_timeslot_insert("2016-4-24 12:00:00", "2016-4-24 18:00:00", 3);
+Call schedule_timeslot_insert("2016-4-24 02:00:00", "2016-4-24 13:00:00", 2);
+Call schedule_timeslot_insert("2016-4-25 15:00:00", "2016-4-25 23:00:00", 4);
+Call schedule_timeslot_insert("2016-4-25 18:00:00", "2016-4-25 20:00:00", 2);
+Call schedule_timeslot_insert("2016-4-25 01:00:00", "2016-4-25 10:00:00", 1);
+Call schedule_timeslot_insert("2016-4-25 22:00:00", "2016-4-26 02:00:00", 2);
+Call schedule_timeslot_insert("2016-4-26 04:00:00", "2016-4-26 12:00:00", 3);
+Call schedule_timeslot_insert("2016-4-26 09:00:00", "2016-4-26 13:00:00", 4);
+Call schedule_timeslot_insert("2016-4-26 10:00:00", "2016-4-26 23:00:00", 1);
+Call schedule_timeslot_insert("2016-4-28 11:00:00", "2016-4-28 12:15:00", 3);
+Call schedule_timeslot_insert("2016-4-28 03:00:00", "2016-4-28 13:00:00", 4);
+
+Call available_timeslot_insert("2016-4-24 11:00:00", "2016-4-24 12:00:00", 3);
+
+SELECT * FROM timeslot;
+SELECT * FROM AVAILABLETIMESLOT;
+SELECT * FROM SCHEDULETIMESLOT;
+
+DELIMITER //
+CREATE PROCEDURE get_all_firefighters()
+BEGIN
+SELECT * FROM firefighter;
+END //
+DELIMITER ;
+
+Call get_all_firefighters;
+
+DELIMITER //
+CREATE PROCEDURE get_all_available_timeslots()
+BEGIN
+SELECT * FROM availableTimeslot JOIN (firefighter, timeslot) ON (firefighter.firefighterId=availableTimeslot.firefighterId AND timeslot.timeslotId = availableTimeslot.timeslotId);
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE get_all_schedule_timeslots()
+BEGIN
+SELECT * FROM scheduleTimeslot JOIN (firefighter, timeslot) ON (firefighter.firefighterId = scheduleTimeslot.firefighterId AND timeslot.timeslotId = scheduleTimeslot.timeslotId);
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE get_all_available_timeslots_between(border_start_date DATETIME, border_end_date DATETIME)
+BEGIN
+SELECT * FROM AVAILABLETIMESLOT JOIN(firefighter, timeslot) ON (firefighter.firefighterId = availabletimeslot.firefighterId AND timeslot.timeslotId = availabletimeslot.timeslotId AND timeslot.startTime<=border_end_date and timeslot.endTime>=border_start_date);
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE get_all_schedule_timeslots_between(border_start_date DATETIME, border_end_date DATETIME)
+BEGIN
+SELECT * FROM SCHEDULETIMESLOT JOIN (firefighter, timeslot) ON (firefighter.firefighterId = scheduleTimeslot.firefighterId AND timeslot.timeslotId = scheduleTimeslot.timeslotId AND timeslot.startTime<=border_end_date and timeslot.endTime>=border_start_date);
+END //
+DELIMITER ;
+
+Call get_all_available_timeslots;
+Call get_all_schedule_timeslots;
+Call get_all_available_timeslots_between("2014-4-24 11:00:00", "2018-4-24 11:00:00");
+Call get_all_schedule_timeslots_between("2014-4-24 11:00:00", "2016-4-24 11:00:00");
+
+CREATE TABLE MyUser
+(
+ username varchar(50) primary key NOT NULL,
+ pass char(128) NOT NULL,
+ firefighterId int not null
+);
+
+DELIMITER //
+CREATE PROCEDURE create_user(IN user_email varchar(50), user_password char(128), firefighter_first_name varchar(30),firefighter_last_name varchar(30), firefighter_phone BIGINT, firefighter_secondary_phone BIGINT, firefighter_phone_provider varchar(30))
+BEGIN
+INSERT INTO firefighter(firstName, lastName, email, phone, secondaryPhone, phoneProvider, firefighterId) VALUES (firefighter_first_name, firefighter_last_name, user_email, firefighter_phone, firefighter_secondary_phone, firefighter_phone_provider, NULL);
+INSERT INTO MyUser(username, pass, firefighterId) VALUES(user_email, user_password, LAST_INSERT_ID());
+END //
+DELIMITER ;
+
+CALL create_user("kblair5@yahoo.com", "kellypass", "Kelly", "Blair", 5745497353, NULL, "att");
+CALL create_user("pikachu100@pokeball.com", "ashpass", "Ash", "Ketchum", NULL, NULL, NULL);
+CALL create_user("misty32453453@staryu.com", "mpass", "Misty", "Bubbles", NULL, NULL, NULL);
+CALL create_user("brockkk@onyx.com", "bpass", "Brock", "Rock", NULL, NULL, NULL);
+CALL create_user( "torchic@blaziken.com", "maypass","May", "Ki", NULL, NULL, NULL);
+
+select * from myUser;
