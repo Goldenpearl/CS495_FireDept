@@ -1,0 +1,46 @@
+USE fireDept;
+
+CALL firefighter_insert("Kelly", "Blair", "kblair5@yahoo.com", 5745497353, NULL, "att");
+CALL firefighter_insert("Ash", "Ketchum", "pikachu100@pokeball.com", NULL, NULL, NULL);
+CALL firefighter_insert("Misty", "Bubbles", "misty32453453@staryu.com", NULL, NULL, NULL);
+CALL firefighter_insert("Brock", "Rock", "brockkk@onyx.com", NULL, NULL, NULL);
+CALL firefighter_insert("May", "Ki", "torchic@blaziken.com", NULL, NULL, NULL);
+SELECT * FROM firefighter;
+
+
+Call schedule_timeslot_insert("2016-4-23 11:00:00", "2016-4-23 12:00:00", 1);
+Call schedule_timeslot_insert("2016-4-24 04:00:00", "2016-4-24 10:00:00", 2);
+Call schedule_timeslot_insert("2016-4-24 12:00:00", "2016-4-24 18:00:00", 3);
+Call schedule_timeslot_insert("2016-4-24 02:00:00", "2016-4-24 13:00:00", 2);
+Call schedule_timeslot_insert("2016-4-25 15:00:00", "2016-4-25 23:00:00", 4);
+Call schedule_timeslot_insert("2016-4-25 18:00:00", "2016-4-25 20:00:00", 2);
+Call schedule_timeslot_insert("2016-4-25 01:00:00", "2016-4-25 10:00:00", 1);
+Call schedule_timeslot_insert("2016-4-25 22:00:00", "2016-4-26 02:00:00", 2);
+Call schedule_timeslot_insert("2016-4-26 04:00:00", "2016-4-26 12:00:00", 3);
+Call schedule_timeslot_insert("2016-4-26 09:00:00", "2016-4-26 13:00:00", 4);
+Call schedule_timeslot_insert("2016-4-26 10:00:00", "2016-4-26 23:00:00", 1);
+Call schedule_timeslot_insert("2016-4-28 11:00:00", "2016-4-28 12:15:00", 3);
+Call schedule_timeslot_insert("2016-4-28 03:00:00", "2016-4-28 13:00:00", 4);
+Call schedule_timeslot_insert("2017-4-23 11:00:00", "2017-4-23 12:00:00", 1);
+Call available_timeslot_insert("2016-4-24 11:00:00", "2016-4-24 12:00:00", 3);
+
+SELECT * FROM timeslot;
+SELECT * FROM AVAILABLETIMESLOT;
+SELECT * FROM SCHEDULETIMESLOT;
+Call get_all_firefighters;
+Call get_all_available_timeslots;
+Call get_all_schedule_timeslots;
+Call get_all_available_timeslots_between("2014-4-24 11:00:00", "2018-4-24 11:00:00");
+Call get_all_schedule_timeslots_between("2014-4-24 11:00:00", "2016-4-24 11:00:00");
+
+CALL create_user("kblair5@yahoo.com", "kellypass", "Kelly", "Blair", 5745497353, NULL, "att");
+CALL create_user("pikachu100@pokeball.com", "ashpass", "Ash", "Ketchum", NULL, NULL, NULL);
+CALL create_user("misty32453453@staryu.com", "mpass", "Misty", "Bubbles", NULL, NULL, NULL);
+CALL create_user("brockkk@onyx.com", "bpass", "Brock", "Rock", NULL, NULL, NULL);
+CALL create_user( "torchic@blaziken.com", "maypass","May", "Ki", NULL, NULL, NULL);
+
+select * from myUser;
+
+Call get_schedule_timeslots_for_firefighter_within_90_day_window(2);
+Call get_all_schedule_timeslots_within_90_day_window();
+

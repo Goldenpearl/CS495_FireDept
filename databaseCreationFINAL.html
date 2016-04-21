@@ -2,6 +2,13 @@ DROP DATABASE IF EXISTS fireDept;
 CREATE DATABASE fireDept;
 USE fireDept;
 
+CREATE TABLE MyUser
+(
+ username varchar(50) primary key NOT NULL,
+ pass char(128) NOT NULL,
+ firefighterId int not null
+);
+
 CREATE TABLE firefighter
 (
  firstName varchar(30) NOT NULL,
@@ -61,24 +68,13 @@ CREATE TABLE apparatus(
  apparatusId int AUTO_INCREMENT NOT NULL PRIMARY KEY
 );
 
-
-DESCRIBE firefighter;
-
 DELIMITER //
-
 CREATE PROCEDURE firefighter_insert (IN firefighter_first_name varchar(30),firefighter_last_name varchar(30), firefighter_email varchar(50), firefighter_phone BIGINT, firefighter_secondary_phone BIGINT, firefighter_phone_provider varchar(30))
 BEGIN
 INSERT INTO firefighter(firstName, lastName, email, phone, secondaryPhone, phoneProvider, firefighterId) VALUES (firefighter_first_name, firefighter_last_name,firefighter_email, firefighter_phone, firefighter_secondary_phone, firefighter_phone_provider, NULL);
-END//
-    
-
+END//    
 DELIMITER ;
-CALL firefighter_insert("Kelly", "Blair", "kblair5@yahoo.com", 5745497353, NULL, "att");
-CALL firefighter_insert("Ash", "Ketchum", "pikachu100@pokeball.com", NULL, NULL, NULL);
-CALL firefighter_insert("Misty", "Bubbles", "misty32453453@staryu.com", NULL, NULL, NULL);
-CALL firefighter_insert("Brock", "Rock", "brockkk@onyx.com", NULL, NULL, NULL);
-CALL firefighter_insert("May", "Ki", "torchic@blaziken.com", NULL, NULL, NULL);
-SELECT * FROM firefighter;
+
 DELIMITER //
 CREATE PROCEDURE schedule_timeslot_insert(IN schedule_timeslot_start_time DATETIME, schedule_timeslot_end_time DATETIME, schedule_timeslot_firefighter_id INT)
 BEGIN
@@ -95,25 +91,13 @@ INSERT INTO availableTimeslot(timeslotId, firefighterId) VALUES (LAST_INSERT_ID(
 END //
 DELIMITER ;
 
-Call schedule_timeslot_insert("2016-4-23 11:00:00", "2016-4-23 12:00:00", 1);
-Call schedule_timeslot_insert("2016-4-24 04:00:00", "2016-4-24 10:00:00", 2);
-Call schedule_timeslot_insert("2016-4-24 12:00:00", "2016-4-24 18:00:00", 3);
-Call schedule_timeslot_insert("2016-4-24 02:00:00", "2016-4-24 13:00:00", 2);
-Call schedule_timeslot_insert("2016-4-25 15:00:00", "2016-4-25 23:00:00", 4);
-Call schedule_timeslot_insert("2016-4-25 18:00:00", "2016-4-25 20:00:00", 2);
-Call schedule_timeslot_insert("2016-4-25 01:00:00", "2016-4-25 10:00:00", 1);
-Call schedule_timeslot_insert("2016-4-25 22:00:00", "2016-4-26 02:00:00", 2);
-Call schedule_timeslot_insert("2016-4-26 04:00:00", "2016-4-26 12:00:00", 3);
-Call schedule_timeslot_insert("2016-4-26 09:00:00", "2016-4-26 13:00:00", 4);
-Call schedule_timeslot_insert("2016-4-26 10:00:00", "2016-4-26 23:00:00", 1);
-Call schedule_timeslot_insert("2016-4-28 11:00:00", "2016-4-28 12:15:00", 3);
-Call schedule_timeslot_insert("2016-4-28 03:00:00", "2016-4-28 13:00:00", 4);
-Call schedule_timeslot_insert("2017-4-23 11:00:00", "2017-4-23 12:00:00", 1);
-Call available_timeslot_insert("2016-4-24 11:00:00", "2016-4-24 12:00:00", 3);
-
-SELECT * FROM timeslot;
-SELECT * FROM AVAILABLETIMESLOT;
-SELECT * FROM SCHEDULETIMESLOT;
+DELIMITER //
+CREATE PROCEDURE create_user(IN user_email varchar(50), user_password char(128), firefighter_first_name varchar(30),firefighter_last_name varchar(30), firefighter_phone BIGINT, firefighter_secondary_phone BIGINT, firefighter_phone_provider varchar(30))
+BEGIN
+INSERT INTO firefighter(firstName, lastName, email, phone, secondaryPhone, phoneProvider, firefighterId) VALUES (firefighter_first_name, firefighter_last_name, user_email, firefighter_phone, firefighter_secondary_phone, firefighter_phone_provider, NULL);
+INSERT INTO MyUser(username, pass, firefighterId) VALUES(user_email, user_password, LAST_INSERT_ID());
+END //
+DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE get_all_firefighters()
@@ -121,8 +105,6 @@ BEGIN
 SELECT * FROM firefighter;
 END //
 DELIMITER ;
-
-Call get_all_firefighters;
 
 DELIMITER //
 CREATE PROCEDURE get_all_available_timeslots()
@@ -152,34 +134,6 @@ SELECT * FROM SCHEDULETIMESLOT JOIN (firefighter, timeslot) ON (firefighter.fire
 END //
 DELIMITER ;
 
-Call get_all_available_timeslots;
-Call get_all_schedule_timeslots;
-Call get_all_available_timeslots_between("2014-4-24 11:00:00", "2018-4-24 11:00:00");
-Call get_all_schedule_timeslots_between("2014-4-24 11:00:00", "2016-4-24 11:00:00");
-
-CREATE TABLE MyUser
-(
- username varchar(50) primary key NOT NULL,
- pass char(128) NOT NULL,
- firefighterId int not null
-);
-
-DELIMITER //
-CREATE PROCEDURE create_user(IN user_email varchar(50), user_password char(128), firefighter_first_name varchar(30),firefighter_last_name varchar(30), firefighter_phone BIGINT, firefighter_secondary_phone BIGINT, firefighter_phone_provider varchar(30))
-BEGIN
-INSERT INTO firefighter(firstName, lastName, email, phone, secondaryPhone, phoneProvider, firefighterId) VALUES (firefighter_first_name, firefighter_last_name, user_email, firefighter_phone, firefighter_secondary_phone, firefighter_phone_provider, NULL);
-INSERT INTO MyUser(username, pass, firefighterId) VALUES(user_email, user_password, LAST_INSERT_ID());
-END //
-DELIMITER ;
-
-CALL create_user("kblair5@yahoo.com", "kellypass", "Kelly", "Blair", 5745497353, NULL, "att");
-CALL create_user("pikachu100@pokeball.com", "ashpass", "Ash", "Ketchum", NULL, NULL, NULL);
-CALL create_user("misty32453453@staryu.com", "mpass", "Misty", "Bubbles", NULL, NULL, NULL);
-CALL create_user("brockkk@onyx.com", "bpass", "Brock", "Rock", NULL, NULL, NULL);
-CALL create_user( "torchic@blaziken.com", "maypass","May", "Ki", NULL, NULL, NULL);
-
-select * from myUser;
-
 DELIMITER //
 CREATE PROCEDURE get_all_available_timeslots_within_90_day_window()
 BEGIN
@@ -207,6 +161,3 @@ BEGIN
 SELECT * FROM SCHEDULETIMESLOT JOIN (firefighter, timeslot) ON (firefighter.firefighterId = scheduleTimeslot.firefighterId AND firefighter.firefighterId = firefighter_id AND timeslot.timeslotId = scheduleTimeslot.timeslotId AND timeslot.startTime<=(NOW() + INTERVAL 90 DAY) and timeslot.endTime>=(NOW() - INTERVAL 90 DAY));
 END //
 DELIMITER ;
-Call get_schedule_timeslots_for_firefighter_within_90_day_window(2);
-
-Call get_all_schedule_timeslots_within_90_day_window();
