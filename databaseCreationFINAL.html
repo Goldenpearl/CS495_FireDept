@@ -130,41 +130,41 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE get_all_available_timeslots_between(border_start_date DATETIME, border_end_date DATETIME)
 BEGIN
-SELECT * FROM AVAILABLETIMESLOT JOIN(firefighter, timeslot) ON (firefighter.firefighterId = availabletimeslot.firefighterId AND timeslot.timeslotId = availabletimeslot.timeslotId AND timeslot.startTime<=border_end_date and timeslot.endTime>=border_start_date);
+SELECT * FROM availableTimeslot JOIN(firefighter, timeslot) ON (firefighter.firefighterId = availabletimeslot.firefighterId AND timeslot.timeslotId = availabletimeslot.timeslotId AND timeslot.startTime<=border_end_date and timeslot.endTime>=border_start_date);
 END //
 DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE get_all_schedule_timeslots_between(border_start_date DATETIME, border_end_date DATETIME)
 BEGIN
-SELECT * FROM SCHEDULETIMESLOT JOIN (firefighter, timeslot) ON (firefighter.firefighterId = scheduleTimeslot.firefighterId AND timeslot.timeslotId = scheduleTimeslot.timeslotId AND timeslot.startTime<=border_end_date and timeslot.endTime>=border_start_date);
+SELECT * FROM scheduleTimeslot JOIN (firefighter, timeslot) ON (firefighter.firefighterId = scheduleTimeslot.firefighterId AND timeslot.timeslotId = scheduleTimeslot.timeslotId AND timeslot.startTime<=border_end_date and timeslot.endTime>=border_start_date);
 END //
 DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE get_all_available_timeslots_within_90_day_window()
 BEGIN
-SELECT * FROM AVAILABLETIMESLOT JOIN(firefighter, timeslot) ON (firefighter.firefighterId = availabletimeslot.firefighterId AND timeslot.timeslotId = availabletimeslot.timeslotId AND timeslot.startTime<=(NOW() + INTERVAL 90 DAY) and timeslot.endTime>=(NOW() - INTERVAL 90 DAY));
+SELECT * FROM availableTimeslot JOIN(firefighter, timeslot) ON (firefighter.firefighterId = availabletimeslot.firefighterId AND timeslot.timeslotId = availabletimeslot.timeslotId AND timeslot.startTime<=(NOW() + INTERVAL 90 DAY) and timeslot.endTime>=(NOW() - INTERVAL 90 DAY));
 END //
 DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE get_all_schedule_timeslots_within_90_day_window()
 BEGIN
-SELECT * FROM SCHEDULETIMESLOT JOIN (firefighter, timeslot) ON (firefighter.firefighterId = scheduleTimeslot.firefighterId AND timeslot.timeslotId = scheduleTimeslot.timeslotId AND timeslot.startTime<=(NOW() + INTERVAL 90 DAY) and timeslot.endTime>=(NOW() - INTERVAL 90 DAY));
+SELECT * FROM scheduleTimeslot JOIN (firefighter, timeslot) ON (firefighter.firefighterId = scheduleTimeslot.firefighterId AND timeslot.timeslotId = scheduleTimeslot.timeslotId AND timeslot.startTime<=(NOW() + INTERVAL 90 DAY) and timeslot.endTime>=(NOW() - INTERVAL 90 DAY));
 END //
 DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE get_available_timeslots_for_firefighter_within_90_day_window(firefighter_id INT)
 BEGIN
-SELECT * FROM AVAILABLETIMESLOT JOIN(firefighter, timeslot) ON (firefighter.firefighterId = availabletimeslot.firefighterId AND firefighter.firefighterId=firefighter_id AND timeslot.timeslotId = availabletimeslot.timeslotId AND timeslot.startTime<=(NOW() + INTERVAL 90 DAY) and timeslot.endTime>=(NOW() - INTERVAL 90 DAY));
+SELECT * FROM availableTimeslot JOIN(firefighter, timeslot) ON (firefighter.firefighterId = availabletimeslot.firefighterId AND firefighter.firefighterId=firefighter_id AND timeslot.timeslotId = availabletimeslot.timeslotId AND timeslot.startTime<=(NOW() + INTERVAL 90 DAY) and timeslot.endTime>=(NOW() - INTERVAL 90 DAY));
 END //
 DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE get_schedule_timeslots_for_firefighter_within_90_day_window(firefighter_id INT)
 BEGIN
-SELECT * FROM SCHEDULETIMESLOT JOIN (firefighter, timeslot) ON (firefighter.firefighterId = scheduleTimeslot.firefighterId AND firefighter.firefighterId = firefighter_id AND timeslot.timeslotId = scheduleTimeslot.timeslotId AND timeslot.startTime<=(NOW() + INTERVAL 90 DAY) and timeslot.endTime>=(NOW() - INTERVAL 90 DAY));
+SELECT * FROM scheduleTimeslot JOIN (firefighter, timeslot) ON (firefighter.firefighterId = scheduleTimeslot.firefighterId AND firefighter.firefighterId = firefighter_id AND timeslot.timeslotId = scheduleTimeslot.timeslotId AND timeslot.startTime<=(NOW() + INTERVAL 90 DAY) and timeslot.endTime>=(NOW() - INTERVAL 90 DAY));
 END //
 DELIMITER ;
