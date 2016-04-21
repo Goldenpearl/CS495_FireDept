@@ -5,11 +5,14 @@ class Firefighter {
 	private $lName = "";
 	private $id = 0;
 	
-	function __construct($id, $fName, $lName, $age){
-		$this->age = $age;
+	function __construct($id, $fName, $lName, $email, $phone, $secondaryPhone, $carrier){
 		$this->fName=$fName;
 		$this->lName=$lName;
 		$this->id = $id;
+		$this->email = $email;
+		$this->phone = $phone;
+		$this->secondaryPhone = $secondaryPhone;
+		$this->carrier = $carrier;
 	}
 	
 	public function getFirstName(){
@@ -23,20 +26,18 @@ class Firefighter {
 	public function getId(){
 		return $this ->id;
 	}
-	public function getAge(){
-		return $this->age;
-	}
-	
+
 	public function getJSON(){
-		$arr = array('firefighterId'=>$this->id, 'firstName'=>$this->fName, 'lastName'=>$this->lName, 'age'=>$this->age);
+		$arr = array('firefighterId'=>$this->id, 'firstName'=>$this->fName, 
+			'lastName'=>$this->lName, 'email'=>$this->email, 'phone' =>$this->phone,
+			'secondaryPhone'=>$this->secondaryPhone,'carrier'=>$this->carrier) ;
 		$json = json_encode($arr);
 		return $json;
 	}
 	
 	public function getSummary(){
-		return "Age : ".
-		$this->age .
-		" <br> Name: ".
+		return 
+		"Name: ".
 		$this->fName.
 		" ".
 		$this->lName. 

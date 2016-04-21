@@ -28,11 +28,11 @@ function getAllFirefighters(){
 				$firefighterId = $row["firefighterId"];
 				$firefighterFName = $row["firstName"];
 				$firefighterLName = $row["lastName"];
-				//$firefighterEmail = $row["email"];
-				//$firefighterPhone = $row["phone"];
-				//$firefighterSecondaryPhone = $row["secondaryPhone"];
-				//$firefighterPhoneCarrier = $row["phoneProvider"];
-				$firefighter = new Firefighter($firefighterId, $firefighterFName, $firefighterLName, 0);
+				$firefighterEmail = $row["email"];
+				$firefighterPhone = $row["phone"];
+				$firefighterSecondaryPhone = $row["secondaryPhone"];
+				$firefighterPhoneCarrier = $row["phoneProvider"];
+				$firefighter = new Firefighter($firefighterId, $firefighterFName, $firefighterLName, $firefighterEmail, $firefighterPhone, $firefighterSecondaryPhone, $firefighterPhoneCarrier);
 				array_push($firefighters, $firefighter); 
 			}
 	}
@@ -54,9 +54,12 @@ function getAllScheduleTimeslotsBetween($startTime, $endTime){
 				$firefighterId = $row['firefighterId'];	
 				$firstName = $row['firstName'];
 				$lastName = $row['lastName'];
-				//$age = $row ['age'];
+				$email = $row['email'];
+				$phone = $row['phone'];
+				$secondaryPhone =$row['secondaryPhone'];
+				$carrier = $row['phoneProvider'];
 				$scheduleTimeslotId= $row['scheduleTimeslotId'];
-				$firefighter = new Firefighter($firefighterId, $firstName, $lastName, 0);
+				$firefighter = new Firefighter($firefighterId, $firstName, $lastName, $email, $phone, $secondaryPhone, $carrier);
 				$timeslot = new TimeSlot($timeslotId, $startTime, $endTime, $firefighter);
 				$scheduleTimeslot = new ScheduleTimeslot($timeslot, $scheduleTimeslotId);
 				array_push($timeslots, $scheduleTimeslot); 
