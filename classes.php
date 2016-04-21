@@ -1,10 +1,9 @@
 <?php
 class Firefighter {
-	private $age = 0;
 	private $fName = "";
 	private $lName = "";
 	private $id = 0;
-	
+
 	function __construct($id, $fName, $lName, $email, $phone, $secondaryPhone, $carrier){
 		$this->fName=$fName;
 		$this->lName=$lName;
@@ -51,14 +50,14 @@ class Firefighter {
 		$data = json_decode($json, true);
 		$array = ($data["Firefighter"]);
 		//var_dump($array, true);
-		$age = 0;//$result['age'];
 		$fName= $array["firstName"];
 		$lName = $array["lastName"];
 		$id = $array["firefighterId"];
-		//echo($fName."<br>");
-		//echo($lName."<br>");
-		//echo($id."<br>");
-		return new Firefighter($id, $fName, $lName, $age);
+		$email= $array["email"];
+		$phone = $array["phone"];
+		$secondaryPhone = $array["secondaryPhone"];
+		$carrier = $array["carrier"];
+		return new Firefighter($id, $fName, $lName, $email, $phone, $secondaryPhone, $carrier);
 	}
 	
 	public static function getClassId(){

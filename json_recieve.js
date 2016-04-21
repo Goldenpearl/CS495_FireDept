@@ -6,7 +6,7 @@ function recieveScheduleJson() {
 		var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("GET", "scheduleGrab.php?id=" + SCHEDULE_ID, false);
         xmlhttp.send();
-		document.write(xmlhttp.responseText);
+		//document.write(xmlhttp.responseText);
 		return xmlhttp.responseText;
 		//xmlhttp.close;
 }
