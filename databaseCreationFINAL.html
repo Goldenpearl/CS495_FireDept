@@ -100,6 +100,13 @@ END //
 DELIMITER ;
 
 DELIMITER //
+CREATE PROCEDURE delete_user(user_name varchar(50))
+BEGIN
+DELETE from MyUser where (username = user_name);
+END //
+DELIMITER ;
+
+DELIMITER //
 CREATE PROCEDURE get_all_firefighters()
 BEGIN
 SELECT * FROM firefighter;

@@ -38,7 +38,7 @@ CALL create_user("pikachu100@pokeball.com", "ashpass", "Ash", "Ketchum", NULL, N
 CALL create_user("misty32453453@staryu.com", "mpass", "Misty", "Bubbles", NULL, NULL, NULL);
 CALL create_user("brockkk@onyx.com", "bpass", "Brock", "Rock", NULL, NULL, NULL);
 CALL create_user( "torchic@blaziken.com", "maypass","May", "Ki", NULL, NULL, NULL);
-
+CALL delete_user("torchic@blaziken.com");
 select * from myUser;
 
 Call get_schedule_timeslots_for_firefighter_within_90_day_window(2);
