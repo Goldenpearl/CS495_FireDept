@@ -20,16 +20,19 @@ function openConnection($queryString){
 function getAllFirefighters(){
 	$q = intval($_GET);
 	$firefighters = array();
-	$sql = "SELECT firemanId, firstName, lastName, age FROM Fireman";
+	$sql = "call get_all_firefighters();";
 	$result = openConnection($sql);
 	if ($result->num_rows > 0) {
 		mysqli_data_seek($result, 0);
 			while($row = $result->fetch_assoc()) {
-				$firefighterId = $row['firemanId'];
+				$firefighterId = $row["firefighterId"];
 				$firefighterFName = $row["firstName"];
 				$firefighterLName = $row["lastName"];
-				$firefighterAge = $row["age"];
-				$firefighter = new Firefighter($firefighterId, $firefighterFName, $firefighterLName, $firefighterAge);
+				//$firefighterEmail = $row["email"];
+				//$firefighterPhone = $row["phone"];
+				//$firefighterSecondaryPhone = $row["secondaryPhone"];
+				//$firefighterPhoneCarrier = $row["phoneProvider"];
+				$firefighter = new Firefighter($firefighterId, $firefighterFName, $firefighterLName, 0);
 				array_push($firefighters, $firefighter); 
 			}
 	}
@@ -37,24 +40,23 @@ function getAllFirefighters(){
 }
 function getAllScheduleTimeslotsBetween($startTime, $endTime){
 	$timeslots = array();
-	$result = openConnection("
-	SELECT scheduleTimeslotId, fireman.firemanId, fireman.firstName, fireman.lastName, fireman.age, timeslot.startDate, timeslot.endDate, timeslot.timeslotId
-	FROM scheduleTimeslot
-	JOIN (fireman, timeslot)
-	ON (scheduleTimeslot.firemanId=fireman.firemanId AND scheduleTimeslot.timeslotId=timeslot.timeslotId);");
+	$result = openConnection("Call get_all_schedule_timeslots();");
+	//var_dump($result);
+	//$result = openConnection("get_all_schedule_timeslots_between(".$startTime.", ".$endTime.");");
+	
 	$timeslots;
 	if ($result->num_rows > 0) {
 		mysqli_data_seek($result, 0);
 			while($row = $result->fetch_assoc()) {
-				$startTime = $row['startDate'];
-				$endTime = $row['endDate'];
+				$startTime = $row['startTime'];
+				$endTime = $row['endTime'];
 				$timeslotId = $row['timeslotId'];
-				$firefighterId = $row['firemanId'];	
+				$firefighterId = $row['firefighterId'];	
 				$firstName = $row['firstName'];
 				$lastName = $row['lastName'];
-				$age = $row ['age'];
+				//$age = $row ['age'];
 				$scheduleTimeslotId= $row['scheduleTimeslotId'];
-				$firefighter = new Firefighter($firefighterId, $firstName, $lastName, $age);
+				$firefighter = new Firefighter($firefighterId, $firstName, $lastName, 0);
 				$timeslot = new TimeSlot($timeslotId, $startTime, $endTime, $firefighter);
 				$scheduleTimeslot = new ScheduleTimeslot($timeslot, $scheduleTimeslotId);
 				array_push($timeslots, $scheduleTimeslot); 
