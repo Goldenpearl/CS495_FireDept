@@ -20,41 +20,69 @@ function openConnection($queryString){
 function getAllFirefighters(){
 	$q = intval($_GET);
 	$firefighters = array();
-	$sql = "SELECT firemanId, firstName, lastName, age FROM Fireman";
+	$sql = "call get_all_firefighters();";
 	$result = openConnection($sql);
 	if ($result->num_rows > 0) {
 		mysqli_data_seek($result, 0);
 			while($row = $result->fetch_assoc()) {
-				$firefighterId = $row['firemanId'];
+				$firefighterId = $row["firefighterId"];
 				$firefighterFName = $row["firstName"];
 				$firefighterLName = $row["lastName"];
-				$firefighterAge = $row["age"];
-				$firefighter = new Firefighter($firefighterId, $firefighterFName, $firefighterLName, $firefighterAge);
+				$firefighterEmail = $row["email"];
+				$firefighterPhone = $row["phone"];
+				$firefighterSecondaryPhone = $row["secondaryPhone"];
+				$firefighterPhoneCarrier = $row["phoneProvider"];
+				$firefighter = new Firefighter($firefighterId, $firefighterFName, $firefighterLName, $firefighterEmail, $firefighterPhone, $firefighterSecondaryPhone, $firefighterPhoneCarrier);
 				array_push($firefighters, $firefighter); 
 			}
 	}
 	return $firefighters;
 }
+
+function getFirefighterWithId($id){
+	$q = intval($_GET);
+	$firefighter;
+	$sql = "call get_firefighter_with_id(".$id.");";
+	$result = openConnection($sql);
+	if ($result->num_rows > 0) {
+		mysqli_data_seek($result, 0);
+		while($row = $result->fetch_assoc()) {
+			$firefighterId = $row["firefighterId"];
+			$firefighterFName = $row["firstName"];
+			$firefighterLName = $row["lastName"];
+			$firefighterEmail = $row["email"];
+			$firefighterPhone = $row["phone"];
+			$firefighterSecondaryPhone = $row["secondaryPhone"];
+			$firefighterPhoneCarrier = $row["phoneProvider"];
+			$firefighter = new Firefighter($firefighterId, $firefighterFName, $firefighterLName, $firefighterEmail, $firefighterPhone, $firefighterSecondaryPhone, $firefighterPhoneCarrier);
+		}
+	}
+	return $firefighter;
+	
+}
+
 function getAllScheduleTimeslotsBetween($startTime, $endTime){
 	$timeslots = array();
-	$result = openConnection("
-	SELECT scheduleTimeslotId, fireman.firemanId, fireman.firstName, fireman.lastName, fireman.age, timeslot.startDate, timeslot.endDate, timeslot.timeslotId
-	FROM scheduleTimeslot
-	JOIN (fireman, timeslot)
-	ON (scheduleTimeslot.firemanId=fireman.firemanId AND scheduleTimeslot.timeslotId=timeslot.timeslotId);");
+	$result = openConnection("Call get_all_schedule_timeslots();");
+	//var_dump($result);
+	//$result = openConnection("get_all_schedule_timeslots_between(".$startTime.", ".$endTime.");");
+	
 	$timeslots;
 	if ($result->num_rows > 0) {
 		mysqli_data_seek($result, 0);
 			while($row = $result->fetch_assoc()) {
-				$startTime = $row['startDate'];
-				$endTime = $row['endDate'];
+				$startTime = $row['startTime'];
+				$endTime = $row['endTime'];
 				$timeslotId = $row['timeslotId'];
-				$firefighterId = $row['firemanId'];	
+				$firefighterId = $row['firefighterId'];	
 				$firstName = $row['firstName'];
 				$lastName = $row['lastName'];
-				$age = $row ['age'];
+				$email = $row['email'];
+				$phone = $row['phone'];
+				$secondaryPhone =$row['secondaryPhone'];
+				$carrier = $row['phoneProvider'];
 				$scheduleTimeslotId= $row['scheduleTimeslotId'];
-				$firefighter = new Firefighter($firefighterId, $firstName, $lastName, $age);
+				$firefighter = new Firefighter($firefighterId, $firstName, $lastName, $email, $phone, $secondaryPhone, $carrier);
 				$timeslot = new TimeSlot($timeslotId, $startTime, $endTime, $firefighter);
 				$scheduleTimeslot = new ScheduleTimeslot($timeslot, $scheduleTimeslotId);
 				array_push($timeslots, $scheduleTimeslot); 
@@ -64,14 +92,20 @@ function getAllScheduleTimeslotsBetween($startTime, $endTime){
 }
 
 
-function getAllFirefightersToJSON(){
+function echoAllFirefightersToJSON(){
 $firefighters = getAllFirefighters();
+$jsonString = "";
 foreach($firefighters as $firefighter){
 	echo $firefighter->getJSON()."<br> ";
 }
+return $jsonString;
+}
+function echoFirefighterWithIdToJSON($id){
+	$firefighter = getFirefighterWithId($id);
+	echo $firefighter->getJSON();
 }
 
-function getAllScheduleToJSON(){
+function echoAllScheduleToJSON(){
 	$timeslots = getAllScheduleTimeslotsBetween(2,2);
 	$len = count($timeslots);
 	//echo "{";
@@ -87,9 +121,13 @@ function getAllScheduleToJSON(){
 
 $id = $_REQUEST["id"];
 if($id == 0){
-	echo getAllScheduleToJSON();
+	echoAllScheduleToJSON();
 }
 else if ($id==1){
-	echo getAllFirefightersToJSON();
+	echoAllFirefightersToJSON();
+}
+else if ($id==3){
+	$givenId = $_REQUEST["givenId"];
+	echoFirefighterWithIdToJSON($givenId);
 }
 ?>

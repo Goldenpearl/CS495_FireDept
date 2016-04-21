@@ -1,15 +1,17 @@
 <?php
 class Firefighter {
-	private $age = 0;
 	private $fName = "";
 	private $lName = "";
 	private $id = 0;
-	
-	function __construct($id, $fName, $lName, $age){
-		$this->age = $age;
+
+	function __construct($id, $fName, $lName, $email, $phone, $secondaryPhone, $carrier){
 		$this->fName=$fName;
 		$this->lName=$lName;
 		$this->id = $id;
+		$this->email = $email;
+		$this->phone = $phone;
+		$this->secondaryPhone = $secondaryPhone;
+		$this->carrier = $carrier;
 	}
 	
 	public function getFirstName(){
@@ -23,20 +25,34 @@ class Firefighter {
 	public function getId(){
 		return $this ->id;
 	}
-	public function getAge(){
-		return $this->age;
+	
+	public function getEmail(){
+		return $this->email;
 	}
 	
+	public function getPhone(){
+		return $this ->phone;
+	}
+	
+	public function getSecondaryPhone(){
+		return $this ->secondaryPhone;
+	}
+	
+	public function getCarrier(){
+		return $this->carrier;
+	}
+
 	public function getJSON(){
-		$arr = array('firefighterId'=>$this->id, 'firstName'=>$this->fName, 'lastName'=>$this->lName, 'age'=>$this->age);
+		$arr = array('firefighterId'=>$this->id, 'firstName'=>$this->fName, 
+			'lastName'=>$this->lName, 'email'=>$this->email, 'phone' =>$this->phone,
+			'secondaryPhone'=>$this->secondaryPhone,'carrier'=>$this->carrier) ;
 		$json = json_encode($arr);
 		return $json;
 	}
 	
 	public function getSummary(){
-		return "Age : ".
-		$this->age .
-		" <br> Name: ".
+		return 
+		"Name: ".
 		$this->fName.
 		" ".
 		$this->lName. 
@@ -50,14 +66,14 @@ class Firefighter {
 		$data = json_decode($json, true);
 		$array = ($data["Firefighter"]);
 		//var_dump($array, true);
-		$age = 0;//$result['age'];
 		$fName= $array["firstName"];
 		$lName = $array["lastName"];
 		$id = $array["firefighterId"];
-		//echo($fName."<br>");
-		//echo($lName."<br>");
-		//echo($id."<br>");
-		return new Firefighter($id, $fName, $lName, $age);
+		$email= $array["email"];
+		$phone = $array["phone"];
+		$secondaryPhone = $array["secondaryPhone"];
+		$carrier = $array["carrier"];
+		return new Firefighter($id, $fName, $lName, $email, $phone, $secondaryPhone, $carrier);
 	}
 	
 	public static function getClassId(){
@@ -162,10 +178,14 @@ class ScheduleTimeslot{
 		$startTime= $timeslotArray["startTime"];
 		$endTime = $timeslotArray["endTime"];
 		$timeslotId = $timeslotArray["timeslotId"];
-		$fName = $firefighterArray["firstName"];
+		$fName= $firefighterArray["firstName"];
 		$lName = $firefighterArray["lastName"];
+		$email= $firefighterArray["email"];
+		$phone = $firefighterArray["phone"];
+		$secondaryPhone = $firefighterArray["secondaryPhone"];
+		$carrier = $firefighterArray["carrier"];
 		$firefighterId = $firefighterArray["firefighterId"];
-		$firefighter = new Firefighter($firefighterId, $fName, $lName, 0);
+		$firefighter = new Firefighter($firefighterId, $fName, $lName, $email, $phone, $secondaryPhone, $carrier);
 		$timeslot = new Timeslot($timeslotId, $startTime, $endTime, $firefighter);
 		$scheduleTimeslot = new ScheduleTimeslot($timeslot, $scheduleTimeslotId);
 		return $scheduleTimeslot;
