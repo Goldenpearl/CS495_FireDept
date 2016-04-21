@@ -25,6 +25,22 @@ class Firefighter {
 	public function getId(){
 		return $this ->id;
 	}
+	
+	public function getEmail(){
+		return $this->email;
+	}
+	
+	public function getPhone(){
+		return $this ->phone;
+	}
+	
+	public function getSecondaryPhone(){
+		return $this ->secondaryPhone;
+	}
+	
+	public function getCarrier(){
+		return $this->carrier;
+	}
 
 	public function getJSON(){
 		$arr = array('firefighterId'=>$this->id, 'firstName'=>$this->fName, 
@@ -162,10 +178,14 @@ class ScheduleTimeslot{
 		$startTime= $timeslotArray["startTime"];
 		$endTime = $timeslotArray["endTime"];
 		$timeslotId = $timeslotArray["timeslotId"];
-		$fName = $firefighterArray["firstName"];
+		$fName= $firefighterArray["firstName"];
 		$lName = $firefighterArray["lastName"];
+		$email= $firefighterArray["email"];
+		$phone = $firefighterArray["phone"];
+		$secondaryPhone = $firefighterArray["secondaryPhone"];
+		$carrier = $firefighterArray["carrier"];
 		$firefighterId = $firefighterArray["firefighterId"];
-		$firefighter = new Firefighter($firefighterId, $fName, $lName, 0);
+		$firefighter = new Firefighter($firefighterId, $fName, $lName, $email, $phone, $secondaryPhone, $carrier);
 		$timeslot = new Timeslot($timeslotId, $startTime, $endTime, $firefighter);
 		$scheduleTimeslot = new ScheduleTimeslot($timeslot, $scheduleTimeslotId);
 		return $scheduleTimeslot;

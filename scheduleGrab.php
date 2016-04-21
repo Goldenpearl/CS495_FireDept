@@ -38,6 +38,29 @@ function getAllFirefighters(){
 	}
 	return $firefighters;
 }
+
+function getFirefighterWithId($id){
+	$q = intval($_GET);
+	$firefighter;
+	$sql = "call get_firefighter_with_id(".$id.");";
+	$result = openConnection($sql);
+	if ($result->num_rows > 0) {
+		mysqli_data_seek($result, 0);
+		while($row = $result->fetch_assoc()) {
+			$firefighterId = $row["firefighterId"];
+			$firefighterFName = $row["firstName"];
+			$firefighterLName = $row["lastName"];
+			$firefighterEmail = $row["email"];
+			$firefighterPhone = $row["phone"];
+			$firefighterSecondaryPhone = $row["secondaryPhone"];
+			$firefighterPhoneCarrier = $row["phoneProvider"];
+			$firefighter = new Firefighter($firefighterId, $firefighterFName, $firefighterLName, $firefighterEmail, $firefighterPhone, $firefighterSecondaryPhone, $firefighterPhoneCarrier);
+		}
+	}
+	return $firefighter;
+	
+}
+
 function getAllScheduleTimeslotsBetween($startTime, $endTime){
 	$timeslots = array();
 	$result = openConnection("Call get_all_schedule_timeslots();");
@@ -69,14 +92,20 @@ function getAllScheduleTimeslotsBetween($startTime, $endTime){
 }
 
 
-function getAllFirefightersToJSON(){
+function echoAllFirefightersToJSON(){
 $firefighters = getAllFirefighters();
+$jsonString = "";
 foreach($firefighters as $firefighter){
 	echo $firefighter->getJSON()."<br> ";
 }
+return $jsonString;
+}
+function echoFirefighterWithIdToJSON($id){
+	$firefighter = getFirefighterWithId($id);
+	echo $firefighter->getJSON();
 }
 
-function getAllScheduleToJSON(){
+function echoAllScheduleToJSON(){
 	$timeslots = getAllScheduleTimeslotsBetween(2,2);
 	$len = count($timeslots);
 	//echo "{";
@@ -92,9 +121,13 @@ function getAllScheduleToJSON(){
 
 $id = $_REQUEST["id"];
 if($id == 0){
-	echo getAllScheduleToJSON();
+	echoAllScheduleToJSON();
 }
 else if ($id==1){
-	echo getAllFirefightersToJSON();
+	echoAllFirefightersToJSON();
+}
+else if ($id==3){
+	$givenId = $_REQUEST["givenId"];
+	echoFirefighterWithIdToJSON($givenId);
 }
 ?>

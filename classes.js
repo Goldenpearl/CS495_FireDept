@@ -1,10 +1,51 @@
-function Firefighter(firefighterId, firstName, lastName){
+function Firefighter(firefighterId, firstName, lastName, email, phone, secondaryPhone, carrier){
 	this.firefighterId=firefighterId;
 	this.firstName=firstName;
 	this.lastName=lastName;
+	this.email=email;
+	this.phone=phone;
+	this.secondaryPhone=secondaryPhone;
+	this.carrier=carrier;
 	
 	this.getFullName = function(){
 		return this.firstName + " " + this.lastName;
+	}
+	
+	this.getFirstName = function(){
+		return this.firstName;
+	}
+	
+	this.getFirefighterId = function (){
+		return this.firefighterId;
+	}
+	this.getLastName = function(){
+		return this.lastName;
+	}
+	this.getEmail = function(){
+		if(this.email == null)
+			return "N/A";
+		else 
+			return this.email;
+	}
+	
+	this.getPhone = function(){
+		if(this.phone == null)
+			return "N/A";
+		else 
+			return this.phone;
+	}
+	this.getSecondaryPhone = function(){
+		if(this.secondaryPhone == null)
+			return "N/A";
+		else 
+			return this.secondaryPhone;
+	}
+	
+	this.getCarrier = function(){
+		if(this.carrier = "null")
+			return "N/A";
+		else 
+			return this.carrier;
 	}
 	
 	this.getSummary = function(){
@@ -21,6 +62,14 @@ function Firefighter(firefighterId, firstName, lastName){
 				this.firstName +
 				'", "lastName":"'+
 				this.lastName+
+				'", "email":"'+
+				this.email +
+				'", "phone":"'+
+				this.phone+
+				'", "secondaryPhone":"'+
+				this.secondaryPhone +
+				'", "carrier":"'+
+				this.carrier+
 				'"}';
 	}
 }
@@ -48,6 +97,24 @@ function Timeslot(timeslotId, startTime, endTime, firefighter){
 		return new DateRange(this.getStartDate(), this.getEndDate());
    }
    
+   this.twoDigits = function(d){
+		if(0 <= d && d < 10) return "0" + d.toString();
+		if(-10 < d && d < 0) return "-0" + (-1*d).toString();
+		return d.toString();
+	}
+
+   this.dateToSQLDate= function(oldDate){
+	   var dateConvert = new Date(oldDate);
+	   var date = "";
+	   date+=this.twoDigits(dateConvert.getFullYear());
+	   date+="-"+this.twoDigits(dateConvert.getMonth())+"-";
+	   date+=dateConvert.getDate()+" ";
+	   date+=this.twoDigits(dateConvert.getHours())+":";
+	   date+=this.twoDigits(dateConvert.getMinutes())+":";
+	   date+=this.twoDigits(dateConvert.getSeconds());
+	   return date;
+   }
+
    this.getJson = function(){
 	   return '{'+this.getNestedJson()+'}';
    }
@@ -55,16 +122,17 @@ function Timeslot(timeslotId, startTime, endTime, firefighter){
    this.getNestedJson = function(){
 	   var json = '"Timeslot": {';
 	   json+='"startTime":"';
-	   json+=startTime;
+	   json+=this.dateToSQLDate(startTime);
 	   json+='", "endTime":"';
-	   json+=endTime;
+	   json+=this.dateToSQLDate(endTime);
 	   json+='", "timeslotId":"';
-	   json+=timeslotId;
+	   json+=this.dateToSQLDate(timeslotId);
 	   json+='", ';
 	   json+=this.firefighter.getNestedJson();
 	   json+='}';
 	   return json;
    }
+ 
 }
 
 function validDateGetter(){
@@ -221,7 +289,11 @@ function parseFirefighter(json){
 	var firefighterId = ob.firefighterId;
 	var firstName = ob.firstName;
 	var lastName = ob.lastName;
-	var firefighter = new Firefighter(firefighterId, firstName, lastName);
+	var email = ob.email;
+	var phone = ob.phone;
+	var secondaryPhone = ob.secondaryPhone;
+	var carrier = ob.carrier;
+	var firefighter = new Firefighter(firefighterId, firstName, lastName, email, phone, secondaryPhone, carrier);
 	return firefighter;
 }
 

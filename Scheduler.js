@@ -574,17 +574,18 @@
 		}
 		scheduleInputString+="</select>"
 		scheduleInputString+="<br> Start time: ";
-		scheduleInputString+="<input type = 'text' id =";
+		scheduleInputString+="<input type = 'time' id =";
 		scheduleInputString+=startTimeInputId;
 		scheduleInputString+=">";
 		scheduleInputString+="</input>";
 		scheduleInputString+="<br> End time: ";
-		scheduleInputString+="<input type = 'text' id =";
+		scheduleInputString+="<input type = 'time' id =";
 		scheduleInputString+=endTimeInputId;
 		scheduleInputString+=">";
 		scheduleInputString+="</input>";
 		scheduleInputString+="<br> <button onclick = 'clickAddScheduleTimeslot()'>";
 		scheduleInputString+="OK </button>";
+		scheduleInputString+="<br><br><br>";
 		return scheduleInputString;
 	}
 	
@@ -612,8 +613,7 @@
 	function scheduleShift(firefighter, dateRange){
 		var timeslot = new Timeslot(0, dateRange.startDate, dateRange.endDate, firefighter);
 		var scheduleTimeslot = new ScheduleTimeslot(firefighter, timeslot, 0);
-		addFirefighterJson(firefighter.getJson());
-		//addTimeslotJson(timeslot.getJson());
+		//addFirefighterJson(firefighter.getJson());
 		addScheduleTimeslotJson(scheduleTimeslot.getJson());
 		refreshShiftsInTable();
 	}
@@ -623,7 +623,12 @@
 	}
 	
 	function refreshShiftsInTable(){
-		
+		grabbedslots = grabSchedule(); //external call
+		grabFirefighters = grabFirefighters(); //external call
+		createListSelection(listBubbleDiv);
+		createDateSelection(bubbleDiv);
+		reloadTable();
+		createScheduleInput();
 	}
 	
 	
