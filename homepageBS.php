@@ -51,7 +51,6 @@
         <li class="active"><a href="#">Home</a></li>
         <li><a href="calendar.php">Event Calendar</a></li>
         <li><a href="schedule.php">Shift Schedule</a></li>
-        <li><a href="email.php">Email</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="registerBS.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
@@ -103,23 +102,17 @@
 <div class="container text-center">    
   <h3>Select An Option</h3><br>
   <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-6">
 	<a href="calendar.php">
       <img src="http://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
 	  </a>
       <p>Event Calendar</p>
     </div>
 	<a href="schedule.php">
-    <div class="col-sm-4"> 
+    <div class="col-sm-6"> 
       <img src="http://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
 	  </a>
       <p>Shift Scheduler</p>    
-    </div>
-	<div class="col-sm-4"> 
-	<a href="email.php">
-      <img src="http://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
-	  </a>
-      <p>Email</p>    
     </div>
   </div>
 </div><br>

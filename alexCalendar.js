@@ -7,10 +7,13 @@ var SIGN_UP_EVENT_ID = 4;
 var currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1, 3);
 var selectedCalendarDay = new Date(new Date().getFullYear(), new Date().getMonth(), 1, 3);
 var selectedEvent= "b";
-var loadedEvents = ["Party", "School", "Games"];
+var loadedEvents = [];
+var firefighters =[];
+var apparatus = [];
+var timeslots =[];
 function loadPage(){
 	initializeEvents();
-	//drawCalendar();
+	drawCalendar(); //comment this out to test
 }
 
 function initializeEvents(){
@@ -20,13 +23,25 @@ function initializeEvents(){
 	var big_truck = new Apparatus("Big truck", "Its Huge!", 16, 1);
 	var medium_truck = new Apparatus("Medium Truck", "A truck.", 8, 2);
 	var small_truck = new Apparatus ("Small Truck", "A Baby Truck!", 4, 3);
-	var birthdayTimeslot = new Timeslot(1, new Date(), new Date());
+	var bStartDate = new Date();
+	bStartDate.setHours(3);
+	var birthdayTimeslot = new Timeslot(1, bStartDate, new Date());
 	var newYearTimeslot = new Timeslot(2, new Date(), new Date());
 	var bday_party = new MyEvent("Ash's Birthday", "Happy B-Day!", birthdayTimeslot, 1);
 	var new_year_eve = new MyEvent("New Year's Eve", "Yay", newYearTimeslot, 2);
+	loadedEvents.push(bday_party);
+	loadedEvents.push(new_year_eve);
+	firefighters.push(ash);
+	firefighters.push(misty);
+	firefighters.push(brock);
+	apparatus.push(big_truck);
+	apparatus.push(medium_truck);
+	apparatus.push(small_truck);
+	timeslots.push(birthdayTimeslot);
+	timeslots.push(newYearTimeslot);
 	var assignedSmallTruckToBirthday = (bday_party, small_truck, 1);
 	var assignedAshToBirthday = new AssignedFirefighter(bday_party, small_truck, ash, 1);
-	document.writeln(ash.getSummary());
+	//document.writeln(ash.getSummary()); //comment this out to draw calendar
 }
 
 /*** Draw Calendar ****/
@@ -147,14 +162,9 @@ function getMonthName(date){
 
 
 /***Draw Event List***/
-function loadEvents(){
-	loadedEvents = ["Party", "School", "Games"];
-	return loadedEvents;
-}
-
 function drawEventList(){
 	var eventString = "";
-	var events = loadEvents();
+	var events = loadedEvents;
 	eventString +="<h3> Events </h3>";
 	eventString += "<table class = 'event-table'>"
 	eventString +="<tr onclick = 'newEventClick()'>";
@@ -163,9 +173,9 @@ function drawEventList(){
 	eventString += "</td>"
 	eventString +="</tr>"
 	for(var r=0; r<events.length; r++){
-		eventString +="<tr onclick = 'eventClick()'>";
+		eventString +="<tr onclick = 'eventClick("+r+")'>";
 		eventString +="<td>";
-		eventString += events[r];
+		eventString += events[r].eventName;
 		eventString += "</td>"
 		eventString +="</tr>"
 	}
@@ -196,8 +206,22 @@ function convertDateToDateInputValue(date){
 	var inputValue = year+"-"+monthString+"-"+dayOfMonthString;
 	return inputValue;
 }
+function convertDateToTimeInputValue(date){
+	var two_digit_hours = date.getHours();
+	if (date.getHours() < 10) {
+		two_digit_hours = "0" + date.getHours();
+	}
+	var two_digit_minutes= date.getMinutes();
+	if (date.getMinutes() < 10) {
+		two_digit_minutes = "0" + date.getMinutes();
+	}
+	var inputValue = (two_digit_hours+":"+two_digit_minutes+":00");
+	return inputValue;
+}
 
-function eventClick(){
+
+function eventClick(eventIndex){
+	selectedEvent = loadedEvents[eventIndex];
 	drawEventBox(selectedEvent, CURRENT_EVENT_ID);
 }
 
@@ -265,8 +289,13 @@ function drawBlankEventBox(id){
 
 function drawEventBox(calendarEvent, id){
 	drawBlankEventBox(id);
-	document.getElementById("eventName").value=calendarEvent;
-}
+	document.getElementById("eventName").value=calendarEvent.eventName;
+	document.getElementById("eventDate").value=convertDateToDateInputValue(calendarEvent.timeslot.startTime);
+	document.getElementById("eventStartTime").value=convertDateToTimeInputValue(calendarEvent.timeslot.startTime);
+	document.getElementById("eventEndTime").value=convertDateToTimeInputValue(calendarEvent.timeslot.endTime);
+	document.getElementById("eventLocation").value= "Hawaii";
+	document.getElementById("eventDescription").value=calendarEvent.eventDescription;
+	}
 
 function getEventBoxButtons(eventId){
 	var eventBoxButtonString ="";
