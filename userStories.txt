@@ -10,13 +10,33 @@ As a fire leader, I want to be able to update the firefighter's contact informat
 As a fire leader, I want to be able to delete shifts
 As a fire leader, I want to be able to delete events
 As a fire leader, I want to be able to delete old users
-As a fire leader, I want to be able to view firefighter availibility
-
+As a fire leader, I want to be able to view firefighter availibility in a 60 day window
 
 As a user, I want to be able to set my availibility
 As a user, I want to be able to delete my availibility
-As a user, I want to be able to sign up for events
-As a user, I want to view my personal schedule
-As a user, I want to view my personal events
+As a user, I want to view my personal schedule including availibility, shifts, and events, withing a 60 day window
 As a user, I want to view my personal information
-As a user, I want to be able to view everyone's shifts
+As a user, I want to be able to view everyone's shifts within a 60 day window
+
+
+
+TASKS:
+60 day window shift view (TOP of event calendar)
+Scheduler - input shift times
+Scheduler - delete shift
+
+Personal View - My info, my shifts, my events, my availibility
+
+
+PERSONAL AVAILIBILITY INPUT AND DELETE SCREEN
+
+
+
+
+EXTRA:
+As a user, I want to be able to sign up for events
+
+USER:
+View 1: My info
+View 2: My Shifts, My Events
+View 3: My availibility, input and delete
